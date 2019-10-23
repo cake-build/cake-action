@@ -1,0 +1,17 @@
+name: 'Cake Action'
+description: 'Run a Cake script as part of your build.'
+author: 'Enrico Campidoglio'
+branding:
+  icon: 'package'
+  color: 'yellow'
+inputs:
+  scriptPath:
+    description: 'The path of the Cake script to run.'
+    required: false
+    default: 'build.cake'
+  target:
+    description: 'The name of the task to execute. Note that this argument must be supported by the script.'
+    required: false
+runs:
+  using: 'node12'
+  main: 'lib/main.js'
