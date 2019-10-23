@@ -1,0 +1,10 @@
+name: 'Run Cake Script'
+description: 'Run a Cake script from your GitHub Actions workflow.'
+author: 'Enrico Campidoglio'
+inputs:
+  scriptPath:
+    description: 'The path to the Cake script to run.'
+    default: 'build.cake'
+runs:
+  using: 'node12'
+  main: 'lib/main.js'
