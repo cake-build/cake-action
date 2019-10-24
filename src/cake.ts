@@ -15,8 +15,8 @@ export class CakeTool {
     }
   }
 
-  static async runScript(scriptPath: string, toolDirectory?: ToolsDirectory, ...params: CakeParameter[]) {
-    const cakeToolPath = await CakeTool.resolveCakeToolPath(toolDirectory);
+  static async runScript(scriptPath: string, workingDirectory?: ToolsDirectory, ...params: CakeParameter[]) {
+    const cakeToolPath = await CakeTool.resolveCakeToolPath(workingDirectory);
     const cakeParams = CakeTool.formatParameters(params);
     const exitCode = await exec(cakeToolPath, [scriptPath, ...cakeParams]);
 
@@ -25,8 +25,10 @@ export class CakeTool {
     }
   }
 
-  private static async resolveCakeToolPath(toolDirectory?: ToolsDirectory): Promise<string> {
-    return toolDirectory ? toolDirectory.appendFileName(dotnetCake) : await which(dotnetCake);
+  private static async resolveCakeToolPath(workingDirectory?: ToolsDirectory): Promise<string> {
+    return workingDirectory
+      ? workingDirectory.appendFileName(dotnetCake)
+      : await which(dotnetCake);
   }
 
   private static formatParameters(params: CakeParameter[]): string[] {
