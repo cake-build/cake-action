@@ -8,6 +8,8 @@ jobs:
   build:
     name: Build and Test
     runs-on: ubuntu-latest
+    env:
+      COVERALLS_REPO_TOKEN: ${{ secrets.CoverallsRepoToken }}
     steps:
       - name: Get the sources
         uses: actions/checkout@v1
@@ -15,5 +17,5 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
-      - name: Run the tests
-        run: npm run test
+      - name: Run the tests with code coverage
+        run: npm run coveralls
