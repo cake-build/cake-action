@@ -8,8 +8,6 @@ jobs:
   build:
     name: Build and Test
     runs-on: ubuntu-latest
-    env:
-      COVERALLS_REPO_TOKEN: ${{ secrets.CoverallsRepoToken }}
     steps:
       - name: Get the sources
         uses: actions/checkout@v1
@@ -18,4 +16,8 @@ jobs:
       - name: Build
         run: npm run build
       - name: Run the tests with code coverage
-        run: npm run coveralls
+        run: npm run test
+      - name: Upload the code coverage report to Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
