@@ -2,7 +2,7 @@ import * as core from '@actions/core';
 import { ToolsDirectory } from "./toolsDirectory";
 import { CakeTool } from "./cake";
 
-async function run() {
+export async function run() {
   try {
     const scriptPath = core.getInput('script-path');
 
