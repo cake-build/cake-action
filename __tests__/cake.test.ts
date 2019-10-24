@@ -2,6 +2,7 @@ import { exec } from '@actions/exec';
 import { which } from '@actions/io';
 import { CakeTool } from "../src/cake";
 import { ToolsDirectory } from '../src/toolsDirectory';
+import { CakeArgument, CakeSwitch } from '../src/cakeParameter';
 
 jest.mock('@actions/exec');
 jest.mock('@actions/io');
@@ -49,6 +50,28 @@ describe('When running a script successfully using the global Cake tool', () => 
     await CakeTool.runScript('build.cake');
     expect(fakeExec).toBeCalledWith('/usr/bin/dotnet-cake', ['build.cake']);
   });
+
+  test('it should run the global dotnet-cake tool with the specified parameters', async () => {
+    await CakeTool.runScript(
+      'build.cake',
+      undefined,
+      new CakeArgument('param', 'arg'),
+      new CakeSwitch("switch"));
+    expect(fakeExec).toBeCalledWith(
+      '/usr/bin/dotnet-cake',
+      ['build.cake', '--param=arg', '--switch']);
+  });
+
+  test('it should run the global dotnet-cake tool without any invalid parameters', async () => {
+    await CakeTool.runScript(
+      'build.cake',
+      undefined,
+      new CakeArgument('', ''),
+      new CakeSwitch("switch"));
+    expect(fakeExec).toBeCalledWith(
+      '/usr/bin/dotnet-cake',
+      ['build.cake', '--switch']);
+  });
 });
 
 describe('When running a script successfully using the local Cake tool', () => {
@@ -61,6 +84,28 @@ describe('When running a script successfully using the local Cake tool', () => {
   test('it should run the local dotnet-cake tool on the specified script', async () => {
     await CakeTool.runScript('build.cake', new ToolsDirectory('path/to/tool'));
     expect(fakeExec).toBeCalledWith('path/to/tool/dotnet-cake', ['build.cake']);
+  });
+
+  test('it should run the local dotnet-cake tool with the specified parameters', async () => {
+    await CakeTool.runScript(
+      'build.cake',
+      new ToolsDirectory('path/to/tool'),
+      new CakeArgument('param', 'arg'),
+      new CakeSwitch("switch"));
+    expect(fakeExec).toBeCalledWith(
+      'path/to/tool/dotnet-cake',
+      ['build.cake', '--param=arg', '--switch']);
+  });
+
+  test('it should run the local dotnet-cake tool without any invalid parameters', async () => {
+    await CakeTool.runScript(
+      'build.cake',
+      new ToolsDirectory('path/to/tool'),
+      new CakeArgument('', ''),
+      new CakeSwitch("switch"));
+    expect(fakeExec).toBeCalledWith(
+      'path/to/tool/dotnet-cake',
+      ['build.cake', '--switch']);
   });
 });
 
