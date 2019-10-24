@@ -1,0 +1,27 @@
+name: Tests
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+jobs:
+  test_on_linux:
+    name: Test on Linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the sources
+        uses: actions/checkout@v1
+      - name: Run a Cake script
+        uses: ./
+        with:
+          script-path: build.cake
+  test_on_windows:
+    name: Test on Windows
+    runs-on: windows-latest
+    steps:
+      - name: Get the sources
+        uses: actions/checkout@v1
+      - name: Run a Cake script
+        uses: ./
+        with:
+          script-path: build.cake
