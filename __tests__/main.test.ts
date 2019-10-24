@@ -2,6 +2,7 @@ import * as core from '@actions/core';
 import { run } from '../src/main';
 import { ToolsDirectory } from '../src/toolsDirectory';
 import { CakeTool } from '../src/cake';
+import { CakeArgument } from '../src/cakeParameter';
 
 jest.mock('@actions/core');
 jest.mock('../src/toolsDirectory');
@@ -38,7 +39,28 @@ describe('When running the action with the script path input argument', () => {
   test('it should run the specified Cake script', async () => {
     await run();
     expect(fakeGetInput).toBeCalledWith('script-path');
-    expect(fakeCakeTool.runScript).toBeCalledWith('path/to/script.cake', expect.anything());
+    expect(fakeCakeTool.runScript).toBeCalledWith(
+      'path/to/script.cake',
+      expect.anything(),
+      expect.anything());
+  });
+});
+
+describe('When running the action with the target input argument', () => {
+  const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
+  const fakeCakeTool = CakeTool as jest.MockedClass<typeof CakeTool>;
+
+  beforeAll(() => {
+    fakeGetInput.mockReturnValue('Task-To-Run');
+  });
+
+  test('it should run the specified Cake script', async () => {
+    await run();
+    expect(fakeGetInput).toBeCalledWith('target');
+    expect(fakeCakeTool.runScript).toBeCalledWith(
+      expect.anything(),
+      expect.anything(),
+      new CakeArgument('target', 'Task-To-Run'));
   });
 });
 
