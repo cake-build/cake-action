@@ -1,5 +1,9 @@
 __tests__/runner/*
 
+# Dependencies
+node_modules/*
+!node_modules/@actions/
+
 # Logs
 logs
 *.log
