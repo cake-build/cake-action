@@ -2,7 +2,7 @@
 
 | Build Status | Tests | Coverage |
 | :----------: | :---: | :------: |
-| [![GitHub Actions Build](https://github.com/ecampidoglio/cake-action/workflows/Build/badge.svg)](https://github.com/ecampidoglio/cake-action/actions?workflow=Build) | [![GitHub Actions Tests](https://github.com/ecampidoglio/cake-action/workflows/Tests/badge.svg)](https://github.com/ecampidoglio/cake-action/actions?workflow=Tests) | [![Coveralls](https://coveralls.io/repos/github/ecampidoglio/cake-action/badge.svg)](https://coveralls.io/github/ecampidoglio/cake-action) |
+| [![GitHub Actions Build](https://github.com/ecampidoglio/cake-action/workflows/Build/badge.svg)](https://github.com/ecampidoglio/cake-action/actions?workflow=Build) | [![GitHub Actions Tests](https://github.com/ecampidoglio/cake-action/workflows/Tests/badge.svg)](https://github.com/ecampidoglio/cake-action/actions?workflow=Tests) | [![Coveralls](https://coveralls.io/repos/github/ecampidoglio/cake-action/badge.svg?branch=master)](https://coveralls.io/github/ecampidoglio/cake-action?branch=master) |
 
 This action allows you to run a Cake script from your GitHub Actions workflow without having to use a [bootstrapper](https://github.com/cake-build/resources).
 
