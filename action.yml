@@ -5,7 +5,7 @@ branding:
   icon: 'package'
   color: 'yellow'
 inputs:
-  scriptPath:
+  script-path:
     description: 'The path of the Cake script to run.'
     required: false
     default: 'build.cake'
