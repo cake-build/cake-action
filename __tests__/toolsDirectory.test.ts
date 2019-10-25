@@ -1,4 +1,7 @@
+import * as io from '@actions/io';
 import { ToolsDirectory } from '../src/toolsDirectory';
+
+jest.mock('@actions/io');
 
 describe('When constructing the tools directory', () => {
   test('it should set the default directory path to tools', () => {
@@ -24,6 +27,16 @@ describe('When constructing the tools directory', () => {
   test('it should remove double slashes from the specified path', () => {
     const sut = new ToolsDirectory('the//name');
     expect(sut.path).toBe('the/name');
+  });
+});
+
+describe('When creating the directory on the file system', () => {
+  const fakeMkdirP = io.mkdirP as jest.MockedFunction<typeof io.mkdirP>;
+
+  test('it should create the directory at the specified path', () => {
+    const sut = new ToolsDirectory('theName');
+    sut.create();
+    expect(fakeMkdirP).toBeCalledWith(sut.path);
   });
 });
 
