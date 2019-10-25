@@ -1,15 +1,18 @@
 import * as core from '@actions/core';
 import { run } from '../src/main';
 import { ToolsDirectory } from '../src/toolsDirectory';
+import { DotNet } from '../src/dotnet';
 import { CakeTool } from '../src/cake';
 import { CakeArgument } from '../src/cakeParameter';
 
 jest.mock('@actions/core');
 jest.mock('../src/toolsDirectory');
+jest.mock('../src/dotnet');
 jest.mock('../src/cake');
 
 describe('When running the action without any input arguments', () => {
   const fakeToolsDirectory = ToolsDirectory as jest.MockedClass<typeof ToolsDirectory>;
+  const fakeDotNet = DotNet as jest.MockedClass<typeof DotNet>;
   const fakeCakeTool = CakeTool as jest.MockedClass<typeof CakeTool>;
 
   test('it should create the tools directory', async () => {
@@ -19,7 +22,7 @@ describe('When running the action without any input arguments', () => {
 
   test('it should install the Cake tool locally', async () => {
     await run();
-    expect(fakeCakeTool.installLocally).toBeCalled();
+    expect(fakeDotNet.installLocalCakeTool).toBeCalled();
   });
 
   test('it should run the default Cake script', async () => {

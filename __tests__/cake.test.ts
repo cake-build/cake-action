@@ -7,36 +7,6 @@ import { CakeArgument, CakeSwitch } from '../src/cakeParameter';
 jest.mock('@actions/exec');
 jest.mock('@actions/io');
 
-describe('When successfully installing the Cake Tool locally', () => {
-  const fakeExec = exec as jest.MockedFunction<typeof exec>;
-
-  beforeAll(() => {
-    fakeExec.mockReturnValue(Promise.resolve(0));
-  });
-
-  test('it should invoke the dotnet tool install command with the tools directory', async () => {
-    await CakeTool.installLocally();
-    expect(fakeExec).toBeCalledWith('dotnet tool install', ['--tool-path', 'tools', 'Cake.Tool']);
-  });
-
-  test('it should invoke the dotnet tool install command with the specified target directory', async () => {
-    await CakeTool.installLocally(new ToolsDirectory('target/directory'));
-    expect(fakeExec).toBeCalledWith('dotnet tool install', ['--tool-path', 'target/directory', 'Cake.Tool']);
-  });
-});
-
-describe('When failing to install the Cake Tool locally', () => {
-  const fakeExec = exec as jest.MockedFunction<typeof exec>;
-
-  beforeAll(() => {
-    fakeExec.mockReturnValue(Promise.resolve(-99));
-  });
-
-  test('it should throw an error containing the exit code', async () => {
-    await expect(CakeTool.installLocally()).rejects.toThrowError('-99');
-  });
-});
-
 describe('When running a script successfully using the global Cake tool', () => {
   const fakeWhich = which as jest.MockedFunction<typeof which>;
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
