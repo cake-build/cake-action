@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
-import { ToolsDirectory } from "./toolsDirectory";
+import { ToolsDirectory } from './toolsDirectory';
 import { DotNet } from './dotnet';
-import { CakeTool } from "./cake";
+import { CakeTool } from './cake';
 import { CakeArgument } from './cakeParameter';
 
 export async function run() {

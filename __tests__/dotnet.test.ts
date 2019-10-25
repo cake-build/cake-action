@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
-import { exec } from "@actions/exec";
+import { exec } from '@actions/exec';
 import { DotNet } from '../src/dotnet';
-import { ToolsDirectory } from "../src/toolsDirectory";
+import { ToolsDirectory } from '../src/toolsDirectory';
 
 jest.mock('@actions/core');
 jest.mock('@actions/exec');

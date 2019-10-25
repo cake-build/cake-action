@@ -1,4 +1,4 @@
-import { ToolsDirectory } from "../src/toolsDirectory";
+import { ToolsDirectory } from '../src/toolsDirectory';
 
 describe('When constructing the tools directory', () => {
   test('it should set the default directory path to tools', () => {

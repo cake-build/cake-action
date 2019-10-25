@@ -1,6 +1,6 @@
 import * as core from '@actions/core';
-import { exec } from "@actions/exec";
-import { ToolsDirectory } from "./toolsDirectory";
+import { exec } from '@actions/exec';
+import { ToolsDirectory } from './toolsDirectory';
 
 const dotnetToolInstall = 'dotnet tool install';
 

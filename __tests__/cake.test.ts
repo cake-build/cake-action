@@ -1,6 +1,6 @@
 import { exec } from '@actions/exec';
 import { which } from '@actions/io';
-import { CakeTool } from "../src/cake";
+import { CakeTool } from '../src/cake';
 import { ToolsDirectory } from '../src/toolsDirectory';
 import { CakeArgument, CakeSwitch } from '../src/cakeParameter';
 
@@ -31,7 +31,7 @@ describe('When running a script successfully using the global Cake tool', () => 
       'script.cake',
       undefined,
       new CakeArgument('param', 'arg'),
-      new CakeSwitch("switch"));
+      new CakeSwitch('switch'));
     expect(fakeExec).toBeCalledWith(
       '/usr/bin/dotnet-cake',
       ['script.cake', '--param=arg', '--switch']);
@@ -42,7 +42,7 @@ describe('When running a script successfully using the global Cake tool', () => 
       'script.cake',
       undefined,
       new CakeArgument('', ''),
-      new CakeSwitch("switch"));
+      new CakeSwitch('switch'));
     expect(fakeExec).toBeCalledWith(
       '/usr/bin/dotnet-cake',
       ['script.cake', '--switch']);
@@ -71,7 +71,7 @@ describe('When running a script successfully using the local Cake tool', () => {
       'script.cake',
       new ToolsDirectory('path/to/tool'),
       new CakeArgument('param', 'arg'),
-      new CakeSwitch("switch"));
+      new CakeSwitch('switch'));
     expect(fakeExec).toBeCalledWith(
       'path/to/tool/dotnet-cake',
       ['script.cake', '--param=arg', '--switch']);
@@ -82,7 +82,7 @@ describe('When running a script successfully using the local Cake tool', () => {
       'script.cake',
       new ToolsDirectory('path/to/tool'),
       new CakeArgument('', ''),
-      new CakeSwitch("switch"));
+      new CakeSwitch('switch'));
     expect(fakeExec).toBeCalledWith(
       'path/to/tool/dotnet-cake',
       ['script.cake', '--switch']);
