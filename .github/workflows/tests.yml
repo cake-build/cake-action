@@ -5,23 +5,17 @@ on:
     branches:
       - master
 jobs:
-  test_on_linux:
-    name: Test on Linux
-    runs-on: ubuntu-latest
+  build:
+    name: Test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
     steps:
       - name: Get the sources
         uses: actions/checkout@v1
-      - name: Run a Cake script
+      - name: Run a Cake script with a specific target
         uses: ./
         with:
           script-path: build.cake
-  test_on_windows:
-    name: Test on Windows
-    runs-on: windows-latest
-    steps:
-      - name: Get the sources
-        uses: actions/checkout@v1
-      - name: Run a Cake script
-        uses: ./
-        with:
-          script-path: build.cake
+          target: Successful-Task
