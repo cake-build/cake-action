@@ -46,31 +46,36 @@ describe('When running a script successfully using the global Cake tool', () => 
     fakeExec.mockReturnValue(Promise.resolve(0));
   });
 
-  test('it should run the global dotnet-cake tool on the specified script', async () => {
-    await CakeTool.runScript('build.cake');
+  test('it should run the global dotnet-cake tool on the default script', async () => {
+    await CakeTool.runScript();
     expect(fakeExec).toBeCalledWith('/usr/bin/dotnet-cake', ['build.cake']);
+  });
+
+  test('it should run the global dotnet-cake tool on the specified script', async () => {
+    await CakeTool.runScript('script.cake');
+    expect(fakeExec).toBeCalledWith('/usr/bin/dotnet-cake', ['script.cake']);
   });
 
   test('it should run the global dotnet-cake tool with the specified parameters', async () => {
     await CakeTool.runScript(
-      'build.cake',
+      'script.cake',
       undefined,
       new CakeArgument('param', 'arg'),
       new CakeSwitch("switch"));
     expect(fakeExec).toBeCalledWith(
       '/usr/bin/dotnet-cake',
-      ['build.cake', '--param=arg', '--switch']);
+      ['script.cake', '--param=arg', '--switch']);
   });
 
   test('it should run the global dotnet-cake tool without any invalid parameters', async () => {
     await CakeTool.runScript(
-      'build.cake',
+      'script.cake',
       undefined,
       new CakeArgument('', ''),
       new CakeSwitch("switch"));
     expect(fakeExec).toBeCalledWith(
       '/usr/bin/dotnet-cake',
-      ['build.cake', '--switch']);
+      ['script.cake', '--switch']);
   });
 });
 
@@ -81,31 +86,36 @@ describe('When running a script successfully using the local Cake tool', () => {
     fakeExec.mockReturnValue(Promise.resolve(0));
   });
 
-  test('it should run the local dotnet-cake tool on the specified script', async () => {
-    await CakeTool.runScript('build.cake', new ToolsDirectory('path/to/tool'));
+  test('it should run the local dotnet-cake tool on the default script', async () => {
+    await CakeTool.runScript(undefined, new ToolsDirectory('path/to/tool'));
     expect(fakeExec).toBeCalledWith('path/to/tool/dotnet-cake', ['build.cake']);
+  });
+
+  test('it should run the local dotnet-cake tool on the specified script', async () => {
+    await CakeTool.runScript('script.cake', new ToolsDirectory('path/to/tool'));
+    expect(fakeExec).toBeCalledWith('path/to/tool/dotnet-cake', ['script.cake']);
   });
 
   test('it should run the local dotnet-cake tool with the specified parameters', async () => {
     await CakeTool.runScript(
-      'build.cake',
+      'script.cake',
       new ToolsDirectory('path/to/tool'),
       new CakeArgument('param', 'arg'),
       new CakeSwitch("switch"));
     expect(fakeExec).toBeCalledWith(
       'path/to/tool/dotnet-cake',
-      ['build.cake', '--param=arg', '--switch']);
+      ['script.cake', '--param=arg', '--switch']);
   });
 
   test('it should run the local dotnet-cake tool without any invalid parameters', async () => {
     await CakeTool.runScript(
-      'build.cake',
+      'script.cake',
       new ToolsDirectory('path/to/tool'),
       new CakeArgument('', ''),
       new CakeSwitch("switch"));
     expect(fakeExec).toBeCalledWith(
       'path/to/tool/dotnet-cake',
-      ['build.cake', '--switch']);
+      ['script.cake', '--switch']);
   });
 });
 
@@ -119,7 +129,7 @@ describe('When failing to run a script using the global Cake tool', () => {
   });
 
   test('it should throw an error containing the exit code', async () => {
-    await expect(CakeTool.runScript('build.cake')).rejects.toThrowError('-21');
+    await expect(CakeTool.runScript('script.cake')).rejects.toThrowError('-21');
   });
 });
 
@@ -131,6 +141,6 @@ describe('When failing to run a script using the local Cake tool', () => {
   });
 
   test('it should throw an error containing the exit code', async () => {
-    await expect(CakeTool.runScript('build.cake', new ToolsDirectory())).rejects.toThrowError('-21');
+    await expect(CakeTool.runScript('script.cake', new ToolsDirectory())).rejects.toThrowError('-21');
   });
 });

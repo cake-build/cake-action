@@ -15,7 +15,11 @@ export class CakeTool {
     }
   }
 
-  static async runScript(scriptPath: string, workingDirectory?: ToolsDirectory, ...params: CakeParameter[]) {
+  static async runScript(
+    scriptPath: string = 'build.cake',
+    workingDirectory?: ToolsDirectory,
+    ...params: CakeParameter[]
+  ) {
     const cakeToolPath = await CakeTool.resolveCakeToolPath(workingDirectory);
     const cakeParams = CakeTool.formatParameters(params);
     const exitCode = await exec(cakeToolPath, [scriptPath, ...cakeParams]);
