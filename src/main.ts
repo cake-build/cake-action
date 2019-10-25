@@ -12,6 +12,8 @@ export async function run() {
     const toolsDir = new ToolsDirectory();
     await toolsDir.create();
 
+    DotNet.disableTelemetry();
+
     await DotNet.installLocalCakeTool(toolsDir);
     await CakeTool.runScript(scriptPath, toolsDir, target);
   } catch (error) {

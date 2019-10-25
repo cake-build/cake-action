@@ -1,8 +1,19 @@
+import * as core from '@actions/core';
 import { exec } from "@actions/exec";
 import { DotNet } from '../src/dotnet';
 import { ToolsDirectory } from "../src/toolsDirectory";
 
+jest.mock('@actions/core');
 jest.mock('@actions/exec');
+
+describe('When disabling the .NET Core telemetry', () => {
+  const fakeExportVariable = core.exportVariable as jest.MockedFunction<typeof core.exportVariable>;
+
+  test('it should set the DOTNET_CLI_TELEMETRY_OPTOUT environment variable to 1', () => {
+    DotNet.disableTelemetry();
+    expect(fakeExportVariable).toBeCalledWith('DOTNET_CLI_TELEMETRY_OPTOUT', '1');
+  });
+});
 
 describe('When successfully installing the Cake Tool locally', () => {
   const fakeExec = exec as jest.MockedFunction<typeof exec>;

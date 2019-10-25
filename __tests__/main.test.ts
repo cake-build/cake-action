@@ -20,6 +20,11 @@ describe('When running the action without any input arguments', () => {
     expect(fakeToolsDirectory.prototype.create).toBeCalled();
   });
 
+  test('it should disable the .NET Core telemetry', async () => {
+    await run();
+    expect(fakeDotNet.disableTelemetry).toBeCalled();
+  });
+
   test('it should install the Cake tool locally', async () => {
     await run();
     expect(fakeDotNet.installLocalCakeTool).toBeCalled();
