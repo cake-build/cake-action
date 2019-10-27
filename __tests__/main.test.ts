@@ -95,3 +95,44 @@ describe('When the script fails to run', () => {
     expect(fakeSetFailed).toBeCalledWith('the error message');
   });
 });
+
+describe('When running the action with the cake-bootstrap input argument', () => {
+  const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
+  const fakeCakeTool = CakeTool as jest.MockedClass<typeof CakeTool>;
+
+  test('it should bootstrap the default Cake script', async () => {
+    fakeGetInput.mockImplementation(
+      key => {
+        switch (key) {
+          case 'cake-bootstrap':
+            return 'true';
+          default:
+            return '';
+        }
+      }
+    );
+    await run();
+    expect(fakeGetInput).toBeCalledWith('cake-bootstrap');
+    expect(fakeCakeTool.bootstrapScript).toBeCalled();
+  });
+
+  test('it should bootstrap the specified Cake script', async () => {
+    fakeGetInput.mockImplementation(
+      key => {
+        switch (key) {
+          case 'cake-bootstrap':
+            return 'true';
+          case 'script-path':
+            return 'custom.cake';
+          default:
+            return '';
+        }
+      }
+    );
+    await run();
+    expect(fakeGetInput).toBeCalledWith('cake-bootstrap');
+    expect(fakeCakeTool.bootstrapScript).toBeCalledWith(
+      'custom.cake',
+      expect.anything());
+  });
+});

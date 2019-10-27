@@ -15,6 +15,10 @@ inputs:
   cake-version:
     description: 'The version of Cake to install.'
     required: false
+  cake-bootstrap:
+    description: 'Flag for if Cake modules should be installed/bootstrapped.'
+    required: false
+    default: 'false'
 runs:
   using: 'node12'
   main: 'lib/main.js'
