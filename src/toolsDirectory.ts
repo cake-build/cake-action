@@ -13,7 +13,9 @@ export class ToolsDirectory {
   }
 
   create() {
-    fs.mkdirSync(this.path);
+    if (!fs.existsSync(this.path)) {
+      fs.mkdirSync(this.path);
+    }
   }
 
   appendFileName(fileName: string): string {

@@ -33,11 +33,17 @@ describe('When constructing the tools directory', () => {
 describe('When creating the directory on the file system', () => {
   const sut = new ToolsDirectory('theName');
 
-  afterAll(() => {
+  afterEach(() => {
     fs.rmdirSync(sut.path);
   });
 
   test('it should create the directory at the specified path', () => {
+    sut.create();
+    expect(fs.existsSync(sut.path)).toBe(true);
+  });
+
+  test('it should not fail if the directory already exists', () => {
+    sut.create();
     sut.create();
     expect(fs.existsSync(sut.path)).toBe(true);
   });
