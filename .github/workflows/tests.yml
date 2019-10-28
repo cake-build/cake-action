@@ -14,8 +14,11 @@ jobs:
     steps:
       - name: Get the sources
         uses: actions/checkout@v1
-      - name: Run a Cake script with a specific target
+      - name: Run a specific Cake script
         uses: ./
         with:
           script-path: build.cake
+      - name: Run a specific target
+        uses: ./
+        with:
           target: Successful-Task
