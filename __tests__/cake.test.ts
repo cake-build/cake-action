@@ -4,6 +4,10 @@ import { CakeTool } from '../src/cake';
 import { ToolsDirectory } from '../src/toolsDirectory';
 import { CakeArgument, CakeSwitch } from '../src/cakeParameter';
 
+const isRunningOnWindows = (require('os').platform() === 'win32');
+const pathToLocalToolsDirectory = isRunningOnWindows ? 'path\\to\\tool' : 'path/to/tool';
+const pathToLocalTool = isRunningOnWindows ? 'path\\to\\tool\\dotnet-cake' : 'path/to/tool/dotnet-cake';
+
 jest.mock('@actions/exec');
 jest.mock('@actions/io');
 
@@ -57,34 +61,34 @@ describe('When running a script successfully using the local Cake tool', () => {
   });
 
   test('it should run the local dotnet-cake tool on the default script', async () => {
-    await CakeTool.runScript(undefined, new ToolsDirectory('path/to/tool'));
-    expect(fakeExec).toBeCalledWith('path/to/tool/dotnet-cake', ['build.cake']);
+    await CakeTool.runScript(undefined, new ToolsDirectory(pathToLocalToolsDirectory));
+    expect(fakeExec).toBeCalledWith(pathToLocalTool, ['build.cake']);
   });
 
   test('it should run the local dotnet-cake tool on the specified script', async () => {
-    await CakeTool.runScript('script.cake', new ToolsDirectory('path/to/tool'));
-    expect(fakeExec).toBeCalledWith('path/to/tool/dotnet-cake', ['script.cake']);
+    await CakeTool.runScript('script.cake', new ToolsDirectory(pathToLocalToolsDirectory));
+    expect(fakeExec).toBeCalledWith(pathToLocalTool, ['script.cake']);
   });
 
   test('it should run the local dotnet-cake tool with the specified parameters', async () => {
     await CakeTool.runScript(
       'script.cake',
-      new ToolsDirectory('path/to/tool'),
+      new ToolsDirectory(pathToLocalToolsDirectory),
       new CakeArgument('param', 'arg'),
       new CakeSwitch('switch'));
     expect(fakeExec).toBeCalledWith(
-      'path/to/tool/dotnet-cake',
+      pathToLocalTool,
       ['script.cake', '--param=arg', '--switch']);
   });
 
   test('it should run the local dotnet-cake tool without any invalid parameters', async () => {
     await CakeTool.runScript(
       'script.cake',
-      new ToolsDirectory('path/to/tool'),
+      new ToolsDirectory(pathToLocalToolsDirectory),
       new CakeArgument('', ''),
       new CakeSwitch('switch'));
     expect(fakeExec).toBeCalledWith(
-      'path/to/tool/dotnet-cake',
+      pathToLocalTool,
       ['script.cake', '--switch']);
   });
 });

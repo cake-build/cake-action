@@ -3,6 +3,9 @@ import { exec } from '@actions/exec';
 import { DotNet } from '../src/dotnet';
 import { ToolsDirectory } from '../src/toolsDirectory';
 
+const isRunningOnWindows = (require('os').platform() === 'win32');
+const targetDirectory = isRunningOnWindows ? 'target\\directory' : 'target/directory';
+
 jest.mock('@actions/core');
 jest.mock('@actions/exec');
 
@@ -28,8 +31,8 @@ describe('When successfully installing the Cake Tool locally', () => {
   });
 
   test('it should install the Cake.Tool in the specified target directory', async () => {
-    await DotNet.installLocalCakeTool(new ToolsDirectory('target/directory'));
-    expect(fakeExec).toBeCalledWith('dotnet tool install', ['--tool-path', 'target/directory', 'Cake.Tool']);
+    await DotNet.installLocalCakeTool(new ToolsDirectory(targetDirectory));
+    expect(fakeExec).toBeCalledWith('dotnet tool install', ['--tool-path', targetDirectory, 'Cake.Tool']);
   });
 });
 
@@ -62,8 +65,8 @@ describe('When successfully installing a tool locally', () => {
   });
 
   test('it should install the specified tool in the specified target directory', async () => {
-    await DotNet.installLocalTool('The.Tool', new ToolsDirectory('target/directory'));
-    expect(fakeExec).toBeCalledWith('dotnet tool install', ['--tool-path', 'target/directory', 'The.Tool']);
+    await DotNet.installLocalTool('The.Tool', new ToolsDirectory(targetDirectory));
+    expect(fakeExec).toBeCalledWith('dotnet tool install', ['--tool-path', targetDirectory, 'The.Tool']);
   });
 });
 
