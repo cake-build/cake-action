@@ -1,11 +1,11 @@
+import * as path from 'path';
 import * as core from '@actions/core';
 import { exec } from '@actions/exec';
 import { DotNet } from '../src/dotnet';
 import { Platform } from '../src/platform';
 import { ToolsDirectory } from '../src/toolsDirectory';
 
-const isRunningOnWindows = (require('os').platform() === 'win32');
-const targetDirectory = isRunningOnWindows ? 'target\\directory' : 'target/directory';
+const targetDirectory = path.join('target', 'directory');
 
 jest.mock('@actions/core');
 jest.mock('@actions/exec');

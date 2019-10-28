@@ -1,12 +1,12 @@
+import * as path from 'path';
 import { exec } from '@actions/exec';
 import { which } from '@actions/io';
 import { CakeTool } from '../src/cake';
 import { ToolsDirectory } from '../src/toolsDirectory';
 import { CakeArgument, CakeSwitch } from '../src/cakeParameter';
 
-const isRunningOnWindows = (require('os').platform() === 'win32');
-const pathToLocalToolsDirectory = isRunningOnWindows ? 'path\\to\\tool' : 'path/to/tool';
-const pathToLocalTool = isRunningOnWindows ? 'path\\to\\tool\\dotnet-cake' : 'path/to/tool/dotnet-cake';
+const pathToLocalToolsDirectory = path.join('path', 'to', 'tool');
+const pathToLocalTool = path.join(pathToLocalToolsDirectory, 'dotnet-cake');
 
 jest.mock('@actions/exec');
 jest.mock('@actions/io');

@@ -1,7 +1,6 @@
 import * as fs from 'fs';
+import { Platform } from '../src/platform';
 import { ToolsDirectory } from '../src/toolsDirectory';
-
-const isRunningOnWindows = (require('os').platform() === 'win32');
 
 describe('When constructing the tools directory', () => {
   test('it should set the default directory path to tools', () => {
@@ -21,12 +20,12 @@ describe('When constructing the tools directory', () => {
 
   test('it should keep ../ at the beginning of the specified path', () => {
     const sut = new ToolsDirectory('../theName');
-    expect(sut.path).toBe(isRunningOnWindows ? '..\\theName' : '../theName');
+    expect(sut.path).toBe(Platform.isWindows() ? '..\\theName' : '../theName');
   });
 
   test('it should remove double slashes from the specified path', () => {
     const sut = new ToolsDirectory('the//name');
-    expect(sut.path).toBe(isRunningOnWindows ? 'the\\name' : 'the/name');
+    expect(sut.path).toBe(Platform.isWindows() ? 'the\\name' : 'the/name');
   });
 });
 
@@ -52,12 +51,12 @@ describe('When creating the directory on the file system', () => {
 describe('When appending a file name', () => {
   test('it should join the directory path with the specified file name', () => {
     const sut = new ToolsDirectory();
-    expect(sut.appendFileName('theFileName')).toBe(`${sut.path}${isRunningOnWindows ? '\\' : '/'}theFileName`);
+    expect(sut.appendFileName('theFileName')).toBe(`${sut.path}${Platform.isWindows() ? '\\' : '/'}theFileName`);
   });
 
   test('it should remove any extra slashes in front of the specified file name', () => {
     const sut = new ToolsDirectory();
-    expect(sut.appendFileName('/theFileName')).toBe(`${sut.path}${isRunningOnWindows ? '\\' : '/'}theFileName`);
+    expect(sut.appendFileName('/theFileName')).toBe(`${sut.path}${Platform.isWindows() ? '\\' : '/'}theFileName`);
   });
 });
 
