@@ -7,6 +7,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
+    "lint": "eslint **/*.ts",
     "coveralls": "jest && cat coverage/lcov.info | coveralls"
   },
   "repository": {
