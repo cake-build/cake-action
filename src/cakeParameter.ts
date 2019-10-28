@@ -1,5 +1,6 @@
 export interface CakeParameter {
   isValid(): boolean;
+
   format(): string;
 }
 
