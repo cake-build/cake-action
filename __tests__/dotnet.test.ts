@@ -1,6 +1,7 @@
 import * as core from '@actions/core';
 import { exec } from '@actions/exec';
 import { DotNet } from '../src/dotnet';
+import { Platform } from '../src/platform';
 import { ToolsDirectory } from '../src/toolsDirectory';
 
 const isRunningOnWindows = (require('os').platform() === 'win32');
@@ -101,5 +102,11 @@ describe('When installing the Cake Tool locally to a directory where it already 
     expect(fakeExec).not.toBeCalledWith(
       'dotnet tool install',
       ['--tool-path', directoryWithCakeTool.path, 'Cake.Tool']);
+  });
+
+  test('it should look for the Cake.Tool executable with extension on Windows', () => {
+    Platform.isWindows = jest.fn().mockImplementation(() => { return true; });
+    DotNet.installLocalCakeTool(directoryWithCakeTool);
+    expect(directoryWithCakeTool.containsFile).toBeCalledWith(expect.stringMatching('dotnet-cake.exe$'));
   });
 });
