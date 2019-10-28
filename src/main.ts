@@ -10,7 +10,7 @@ export async function run() {
     const target = new CakeArgument('target', core.getInput('target'));
 
     const toolsDir = new ToolsDirectory();
-    await toolsDir.create();
+    toolsDir.create();
 
     DotNet.disableTelemetry();
 

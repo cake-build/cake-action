@@ -1,9 +1,7 @@
-import * as io from '@actions/io';
+import * as fs from 'fs';
 import { ToolsDirectory } from '../src/toolsDirectory';
 
 const isRunningOnWindows = (require('os').platform() === 'win32');
-
-jest.mock('@actions/io');
 
 describe('When constructing the tools directory', () => {
   test('it should set the default directory path to tools', () => {
@@ -33,12 +31,15 @@ describe('When constructing the tools directory', () => {
 });
 
 describe('When creating the directory on the file system', () => {
-  const fakeMkdirP = io.mkdirP as jest.MockedFunction<typeof io.mkdirP>;
+  const sut = new ToolsDirectory('theName');
+
+  afterAll(() => {
+    fs.rmdirSync(sut.path);
+  });
 
   test('it should create the directory at the specified path', () => {
-    const sut = new ToolsDirectory('theName');
     sut.create();
-    expect(fakeMkdirP).toBeCalledWith(sut.path);
+    expect(fs.existsSync(sut.path)).toBe(true);
   });
 });
 

@@ -1,5 +1,4 @@
 import * as fs from 'fs';
-import * as io from '@actions/io';
 import * as path from 'path';
 
 export class ToolsDirectory {
@@ -14,7 +13,7 @@ export class ToolsDirectory {
   }
 
   create() {
-    return io.mkdirP(this.path);
+    fs.mkdirSync(this.path);
   }
 
   appendFileName(fileName: string): string {
