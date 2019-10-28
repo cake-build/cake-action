@@ -1,7 +1,9 @@
 import { exec } from '@actions/exec';
 import { which } from '@actions/io';
+/* eslint @typescript-eslint/no-unused-vars: off */
 import { ToolsDirectory } from './toolsDirectory';
 import { CakeParameter } from './cakeParameter';
+/* eslint @typescript-eslint/no-unused-vars: error */
 
 const dotnetCake = 'dotnet-cake';
 
