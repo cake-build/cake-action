@@ -85,3 +85,21 @@ describe('When failing to install the a tool locally', () => {
     await expect(DotNet.installLocalTool('The.Tool')).rejects.toThrowError('-99');
   });
 });
+
+describe('When installing the Cake Tool locally to a directory where it already exists', () => {
+  const directoryWithCakeTool = new ToolsDirectory(targetDirectory);
+  const fakeExec = exec as jest.MockedFunction<typeof exec>;
+
+  beforeAll(() => {
+    directoryWithCakeTool.containsFile = jest.fn().mockImplementation(() => {
+      return true;
+    });
+  });
+
+  test('it should not attempt to install the Cake.Tool in the same directory', () => {
+    DotNet.installLocalCakeTool(directoryWithCakeTool);
+    expect(fakeExec).not.toBeCalledWith(
+      'dotnet tool install',
+      ['--tool-path', directoryWithCakeTool.path, 'Cake.Tool']);
+  });
+});

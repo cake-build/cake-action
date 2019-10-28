@@ -1,3 +1,4 @@
+import * as fs from 'fs';
 import * as io from '@actions/io';
 import * as path from 'path';
 
@@ -18,6 +19,10 @@ export class ToolsDirectory {
 
   appendFileName(fileName: string): string {
     return path.join(this.path, fileName);
+  }
+
+  containsFile(fileName: string): boolean {
+    return fs.existsSync(this.appendFileName(fileName));
   }
 
   toString(): string {

@@ -1,8 +1,10 @@
 import * as core from '@actions/core';
 import { exec } from '@actions/exec';
 import { ToolsDirectory } from './toolsDirectory';
+import { Platform } from './platform';
 
 const dotnetToolInstall = 'dotnet tool install';
+const dotnetCake = 'dotnet-cake';
 
 export class DotNet {
   static disableTelemetry() {
@@ -10,6 +12,13 @@ export class DotNet {
   }
 
   static async installLocalCakeTool(targetDirectory: ToolsDirectory = new ToolsDirectory()) {
+    const cakeTool = Platform.isWindows() ? `${dotnetCake}.exe` : dotnetCake;
+
+    if (targetDirectory.containsFile(cakeTool)) {
+      core.info(`The Cake.Tool already exists in ${targetDirectory}, skipping installation`);
+      return;
+    }
+
     return DotNet.installLocalTool('Cake.Tool', targetDirectory);
   }
 
