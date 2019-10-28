@@ -39,14 +39,17 @@ describe('When checking whether a Cake parameter is valid', () => {
     const sut = new CakeArgument('', 'arg');
     expect(sut.isValid()).toBe(false);
   });
+
   test('it should consider a parameter without argument to be invalid', () => {
     const sut = new CakeArgument('param', '');
     expect(sut.isValid()).toBe(false);
   });
+
   test('it should consider a switch with a name to be valid', () => {
     const sut = new CakeSwitch('switch');
     expect(sut.isValid()).toBe(true);
   });
+
   test('it should consider a switch without name to be invalid', () => {
     const sut = new CakeSwitch('');
     expect(sut.isValid()).toBe(false);
