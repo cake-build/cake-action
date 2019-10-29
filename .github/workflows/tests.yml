@@ -22,3 +22,17 @@ jobs:
         uses: ./
         with:
           target: Successful-Task
+      - name: Run a specific version ( 0.34.1 )
+        env:
+          TEST_CAKE_VERSION: 0.34.1
+        uses: ./
+        with:
+          cake-version: 0.34.1
+          target: Version-Check-Task
+      - name: Run a specific version ( 0.33.0 )
+        env:
+          TEST_CAKE_VERSION: 0.33.0
+        uses: ./
+        with:
+          cake-version: 0.33.0
+          target: Version-Check-Task
