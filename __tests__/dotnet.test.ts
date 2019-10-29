@@ -24,6 +24,9 @@ describe('When successfully installing the Cake Tool locally', () => {
 
   beforeAll(() => {
     fakeExec.mockReturnValue(Promise.resolve(0));
+    ToolsDirectory.prototype.containsFile = jest.fn().mockImplementation(() => {
+      return false;
+    });
   });
 
   test('it should install the Cake.Tool in the tools directory', async () => {

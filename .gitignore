@@ -60,3 +60,6 @@ typings/
 
 # Cache files
 .cache
+
+# Cake tools folder
+[Tt]ools/
