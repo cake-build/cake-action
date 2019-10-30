@@ -108,7 +108,9 @@ describe('When installing the Cake Tool locally to a directory where it already 
   });
 
   test('it should look for the Cake.Tool executable with extension on Windows', () => {
-    Platform.isWindows = jest.fn().mockImplementation(() => { return true; });
+    Platform.isWindows = jest.fn().mockImplementation(() => {
+      return true;
+    });
     DotNet.installLocalCakeTool(directoryWithCakeTool);
     expect(directoryWithCakeTool.containsFile).toBeCalledWith(expect.stringMatching('dotnet-cake.exe$'));
   });
