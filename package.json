@@ -5,9 +5,10 @@
   "description": "Run a Cake script from your GitHub Actions workflow.",
   "main": "lib/main.js",
   "scripts": {
-    "build": "tsc",
+    "build": "npm run lint && npm run transpile",
     "test": "jest",
     "lint": "eslint **/*.ts",
+    "transpile": "tsc",
     "coveralls": "jest && cat coverage/lcov.info | coveralls"
   },
   "repository": {
