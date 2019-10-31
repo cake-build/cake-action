@@ -139,3 +139,37 @@ describe('When installing the Cake Tool locally to a directory where it already 
       ['--version', 'theVersion', '--tool-path', directoryWithCakeTool.path, 'Cake.Tool']);
   });
 });
+
+describe('When successfully uninstalling a tool locally', () => {
+  const fakeExec = exec as jest.MockedFunction<typeof exec>;
+
+  beforeAll(() => {
+    fakeExec.mockReturnValue(Promise.resolve(0));
+  });
+
+  test('it should uninstall the specified tool from the tools directory', async () => {
+    await DotNet.uninstallLocalTool('The.Tool');
+    expect(fakeExec).toBeCalledWith('dotnet tool uninstall', ['--tool-path', 'tools', 'The.Tool']);
+  });
+
+  test('it should uninstall the specified tool from the specified target directory', async () => {
+    await DotNet.uninstallLocalTool('The.Tool', new ToolsDirectory(targetDirectory));
+    expect(fakeExec).toBeCalledWith('dotnet tool uninstall', ['--tool-path', targetDirectory, 'The.Tool']);
+  });
+});
+
+describe('When failing to uninstall a tool locally', () => {
+  const fakeExec = exec as jest.MockedFunction<typeof exec>;
+
+  beforeAll(() => {
+    fakeExec.mockReturnValue(Promise.resolve(-99));
+  });
+
+  test('it should throw an error containing the package id', async () => {
+    await expect(DotNet.uninstallLocalTool('The.Tool')).rejects.toThrowError('The.Tool');
+  });
+
+  test('it should throw an error containing the exit code', async () => {
+    await expect(DotNet.uninstallLocalTool('The.Tool', new ToolsDirectory(targetDirectory))).rejects.toThrowError('-99');
+  });
+});
