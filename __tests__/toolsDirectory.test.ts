@@ -101,7 +101,7 @@ describe('When checking whether the directory contains a specific tool on Window
 
   beforeAll(() => {
     fs.mkdirSync(sut.path);
-    fs.writeFileSync(path.join(sut.path,`${toolName}.exe`), {});
+    fs.writeFileSync(path.join(sut.path, `${toolName}.exe`), {});
     Platform.isWindows = jest.fn().mockImplementation(() => true);
   });
 
