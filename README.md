@@ -41,11 +41,20 @@ steps:
   - name: Run the Cake script
     uses: ecampidoglio/cake-action@master
     with:
-      script-path: path/to/script.cake
       target: Task-To-Run
 ```
 
-And that's it. The rest of this document describes the other options that the Cake action supports.
+### `cake-version`
+
+By default, the Cake action will run your script using the latest _stable_ version of the [Cake .NET Core Global tool](https://www.nuget.org/packages/Cake.Tool/). However, if for some reason you want to use a specific version of Cake (for compatibility with older third-party addins, for example), you can do so by specifying the version number in the `cake-version` parameter:
+
+```yml
+steps:
+  - name: Run the Cake script
+    uses: ecampidoglio/cake-action@master
+    with:
+      cake-version: 0.30.0
+```
 
 ## Cross-platform
 
