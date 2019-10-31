@@ -34,7 +34,7 @@ export class ToolsDirectory {
 
   containsToolWithVersion(packageId: string, version: string): boolean {
     return fs.existsSync(
-      this.append('.store', packageId, version ? version : '', 'project.assets.json'));
+      this.append('.store', packageId, version, 'project.assets.json'));
   }
 
   toString(): string {
