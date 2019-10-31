@@ -8,13 +8,14 @@ export async function run() {
   try {
     const scriptPath = core.getInput('script-path');
     const target = new CakeArgument('target', core.getInput('target'));
+    const version = core.getInput('cake-version');
 
     const toolsDir = new ToolsDirectory();
     toolsDir.create();
 
     DotNet.disableTelemetry();
 
-    await DotNet.installLocalCakeTool(toolsDir);
+    await DotNet.installLocalCakeTool(toolsDir, version);
     await CakeTool.runScript(scriptPath, toolsDir, target);
   } catch (error) {
     core.setFailed(error.message);

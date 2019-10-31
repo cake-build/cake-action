@@ -12,6 +12,9 @@ inputs:
   target:
     description: 'The name of the task to execute. Note that this argument must be supported by the script.'
     required: false
+  cake-version:
+    description: 'The version of Cake to install.'
+    required: false
 runs:
   using: 'node12'
   main: 'lib/main.js'
