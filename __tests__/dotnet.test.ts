@@ -85,7 +85,7 @@ describe('When successfully installing a tool locally', () => {
   });
 });
 
-describe('When failing to install the a tool locally', () => {
+describe('When failing to install a tool locally', () => {
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
   beforeAll(() => {
