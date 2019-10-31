@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import del from 'del';
 import { Platform } from '../src/platform';
 import { ToolsDirectory } from '../src/toolsDirectory';
 
@@ -34,7 +35,7 @@ describe('When creating the directory on the file system', () => {
   const sut = new ToolsDirectory('theName');
 
   afterEach(() => {
-    fs.rmdirSync(sut.path);
+    del.sync(sut.path);
   });
 
   test('it should create the directory at the specified path', () => {
@@ -59,8 +60,7 @@ describe('When checking whether the directory contains a specific file', () => {
   });
 
   afterAll(() => {
-    fs.unlinkSync(path.join(sut.path, fileName));
-    fs.rmdirSync(sut.path);
+    del.sync(sut.path);
   });
 
   test('it should return true if the file exists', () => {
@@ -72,15 +72,90 @@ describe('When checking whether the directory contains a specific file', () => {
   });
 });
 
+describe('When checking whether the directory contains a specific tool on Posix', () => {
+  const sut = new ToolsDirectory('theToolsOnPosix');
+  const toolName = 'theTool';
+
+  beforeAll(() => {
+    fs.mkdirSync(sut.path);
+    fs.writeFileSync(path.join(sut.path, toolName), {});
+    Platform.isWindows = jest.fn().mockImplementation(() => false);
+  });
+
+  afterAll(() => {
+    del.sync(sut.path);
+  });
+
+  test('it should return true if the directory contains the tool', () => {
+    expect(sut.containsTool(toolName)).toBe(true);
+  });
+
+  test('it should return false if the directory does not contain the tool', () => {
+    expect(sut.containsTool('notExisting')).toBe(false);
+  });
+});
+
+describe('When checking whether the directory contains a specific tool on Windows', () => {
+  const sut = new ToolsDirectory('theToolsOnWindows');
+  const toolName = 'theTool';
+
+  beforeAll(() => {
+    fs.mkdirSync(sut.path);
+    fs.writeFileSync(path.join(sut.path,`${toolName}.exe`), {});
+    Platform.isWindows = jest.fn().mockImplementation(() => true);
+  });
+
+  afterAll(() => {
+    del.sync(sut.path);
+  });
+
+  test('it should return true if the directory contains the tool', () => {
+    expect(sut.containsTool(toolName)).toBe(true);
+  });
+
+  test('it should return false if the directory does not contain the tool', () => {
+    expect(sut.containsTool('notExisting')).toBe(false);
+  });
+});
+
+describe('When checking whether the directory contains a specific version of a tool', () => {
+  const sut = new ToolsDirectory('theToolsWithVersions');
+  const packageId = 'thePackage';
+  const version = 'theVersion';
+  const packageMetadata = 'project.assets.json';
+  const toolDirectoryPath = path.join(sut.path, '.store', packageId, version);
+
+  beforeAll(() => {
+    fs.mkdirSync(toolDirectoryPath, { recursive: true });
+    fs.writeFileSync(path.join(toolDirectoryPath, packageMetadata), {});
+  });
+
+  afterAll(() => {
+    del.sync(sut.path);
+  });
+
+  test('it should return true if the directory contains the version of the tool', () => {
+    expect(sut.containsToolWithVersion(packageId, version)).toBe(true);
+  });
+
+  test('it should return false if the directory does not contain the tool', () => {
+    expect(sut.containsToolWithVersion('notExisting', version)).toBe(false);
+  });
+
+  test('it should return false if the directory does not contain the version of the tool', () => {
+    expect(sut.containsToolWithVersion(packageId, 'notExisting')).toBe(false);
+  });
+});
+
 describe('When appending a file name', () => {
   test('it should join the directory path with the specified file name', () => {
     const sut = new ToolsDirectory();
-    expect(sut.appendFileName('theFileName')).toBe(`${sut.path}${Platform.isWindows() ? '\\' : '/'}theFileName`);
+    expect(sut.append('theFileName')).toBe(`${sut.path}${process.platform === 'win32' ? '\\' : '/'}theFileName`);
   });
 
   test('it should remove any extra slashes in front of the specified file name', () => {
     const sut = new ToolsDirectory();
-    expect(sut.appendFileName('/theFileName')).toBe(`${sut.path}${Platform.isWindows() ? '\\' : '/'}theFileName`);
+    expect(sut.append('/theFileName')).toBe(`${sut.path}${process.platform === 'win32' ? '\\' : '/'}theFileName`);
   });
 });
 

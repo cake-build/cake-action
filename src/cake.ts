@@ -24,7 +24,7 @@ export class CakeTool {
 
   private static async resolveCakeToolPath(workingDirectory?: ToolsDirectory): Promise<string> {
     return workingDirectory
-      ? workingDirectory.appendFileName(dotnetCake)
+      ? workingDirectory.append(dotnetCake)
       : await which(dotnetCake);
   }
 
