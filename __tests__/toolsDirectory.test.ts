@@ -72,6 +72,29 @@ describe('When checking whether the directory contains a specific file', () => {
   });
 });
 
+describe('When checking whether the directory contains a specific file in a subdirectory', () => {
+  const sut = new ToolsDirectory('theNameWithSubdirectory');
+  const subdirectoryPath = path.join(sut.path, 'theSubdirectory');
+  const fileName = 'theFile';
+
+  beforeAll(() => {
+    fs.mkdirSync(subdirectoryPath, { recursive: true });
+    fs.writeFileSync(path.join(subdirectoryPath, fileName), {});
+  });
+
+  afterAll(() => {
+    del.sync(sut.path);
+  });
+
+  test('it should return true if the file exists', () => {
+    expect(sut.containsFile(fileName, 'theSubdirectory')).toBe(true);
+  });
+
+  test('it should return false if the file does not exists', () => {
+    expect(sut.containsFile(fileName, 'notExisting')).toBe(false);
+  });
+});
+
 describe('When checking whether the directory contains a specific tool on Posix', () => {
   const sut = new ToolsDirectory('theToolsOnPosix');
   const toolName = 'theTool';

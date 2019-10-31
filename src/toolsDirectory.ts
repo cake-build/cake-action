@@ -23,18 +23,17 @@ export class ToolsDirectory {
     return path.join(this.path, ...segment);
   }
 
-  containsFile(fileName: string): boolean {
-    return fs.existsSync(this.append(fileName));
+  containsFile(fileName: string, ...subdirectory: string[]): boolean {
+    return fs.existsSync(this.append(...subdirectory, fileName));
   }
 
   containsTool(toolName: string): boolean {
     const executableName = Platform.isWindows() ? `${toolName}.exe` : toolName;
-    return fs.existsSync(this.append(executableName));
+    return this.containsFile(executableName);
   }
 
   containsToolWithVersion(packageId: string, version: string): boolean {
-    return fs.existsSync(
-      this.append('.store', packageId, version, 'project.assets.json'));
+    return this.containsFile('project.assets.json', '.store', packageId, version);
   }
 
   toString(): string {
