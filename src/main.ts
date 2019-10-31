@@ -7,8 +7,8 @@ import { CakeArgument } from './cakeParameter';
 export async function run() {
   try {
     const scriptPath = core.getInput('script-path');
-    const target = new CakeArgument('target', core.getInput('target'));
     const version = core.getInput('cake-version');
+    const target = new CakeArgument('target', core.getInput('target'));
 
     const toolsDir = new ToolsDirectory();
     toolsDir.create();
