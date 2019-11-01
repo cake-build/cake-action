@@ -51,6 +51,21 @@ describe('When running the action with the script path input argument', () => {
   });
 });
 
+describe('When running the action with the Cake version input argument', () => {
+  const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
+  const fakeInstallLocalCakeTool =
+    DotNet.installLocalCakeTool as jest.MockedFunction<typeof DotNet.installLocalCakeTool>;
+
+  beforeAll(() => {
+    when(fakeGetInput).calledWith('cake-version').mockReturnValue('the.version.number');
+  });
+
+  test('it should install the specified version of Cake', async () => {
+    await run();
+    expect(fakeInstallLocalCakeTool.mock.calls[0][1]).toBe('the.version.number');
+  });
+});
+
 describe('When running the action with the target input argument', () => {
   const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
   const fakeRunScript = CakeTool.runScript as jest.MockedFunction<typeof CakeTool.runScript>;
