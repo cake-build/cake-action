@@ -1,4 +1,5 @@
 import * as core from '@actions/core';
+import { when } from 'jest-when';
 import { run } from '../src/main';
 import { ToolsDirectory } from '../src/toolsDirectory';
 import { DotNet } from '../src/dotnet';
@@ -41,12 +42,11 @@ describe('When running the action with the script path input argument', () => {
   const fakeCakeTool = CakeTool as jest.MockedClass<typeof CakeTool>;
 
   beforeAll(() => {
-    fakeGetInput.mockReturnValue('path/to/script.cake');
+    when(fakeGetInput).calledWith('script-path').mockReturnValue('path/to/script.cake');
   });
 
   test('it should run the specified Cake script', async () => {
     await run();
-    expect(fakeGetInput).toBeCalledWith('script-path');
     expect(fakeCakeTool.runScript).toBeCalledWith(
       'path/to/script.cake',
       expect.anything(),
@@ -59,12 +59,11 @@ describe('When running the action with the target input argument', () => {
   const fakeCakeTool = CakeTool as jest.MockedClass<typeof CakeTool>;
 
   beforeAll(() => {
-    fakeGetInput.mockReturnValue('Task-To-Run');
+    when(fakeGetInput).calledWith('target').mockReturnValue('Task-To-Run');
   });
 
   test('it should run the specified Cake script', async () => {
     await run();
-    expect(fakeGetInput).toBeCalledWith('target');
     expect(fakeCakeTool.runScript).toBeCalledWith(
       expect.anything(),
       expect.anything(),
