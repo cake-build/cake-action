@@ -39,7 +39,7 @@ describe('When running the action without any input arguments', () => {
 
 describe('When running the action with the script path input argument', () => {
   const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
-  const fakeCakeTool = CakeTool as jest.MockedClass<typeof CakeTool>;
+  const fakeRunScript = CakeTool.runScript as jest.MockedFunction<typeof CakeTool.runScript>;
 
   beforeAll(() => {
     when(fakeGetInput).calledWith('script-path').mockReturnValue('path/to/script.cake');
@@ -47,26 +47,21 @@ describe('When running the action with the script path input argument', () => {
 
   test('it should run the specified Cake script', async () => {
     await run();
-    expect(fakeCakeTool.runScript).toBeCalledWith(
-      'path/to/script.cake',
-      expect.anything(),
-      expect.anything());
+    expect(fakeRunScript.mock.calls[0][0]).toBe('path/to/script.cake');
   });
 });
 
 describe('When running the action with the target input argument', () => {
   const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
-  const fakeCakeTool = CakeTool as jest.MockedClass<typeof CakeTool>;
+  const fakeRunScript = CakeTool.runScript as jest.MockedFunction<typeof CakeTool.runScript>;
 
   beforeAll(() => {
     when(fakeGetInput).calledWith('target').mockReturnValue('Task-To-Run');
   });
 
-  test('it should run the specified Cake script', async () => {
+  test('it should run script with the specified target', async () => {
     await run();
-    expect(fakeCakeTool.runScript).toBeCalledWith(
-      expect.anything(),
-      expect.anything(),
+    expect(fakeRunScript.mock.calls[0][2]).toMatchObject(
       new CakeArgument('target', 'Task-To-Run'));
   });
 });
