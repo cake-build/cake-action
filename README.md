@@ -42,9 +42,23 @@ steps:
       target: Task-To-Run
 ```
 
+### `verbosity`
+
+You can adjust the amount of information Cake sends to the build log by changing the [verbosity level](https://cakebuild.net/api/Cake.Core.Diagnostics/Verbosity/) with the `verbosity` parameter:
+
+```yml
+steps:
+  - name: Run the Cake script
+    uses: ecampidoglio/cake-action@master
+    with:
+      verbosity: Diagnostic
+```
+
+The supported verbosity levels are `Quiet`, `Minimal`, `Normal`, `Verbose` and `Diagnostic`. The default level is set to `Normal`.
+
 ### `cake-version`
 
-By default, the Cake action will run your script using the latest _stable_ version of the [Cake .NET Core Global tool](https://www.nuget.org/packages/Cake.Tool/). However, if for some reason you want to use a specific version of Cake (for compatibility with older third-party addins, for example), you can do so by specifying the version number in the `cake-version` parameter:
+By default, the Cake action will run your script using the latest _stable_ version of the [Cake .NET Core Global tool](https://www.nuget.org/packages/Cake.Tool/). However, if for some reason you want to [use a specific version of Cake](https://cakebuild.net/docs/tutorials/pinning-cake-version) (for compatibility with older third-party addins, for example), you can do so by specifying the version number in the `cake-version` parameter:
 
 ```yml
 steps:
@@ -52,6 +66,18 @@ steps:
     uses: ecampidoglio/cake-action@master
     with:
       cake-version: 0.30.0
+```
+
+### `cake-bootstrap`
+
+If you're referencing any [custom modules](https://cakebuild.net/docs/fundamentals/modules) from within your script, you'll have to [bootstrap](https://cakebuild.net/docs/fundamentals/preprocessor-directives#module-directive) them _before_ the script runs. The Cake action can do this extra step for you; all you have to do is set the `cake-bootstrap` parameter to `true`:
+
+```yml
+steps:
+  - name: Run the Cake script
+    uses: ecampidoglio/cake-action@master
+    with:
+      cake-bootstrap: true
 ```
 
 ## Cross-platform
