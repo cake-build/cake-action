@@ -22,20 +22,20 @@ jobs:
         uses: ./
         with:
           target: Successful-Task
-      - name: Run a specific version ( 0.34.1 )
+      - name: Run with a specific Cake version
         env:
-          TEST_CAKE_VERSION: 0.34.1
+          EXPECTED_CAKE_VERSION: 0.34.1
         uses: ./
         with:
           cake-version: 0.34.1
-          target: Version-Check-Task
-      - name: Run a specific version ( 0.33.0 )
+          target: Test-Cake-Version
+      - name: Run with a different Cake version in the same build
         env:
-          TEST_CAKE_VERSION: 0.33.0
+          EXPECTED_CAKE_VERSION: 0.33.0
         uses: ./
         with:
           cake-version: 0.33.0
-          target: Version-Check-Task
+          target: Test-Cake-Version
       - name: Run bootstrapping of Cake module
         uses: ./
         with:

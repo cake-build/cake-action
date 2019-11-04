@@ -12,16 +12,26 @@ Task("Failing-Task")
     throw new Exception("Failed");
 });
 
-Task("Version-Check-Task")
-    .Does(context =>
+Task("Test-Cake-Version")
+    .Does(() =>
 {
-    Version expect = Version.TryParse($"{EnvironmentVariable("TEST_CAKE_VERSION")}.0", out Version parsedVersion)
-                    ? parsedVersion
-                    : null;
+    var hasExpectedVersion = Version.TryParse(
+        EnvironmentVariable("EXPECTED_CAKE_VERSION"),
+        out Version expectedVersion);
 
-    if (expect != context.Environment.Runtime.CakeVersion)
+    if (!hasExpectedVersion)
     {
-        throw new Exception($"Expected version {expect} got {context.Environment.Runtime.CakeVersion}");
+        throw new Exception(
+            "The EXPECTED_CAKE_VERSION environment variable is not set or it doesn't contain a version number");
+    }
+
+    var actualVersion = Context.Environment.Runtime.CakeVersion;
+
+    if (( expectedVersion.Major, expectedVersion.Minor, expectedVersion.Build ) !=
+        ( actualVersion.Major, actualVersion.Minor, actualVersion.Build ))
+    {
+        throw new Exception(
+            $"Expected Cake version {expectedVersion.ToString(fieldCount: 3)} but got {actualVersion.ToString(fieldCount: 3)}");
     }
 
     Information("Successful");
