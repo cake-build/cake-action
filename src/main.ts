@@ -10,6 +10,7 @@ export async function run() {
     const version = core.getInput('cake-version');
     const bootstrap = (core.getInput('cake-bootstrap') || '').toLowerCase() === 'true';
     const target = new CakeArgument('target', core.getInput('target'));
+    const verbosity = new CakeArgument('verbosity', core.getInput('verbosity'));
 
     const toolsDir = new ToolsDirectory();
     toolsDir.create();
@@ -22,7 +23,7 @@ export async function run() {
       await CakeTool.bootstrapScript(scriptPath, toolsDir);
     }
 
-    await CakeTool.runScript(scriptPath, toolsDir, target);
+    await CakeTool.runScript(scriptPath, toolsDir, target, verbosity);
   } catch (error) {
     core.setFailed(error.message);
   }

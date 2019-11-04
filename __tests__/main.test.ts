@@ -81,6 +81,21 @@ describe('When running the action with the target input argument', () => {
   });
 });
 
+describe('When running the action with the verbosity input argument', () => {
+  const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
+  const fakeRunScript = CakeTool.runScript as jest.MockedFunction<typeof CakeTool.runScript>;
+
+  beforeAll(() => {
+    when(fakeGetInput).calledWith('verbosity').mockReturnValue('Verbosity-Level');
+  });
+
+  test('it should run the script with the specified verbosity level', async () => {
+    await run();
+    expect(fakeRunScript.mock.calls[0][3]).toMatchObject(
+      new CakeArgument('verbosity', 'Verbosity-Level'));
+  });
+});
+
 describe('When the script fails to run', () => {
   const fakeSetFailed = core.setFailed as jest.MockedFunction<typeof core.setFailed>;
 

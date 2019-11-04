@@ -12,6 +12,10 @@ inputs:
   target:
     description: 'The name of the task to execute. Note that this argument must be supported by the script.'
     required: false
+  verbosity:
+    description: 'The verbosity level with which to run the script. Valid values are: Quiet, Minimal, Normal, Verbose or Diagnostic.'
+    required: false
+    default: 'Normal'
   cake-version:
     description: 'The version of Cake to install.'
     required: false
