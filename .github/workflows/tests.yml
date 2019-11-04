@@ -36,3 +36,10 @@ jobs:
         with:
           cake-version: 0.33.0
           target: Version-Check-Task
+      - name: Run bootstrapping of Cake module
+        uses: ./
+        with:
+          cake-bootstrap: true
+          script-path: module.cake
+
+

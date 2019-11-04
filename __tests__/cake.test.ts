@@ -118,3 +118,33 @@ describe('When failing to run a script using the local Cake tool', () => {
     await expect(CakeTool.runScript('script.cake', new ToolsDirectory())).rejects.toThrowError('-21');
   });
 });
+
+describe('When bootstrapping a script successfully using the local Cake tool', () => {
+  const fakeExec = exec as jest.MockedFunction<typeof exec>;
+
+  beforeAll(async () => {
+    fakeExec.mockReturnValue(Promise.resolve(0));
+  });
+
+  test('it should run the local dotnet-cake tool on the default script', async () => {
+    await CakeTool.bootstrapScript(undefined, new ToolsDirectory(pathToLocalToolsDirectory));
+    expect(fakeExec).toBeCalledWith(pathToLocalTool, ['build.cake', '--bootstrap']);
+  });
+
+  test('it should run the local dotnet-cake tool on the specified script', async () => {
+    await CakeTool.bootstrapScript('script.cake', new ToolsDirectory(pathToLocalToolsDirectory));
+    expect(fakeExec).toBeCalledWith(pathToLocalTool, ['script.cake', '--bootstrap']);
+  });
+});
+
+describe('When failing to bootstrap a script using the local Cake tool', () => {
+  const fakeExec = exec as jest.MockedFunction<typeof exec>;
+
+  beforeAll(() => {
+    fakeExec.mockReturnValue(Promise.resolve(-21));
+  });
+
+  test('it should throw an error containing the exit code', async () => {
+    await expect(CakeTool.bootstrapScript('script.cake', new ToolsDirectory())).rejects.toThrowError('-21');
+  });
+});
