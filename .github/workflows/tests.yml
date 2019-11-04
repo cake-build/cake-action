@@ -41,5 +41,10 @@ jobs:
         with:
           cake-bootstrap: true
           script-path: module.cake
-
-
+      - name: Run with a specific verbosity level
+        uses: ./
+        env:
+          EXPECTED_VERBOSITY: Diagnostic
+        with:
+          verbosity: Diagnostic
+          target: Test-Verbosity

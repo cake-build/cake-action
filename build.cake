@@ -37,4 +37,28 @@ Task("Test-Cake-Version")
     Information("✓ Passed");
 });
 
+Task("Test-Verbosity")
+    .Does(() =>
+{
+    var hasExpectedVerbosity = Enum.TryParse(
+        EnvironmentVariable("EXPECTED_VERBOSITY"),
+        ignoreCase: true,
+        out Verbosity expectedVerbosity);
+
+    if (!hasExpectedVerbosity)
+    {
+        throw new Exception(
+            "✕ The EXPECTED_VERBOSITY environment variable is not set or it doesn't contain a verbosity level");
+    }
+
+    var actualVerbosity = Context.Log.Verbosity;
+
+    if (expectedVerbosity != actualVerbosity)
+    {
+        throw new Exception($"✕ Expected verbosity {expectedVerbosity} but got {actualVerbosity}");
+    }
+
+    Information("✓ Passed");
+});
+
 RunTarget(target);
