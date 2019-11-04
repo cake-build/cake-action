@@ -8,8 +8,8 @@ export async function run() {
   try {
     const scriptPath = core.getInput('script-path');
     const version = core.getInput('cake-version');
+    const bootstrap = (core.getInput('cake-bootstrap') || '').toLowerCase() === 'true';
     const target = new CakeArgument('target', core.getInput('target'));
-    const cakeBootstrap = (core.getInput('cake-bootstrap') || '').toLowerCase() === 'true';
 
     const toolsDir = new ToolsDirectory();
     toolsDir.create();
@@ -18,7 +18,7 @@ export async function run() {
 
     await DotNet.installLocalCakeTool(toolsDir, version);
 
-    if (cakeBootstrap) {
+    if (bootstrap) {
       await CakeTool.bootstrapScript(scriptPath, toolsDir);
     }
 
