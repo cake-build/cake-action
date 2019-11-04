@@ -82,4 +82,24 @@ steps:
 
 ## Cross-platform
 
-Since the [Cake Tool](https://www.nuget.org/packages/Cake.Tool/) is built on .NET Core, this action will run on any of the [virtual environments](https://help.github.com/en/github/automating-your-workflow-with-github-actions/software-in-virtual-environments-for-github-actions) supported by GitHub Actions, namely Linux, Windows and macOS.
+Since the [Cake Tool](https://www.nuget.org/packages/Cake.Tool/) is built on .NET Core, the Cake action will run on any of the [virtual environments](https://help.github.com/en/github/automating-your-workflow-with-github-actions/software-in-virtual-environments-for-github-actions) supported by GitHub Actions, namely Linux, Windows and macOS.
+
+This allows you to define your build step exactly _once_ and run it on multiple operating systems _in parallel_ by defining a [build matrix](https://help.github.com/en/github/automating-your-workflow-with-github-actions/configuring-a-workflow#configuring-a-build-matrix):
+
+```yml
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macOS-latest]
+    steps:
+      - name: Get the sources
+        uses: actions/checkout@v1
+      - name: Run the build script
+        uses: ecampidoglio/cake-action@master
+        with:
+          target: Build
+```
+
+You can read more about how to define a build matrix in the [workflow syntax](https://help.github.com/en/github/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#jobsjob_idstrategy) for GitHub Actions.
