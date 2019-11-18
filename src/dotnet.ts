@@ -34,7 +34,7 @@ export class DotNet {
       return;
     }
 
-    if (version && !targetDirectory.containsToolWithVersion(packageId, version)) {
+    if (version && (targetDirectory.containsTool(toolName) && !targetDirectory.containsToolWithVersion(packageId, version))) {
       await DotNet.uninstallLocalTool(packageId, targetDirectory);
     }
 

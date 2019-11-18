@@ -24,6 +24,7 @@ describe('When successfully installing the Cake Tool locally', () => {
   beforeAll(() => {
     fakeExec.mockReturnValue(Promise.resolve(0));
     ToolsDirectory.prototype.containsTool = jest.fn().mockImplementation(() => false);
+    ToolsDirectory.prototype.containsToolWithVersion = jest.fn().mockImplementation(() => false);
   });
 
   test('it should install the Cake.Tool in the tools directory', async () => {
@@ -44,6 +45,11 @@ describe('When successfully installing the Cake Tool locally', () => {
   test('it should install a specific version of the Cake.Tool in the specified target directory', async () => {
     await DotNet.installLocalCakeTool(new ToolsDirectory(targetDirectory), 'theVersion');
     expect(fakeExec).toBeCalledWith('dotnet tool install', ['--version', 'theVersion', '--tool-path', targetDirectory, 'Cake.Tool']);
+  });
+
+  test('it should not attempt to uninstall the Cake.Tool', async () => {
+    await DotNet.installLocalCakeTool(new ToolsDirectory(targetDirectory), 'theVersion');
+    expect(fakeExec).not.toBeCalledWith('dotnet tool uninstall', expect.arrayContaining(['Cake.Tool']));
   });
 });
 
