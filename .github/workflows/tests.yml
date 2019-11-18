@@ -11,6 +11,8 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
+    env:
+      TOOLS_DIRECTORY: tools
     steps:
       - name: Get the sources
         uses: actions/checkout@v1
@@ -22,6 +24,9 @@ jobs:
         uses: ./
         with:
           target: Successful-Task
+      - name: Remove the tools directory
+        run: rm -rf $TOOLS_DIRECTORY
+        shell: bash
       - name: Run with a specific Cake version
         env:
           EXPECTED_CAKE_VERSION: 0.34.1
