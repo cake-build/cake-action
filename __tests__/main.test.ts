@@ -18,22 +18,22 @@ describe('When running the action without any input arguments', () => {
 
   test('it should create the tools directory', async () => {
     await run();
-    expect(fakeToolsDirectory.prototype.create).toBeCalled();
+    expect(fakeToolsDirectory.prototype.create).toHaveBeenCalled();
   });
 
   test('it should disable the .NET Core telemetry', async () => {
     await run();
-    expect(fakeDotNet.disableTelemetry).toBeCalled();
+    expect(fakeDotNet.disableTelemetry).toHaveBeenCalled();
   });
 
   test('it should install the Cake tool locally', async () => {
     await run();
-    expect(fakeDotNet.installLocalCakeTool).toBeCalled();
+    expect(fakeDotNet.installLocalCakeTool).toHaveBeenCalled();
   });
 
   test('it should run the default Cake script', async () => {
     await run();
-    expect(fakeCakeTool.runScript).toBeCalled();
+    expect(fakeCakeTool.runScript).toHaveBeenCalled();
   });
 });
 
@@ -107,7 +107,7 @@ describe('When the script fails to run', () => {
 
   test('it should mark the action as failed with the specific error message', async () => {
     await run();
-    expect(fakeSetFailed).toBeCalledWith('the error message');
+    expect(fakeSetFailed).toHaveBeenCalledWith('the error message');
   });
 });
 
@@ -121,13 +121,13 @@ describe('When running the action with the cake-bootstrap input argument', () =>
 
   test('it should bootstrap the default Cake script', async () => {
     await run();
-    expect(fakeBootstrapScript).toBeCalled();
+    expect(fakeBootstrapScript).toHaveBeenCalled();
   });
 
   test('it should bootstrap the specified Cake script', async () => {
     when(fakeGetInput).calledWith('script-path').mockReturnValue('custom.cake');
     await run();
-    expect(fakeBootstrapScript).toBeCalledWith(
+    expect(fakeBootstrapScript).toHaveBeenCalledWith(
       'custom.cake',
       expect.anything());
   });
