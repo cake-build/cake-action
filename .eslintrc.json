@@ -25,6 +25,7 @@
     "brace-style": "error",
     "semi": "error",
     "arrow-spacing": "error",
+    "eol-last": "error",
     "keyword-spacing": "error",
     "no-mixed-spaces-and-tabs": "error",
     "no-multiple-empty-lines": "error",
