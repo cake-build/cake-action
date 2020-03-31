@@ -22,12 +22,12 @@ describe('When running a script successfully using the global Cake tool', () => 
 
   test('it should run the global dotnet-cake tool on the default script', async () => {
     await CakeTool.runScript();
-    expect(fakeExec).toBeCalledWith('/usr/bin/dotnet-cake', ['build.cake']);
+    expect(fakeExec).toHaveBeenCalledWith('/usr/bin/dotnet-cake', ['build.cake']);
   });
 
   test('it should run the global dotnet-cake tool on the specified script', async () => {
     await CakeTool.runScript('script.cake');
-    expect(fakeExec).toBeCalledWith('/usr/bin/dotnet-cake', ['script.cake']);
+    expect(fakeExec).toHaveBeenCalledWith('/usr/bin/dotnet-cake', ['script.cake']);
   });
 
   test('it should run the global dotnet-cake tool with the specified parameters', async () => {
@@ -36,7 +36,7 @@ describe('When running a script successfully using the global Cake tool', () => 
       undefined,
       new CakeArgument('param', 'arg'),
       new CakeSwitch('switch'));
-    expect(fakeExec).toBeCalledWith(
+    expect(fakeExec).toHaveBeenCalledWith(
       '/usr/bin/dotnet-cake',
       ['script.cake', '--param=arg', '--switch']);
   });
@@ -47,7 +47,7 @@ describe('When running a script successfully using the global Cake tool', () => 
       undefined,
       new CakeArgument('', ''),
       new CakeSwitch('switch'));
-    expect(fakeExec).toBeCalledWith(
+    expect(fakeExec).toHaveBeenCalledWith(
       '/usr/bin/dotnet-cake',
       ['script.cake', '--switch']);
   });
@@ -62,12 +62,12 @@ describe('When running a script successfully using the local Cake tool', () => {
 
   test('it should run the local dotnet-cake tool on the default script', async () => {
     await CakeTool.runScript(undefined, new ToolsDirectory(pathToLocalToolsDirectory));
-    expect(fakeExec).toBeCalledWith(pathToLocalTool, ['build.cake']);
+    expect(fakeExec).toHaveBeenCalledWith(pathToLocalTool, ['build.cake']);
   });
 
   test('it should run the local dotnet-cake tool on the specified script', async () => {
     await CakeTool.runScript('script.cake', new ToolsDirectory(pathToLocalToolsDirectory));
-    expect(fakeExec).toBeCalledWith(pathToLocalTool, ['script.cake']);
+    expect(fakeExec).toHaveBeenCalledWith(pathToLocalTool, ['script.cake']);
   });
 
   test('it should run the local dotnet-cake tool with the specified parameters', async () => {
@@ -76,7 +76,7 @@ describe('When running a script successfully using the local Cake tool', () => {
       new ToolsDirectory(pathToLocalToolsDirectory),
       new CakeArgument('param', 'arg'),
       new CakeSwitch('switch'));
-    expect(fakeExec).toBeCalledWith(
+    expect(fakeExec).toHaveBeenCalledWith(
       pathToLocalTool,
       ['script.cake', '--param=arg', '--switch']);
   });
@@ -87,7 +87,7 @@ describe('When running a script successfully using the local Cake tool', () => {
       new ToolsDirectory(pathToLocalToolsDirectory),
       new CakeArgument('', ''),
       new CakeSwitch('switch'));
-    expect(fakeExec).toBeCalledWith(
+    expect(fakeExec).toHaveBeenCalledWith(
       pathToLocalTool,
       ['script.cake', '--switch']);
   });
@@ -103,7 +103,7 @@ describe('When failing to run a script using the global Cake tool', () => {
   });
 
   test('it should throw an error containing the exit code', async () => {
-    await expect(CakeTool.runScript('script.cake')).rejects.toThrowError('-21');
+    await expect(CakeTool.runScript('script.cake')).rejects.toThrow('-21');
   });
 });
 
@@ -115,7 +115,7 @@ describe('When failing to run a script using the local Cake tool', () => {
   });
 
   test('it should throw an error containing the exit code', async () => {
-    await expect(CakeTool.runScript('script.cake', new ToolsDirectory())).rejects.toThrowError('-21');
+    await expect(CakeTool.runScript('script.cake', new ToolsDirectory())).rejects.toThrow('-21');
   });
 });
 
@@ -128,12 +128,12 @@ describe('When bootstrapping a script successfully using the local Cake tool', (
 
   test('it should run the local dotnet-cake tool on the default script', async () => {
     await CakeTool.bootstrapScript(undefined, new ToolsDirectory(pathToLocalToolsDirectory));
-    expect(fakeExec).toBeCalledWith(pathToLocalTool, ['build.cake', '--bootstrap']);
+    expect(fakeExec).toHaveBeenCalledWith(pathToLocalTool, ['build.cake', '--bootstrap']);
   });
 
   test('it should run the local dotnet-cake tool on the specified script', async () => {
     await CakeTool.bootstrapScript('script.cake', new ToolsDirectory(pathToLocalToolsDirectory));
-    expect(fakeExec).toBeCalledWith(pathToLocalTool, ['script.cake', '--bootstrap']);
+    expect(fakeExec).toHaveBeenCalledWith(pathToLocalTool, ['script.cake', '--bootstrap']);
   });
 });
 
@@ -145,6 +145,6 @@ describe('When failing to bootstrap a script using the local Cake tool', () => {
   });
 
   test('it should throw an error containing the exit code', async () => {
-    await expect(CakeTool.bootstrapScript('script.cake', new ToolsDirectory())).rejects.toThrowError('-21');
+    await expect(CakeTool.bootstrapScript('script.cake', new ToolsDirectory())).rejects.toThrow('-21');
   });
 });

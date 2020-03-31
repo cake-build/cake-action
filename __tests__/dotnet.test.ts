@@ -14,7 +14,7 @@ describe('When disabling the .NET Core telemetry', () => {
 
   test('it should set the DOTNET_CLI_TELEMETRY_OPTOUT environment variable to 1', () => {
     DotNet.disableTelemetry();
-    expect(fakeExportVariable).toBeCalledWith('DOTNET_CLI_TELEMETRY_OPTOUT', '1');
+    expect(fakeExportVariable).toHaveBeenCalledWith('DOTNET_CLI_TELEMETRY_OPTOUT', '1');
   });
 });
 
@@ -29,27 +29,27 @@ describe('When successfully installing the Cake Tool locally', () => {
 
   test('it should install the Cake.Tool in the tools directory', async () => {
     await DotNet.installLocalCakeTool();
-    expect(fakeExec).toBeCalledWith('dotnet tool install', ['--tool-path', 'tools', 'Cake.Tool']);
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool install', ['--tool-path', 'tools', 'Cake.Tool']);
   });
 
   test('it should install the Cake.Tool in the specified target directory', async () => {
     await DotNet.installLocalCakeTool(new ToolsDirectory(targetDirectory));
-    expect(fakeExec).toBeCalledWith('dotnet tool install', ['--tool-path', targetDirectory, 'Cake.Tool']);
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool install', ['--tool-path', targetDirectory, 'Cake.Tool']);
   });
 
   test('it should install a specific version of the Cake.Tool in the tools directory', async () => {
     await DotNet.installLocalCakeTool(undefined, 'theVersion');
-    expect(fakeExec).toBeCalledWith('dotnet tool install', ['--version', 'theVersion', '--tool-path', 'tools', 'Cake.Tool']);
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool install', ['--version', 'theVersion', '--tool-path', 'tools', 'Cake.Tool']);
   });
 
   test('it should install a specific version of the Cake.Tool in the specified target directory', async () => {
     await DotNet.installLocalCakeTool(new ToolsDirectory(targetDirectory), 'theVersion');
-    expect(fakeExec).toBeCalledWith('dotnet tool install', ['--version', 'theVersion', '--tool-path', targetDirectory, 'Cake.Tool']);
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool install', ['--version', 'theVersion', '--tool-path', targetDirectory, 'Cake.Tool']);
   });
 
   test('it should not attempt to uninstall the Cake.Tool', async () => {
     await DotNet.installLocalCakeTool(new ToolsDirectory(targetDirectory), 'theVersion');
-    expect(fakeExec).not.toBeCalledWith('dotnet tool uninstall', expect.arrayContaining(['Cake.Tool']));
+    expect(fakeExec).not.toHaveBeenCalledWith('dotnet tool uninstall', expect.arrayContaining(['Cake.Tool']));
   });
 });
 
@@ -61,15 +61,15 @@ describe('When failing to install the Cake Tool locally', () => {
   });
 
   test('it should throw an error containing the Cake.Tool name', async () => {
-    await expect(DotNet.installLocalCakeTool()).rejects.toThrowError('Cake.Tool');
+    await expect(DotNet.installLocalCakeTool()).rejects.toThrow('Cake.Tool');
   });
 
   test('it should throw an error containing the exit code', async () => {
-    await expect(DotNet.installLocalCakeTool()).rejects.toThrowError('-99');
+    await expect(DotNet.installLocalCakeTool()).rejects.toThrow('-99');
   });
 
   test('it should throw an error containing the exit code regardless of the version', async () => {
-    await expect(DotNet.installLocalCakeTool(new ToolsDirectory(), 'theVersion')).rejects.toThrowError('-99');
+    await expect(DotNet.installLocalCakeTool(new ToolsDirectory(), 'theVersion')).rejects.toThrow('-99');
   });
 });
 
@@ -82,12 +82,12 @@ describe('When successfully installing a tool locally', () => {
 
   test('it should install the specified tool in the tools directory', async () => {
     await DotNet.installLocalTool('The.Tool', 'dotnet-tool');
-    expect(fakeExec).toBeCalledWith('dotnet tool install', ['--tool-path', 'tools', 'The.Tool']);
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool install', ['--tool-path', 'tools', 'The.Tool']);
   });
 
   test('it should install the specified tool in the specified target directory', async () => {
     await DotNet.installLocalTool('The.Tool', 'dotnet-tool', new ToolsDirectory(targetDirectory));
-    expect(fakeExec).toBeCalledWith('dotnet tool install', ['--tool-path', targetDirectory, 'The.Tool']);
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool install', ['--tool-path', targetDirectory, 'The.Tool']);
   });
 });
 
@@ -99,11 +99,11 @@ describe('When failing to install a tool locally', () => {
   });
 
   test('it should throw an error containing the package id', async () => {
-    await expect(DotNet.installLocalTool('The.Tool', 'dotnet-tool')).rejects.toThrowError('The.Tool');
+    await expect(DotNet.installLocalTool('The.Tool', 'dotnet-tool')).rejects.toThrow('The.Tool');
   });
 
   test('it should throw an error containing the exit code', async () => {
-    await expect(DotNet.installLocalTool('The.Tool', 'dotnet-tool')).rejects.toThrowError('-99');
+    await expect(DotNet.installLocalTool('The.Tool', 'dotnet-tool')).rejects.toThrow('-99');
   });
 });
 
@@ -118,7 +118,7 @@ describe('When installing the Cake Tool locally to a directory where it already 
 
   test('it should not attempt to install the Cake.Tool in the same directory', () => {
     DotNet.installLocalCakeTool(directoryWithCakeTool);
-    expect(fakeExec).not.toBeCalledWith(
+    expect(fakeExec).not.toHaveBeenCalledWith(
       'dotnet tool install',
       ['--tool-path', directoryWithCakeTool.path, 'Cake.Tool']);
   });
@@ -126,10 +126,10 @@ describe('When installing the Cake Tool locally to a directory where it already 
   test('it should uninstall and install the specified version of the Cake.Tool in the specified target directory', async () => {
     directoryWithCakeTool.containsToolWithVersion = jest.fn().mockImplementation(() => false);
     await DotNet.installLocalCakeTool(directoryWithCakeTool, 'theVersion');
-    expect(fakeExec).toBeCalledWith(
+    expect(fakeExec).toHaveBeenCalledWith(
       'dotnet tool uninstall',
       ['--tool-path', directoryWithCakeTool.path, 'Cake.Tool']);
-    expect(fakeExec).toBeCalledWith(
+    expect(fakeExec).toHaveBeenCalledWith(
       'dotnet tool install',
       ['--version', 'theVersion', '--tool-path', directoryWithCakeTool.path, 'Cake.Tool']);
   });
@@ -137,10 +137,10 @@ describe('When installing the Cake Tool locally to a directory where it already 
   test('it should not uninstall and install the already installed specific version of the Cake.Tool', async () => {
     directoryWithCakeTool.containsToolWithVersion = jest.fn().mockImplementation(() => true);
     await DotNet.installLocalCakeTool(directoryWithCakeTool, 'theVersion');
-    expect(fakeExec).not.toBeCalledWith(
+    expect(fakeExec).not.toHaveBeenCalledWith(
       'dotnet tool uninstall',
       ['--tool-path', directoryWithCakeTool.path, 'Cake.Tool']);
-    expect(fakeExec).not.toBeCalledWith(
+    expect(fakeExec).not.toHaveBeenCalledWith(
       'dotnet tool install',
       ['--version', 'theVersion', '--tool-path', directoryWithCakeTool.path, 'Cake.Tool']);
   });
@@ -155,12 +155,12 @@ describe('When successfully uninstalling a tool locally', () => {
 
   test('it should uninstall the specified tool from the tools directory', async () => {
     await DotNet.uninstallLocalTool('The.Tool');
-    expect(fakeExec).toBeCalledWith('dotnet tool uninstall', ['--tool-path', 'tools', 'The.Tool']);
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool uninstall', ['--tool-path', 'tools', 'The.Tool']);
   });
 
   test('it should uninstall the specified tool from the specified target directory', async () => {
     await DotNet.uninstallLocalTool('The.Tool', new ToolsDirectory(targetDirectory));
-    expect(fakeExec).toBeCalledWith('dotnet tool uninstall', ['--tool-path', targetDirectory, 'The.Tool']);
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool uninstall', ['--tool-path', targetDirectory, 'The.Tool']);
   });
 });
 
@@ -172,10 +172,10 @@ describe('When failing to uninstall a tool locally', () => {
   });
 
   test('it should throw an error containing the package id', async () => {
-    await expect(DotNet.uninstallLocalTool('The.Tool')).rejects.toThrowError('The.Tool');
+    await expect(DotNet.uninstallLocalTool('The.Tool')).rejects.toThrow('The.Tool');
   });
 
   test('it should throw an error containing the exit code', async () => {
-    await expect(DotNet.uninstallLocalTool('The.Tool', new ToolsDirectory(targetDirectory))).rejects.toThrowError('-99');
+    await expect(DotNet.uninstallLocalTool('The.Tool', new ToolsDirectory(targetDirectory))).rejects.toThrow('-99');
   });
 });
