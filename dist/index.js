@@ -974,8 +974,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
 const toolsDirectory_1 = __webpack_require__(348);
-const dotnet_1 = __webpack_require__(193);
-const cake_1 = __webpack_require__(245);
+const dotnet = __importStar(__webpack_require__(193));
+const cake = __importStar(__webpack_require__(245));
 const cakeParameter_1 = __webpack_require__(947);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -987,12 +987,12 @@ function run() {
             const verbosity = new cakeParameter_1.CakeArgument('verbosity', core.getInput('verbosity'));
             const toolsDir = new toolsDirectory_1.ToolsDirectory();
             toolsDir.create();
-            dotnet_1.DotNet.disableTelemetry();
-            yield dotnet_1.DotNet.installLocalCakeTool(toolsDir, version);
+            dotnet.disableTelemetry();
+            yield dotnet.installLocalCakeTool(toolsDir, version);
             if (bootstrap) {
-                yield cake_1.CakeTool.bootstrapScript(scriptPath, toolsDir);
+                yield cake.bootstrapScript(scriptPath, toolsDir);
             }
-            yield cake_1.CakeTool.runScript(scriptPath, toolsDir, target, verbosity);
+            yield cake.runScript(scriptPath, toolsDir, target, verbosity);
         }
         catch (error) {
             core.setFailed(error.message);
@@ -1032,46 +1032,47 @@ const toolsDirectory_1 = __webpack_require__(348);
 const dotnetToolInstall = 'dotnet tool install';
 const dotnetToolUnInstall = 'dotnet tool uninstall';
 const dotnetCake = 'dotnet-cake';
-class DotNet {
-    static disableTelemetry() {
-        core.exportVariable('DOTNET_CLI_TELEMETRY_OPTOUT', '1');
-    }
-    static installLocalCakeTool(targetDirectory = new toolsDirectory_1.ToolsDirectory(), version) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return DotNet.installLocalTool('Cake.Tool', dotnetCake, targetDirectory, version);
-        });
-    }
-    static installLocalTool(packageId, toolName, targetDirectory = new toolsDirectory_1.ToolsDirectory(), version) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (!version && targetDirectory.containsTool(toolName)) {
-                core.info(`The ${packageId} already exists in ${targetDirectory}, skipping installation`);
-                return;
-            }
-            if (version && targetDirectory.containsToolWithVersion(packageId, version)) {
-                core.info(`The ${packageId} version ${version} already exists in ${targetDirectory}, skipping installation`);
-                return;
-            }
-            if (version && (targetDirectory.containsTool(toolName) && !targetDirectory.containsToolWithVersion(packageId, version))) {
-                yield DotNet.uninstallLocalTool(packageId, targetDirectory);
-            }
-            const versionArg = version ? ['--version', version] : [];
-            const installArgs = [...versionArg, '--tool-path', targetDirectory.path, packageId];
-            const exitCode = yield exec_1.exec(dotnetToolInstall, installArgs);
-            if (exitCode != 0) {
-                throw new Error(`Failed to install ${packageId}. Exit code: ${exitCode}`);
-            }
-        });
-    }
-    static uninstallLocalTool(packageId, targetDirectory = new toolsDirectory_1.ToolsDirectory()) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const exitCode = yield exec_1.exec(dotnetToolUnInstall, ['--tool-path', targetDirectory.path, packageId]);
-            if (exitCode != 0) {
-                throw new Error(`Failed to uninstall ${packageId}. Exit code: ${exitCode}`);
-            }
-        });
-    }
+function disableTelemetry() {
+    core.exportVariable('DOTNET_CLI_TELEMETRY_OPTOUT', '1');
 }
-exports.DotNet = DotNet;
+exports.disableTelemetry = disableTelemetry;
+function installLocalCakeTool(targetDirectory = new toolsDirectory_1.ToolsDirectory(), version) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return installLocalTool('Cake.Tool', dotnetCake, targetDirectory, version);
+    });
+}
+exports.installLocalCakeTool = installLocalCakeTool;
+function installLocalTool(packageId, toolName, targetDirectory = new toolsDirectory_1.ToolsDirectory(), version) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!version && targetDirectory.containsTool(toolName)) {
+            core.info(`The ${packageId} already exists in ${targetDirectory}, skipping installation`);
+            return;
+        }
+        if (version && targetDirectory.containsToolWithVersion(packageId, version)) {
+            core.info(`The ${packageId} version ${version} already exists in ${targetDirectory}, skipping installation`);
+            return;
+        }
+        if (version && (targetDirectory.containsTool(toolName) && !targetDirectory.containsToolWithVersion(packageId, version))) {
+            yield uninstallLocalTool(packageId, targetDirectory);
+        }
+        const versionArg = version ? ['--version', version] : [];
+        const installArgs = [...versionArg, '--tool-path', targetDirectory.path, packageId];
+        const exitCode = yield exec_1.exec(dotnetToolInstall, installArgs);
+        if (exitCode != 0) {
+            throw new Error(`Failed to install ${packageId}. Exit code: ${exitCode}`);
+        }
+    });
+}
+exports.installLocalTool = installLocalTool;
+function uninstallLocalTool(packageId, targetDirectory = new toolsDirectory_1.ToolsDirectory()) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const exitCode = yield exec_1.exec(dotnetToolUnInstall, ['--tool-path', targetDirectory.path, packageId]);
+        if (exitCode != 0) {
+            throw new Error(`Failed to uninstall ${packageId}. Exit code: ${exitCode}`);
+        }
+    });
+}
+exports.uninstallLocalTool = uninstallLocalTool;
 
 
 /***/ }),
@@ -1094,40 +1095,39 @@ const exec_1 = __webpack_require__(986);
 const io_1 = __webpack_require__(1);
 /* eslint @typescript-eslint/no-unused-vars: error */
 const dotnetCake = 'dotnet-cake';
-class CakeTool {
-    static runScript(scriptPath = 'build.cake', workingDirectory, ...params) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const cakeToolPath = yield CakeTool.resolveCakeToolPath(workingDirectory);
-            const cakeParams = CakeTool.formatParameters(params);
-            const exitCode = yield exec_1.exec(cakeToolPath, [scriptPath, ...cakeParams]);
-            if (exitCode != 0) {
-                throw new Error(`Failed to run the build script. Exit code: ${exitCode}`);
-            }
-        });
-    }
-    static bootstrapScript(scriptPath = 'build.cake', workingDirectory) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const cakeToolPath = yield CakeTool.resolveCakeToolPath(workingDirectory);
-            const exitCode = yield exec_1.exec(cakeToolPath, [scriptPath, '--bootstrap']);
-            if (exitCode != 0) {
-                throw new Error(`Failed to bootstrap the build script. Exit code: ${exitCode}`);
-            }
-        });
-    }
-    static resolveCakeToolPath(workingDirectory) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return workingDirectory
-                ? workingDirectory.append(dotnetCake)
-                : yield io_1.which(dotnetCake);
-        });
-    }
-    static formatParameters(params) {
-        return params
-            .filter(p => p.isValid())
-            .map(p => p.format());
-    }
+function runScript(scriptPath = 'build.cake', workingDirectory, ...params) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const cakeToolPath = yield resolveCakeToolPath(workingDirectory);
+        const cakeParams = formatParameters(params);
+        const exitCode = yield exec_1.exec(cakeToolPath, [scriptPath, ...cakeParams]);
+        if (exitCode != 0) {
+            throw new Error(`Failed to run the build script. Exit code: ${exitCode}`);
+        }
+    });
 }
-exports.CakeTool = CakeTool;
+exports.runScript = runScript;
+function bootstrapScript(scriptPath = 'build.cake', workingDirectory) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const cakeToolPath = yield resolveCakeToolPath(workingDirectory);
+        const exitCode = yield exec_1.exec(cakeToolPath, [scriptPath, '--bootstrap']);
+        if (exitCode != 0) {
+            throw new Error(`Failed to bootstrap the build script. Exit code: ${exitCode}`);
+        }
+    });
+}
+exports.bootstrapScript = bootstrapScript;
+function resolveCakeToolPath(workingDirectory) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return workingDirectory
+            ? workingDirectory.append(dotnetCake)
+            : yield io_1.which(dotnetCake);
+    });
+}
+function formatParameters(params) {
+    return params
+        .filter(p => p.isValid())
+        .map(p => p.format());
+}
 
 
 /***/ }),

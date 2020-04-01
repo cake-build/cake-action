@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 import { ToolsDirectory } from './toolsDirectory';
-import { DotNet } from './dotnet';
-import { CakeTool } from './cake';
+import * as dotnet from './dotnet';
+import * as cake from './cake';
 import { CakeArgument } from './cakeParameter';
 
 export async function run() {
@@ -15,15 +15,15 @@ export async function run() {
     const toolsDir = new ToolsDirectory();
     toolsDir.create();
 
-    DotNet.disableTelemetry();
+    dotnet.disableTelemetry();
 
-    await DotNet.installLocalCakeTool(toolsDir, version);
+    await dotnet.installLocalCakeTool(toolsDir, version);
 
     if (bootstrap) {
-      await CakeTool.bootstrapScript(scriptPath, toolsDir);
+      await cake.bootstrapScript(scriptPath, toolsDir);
     }
 
-    await CakeTool.runScript(scriptPath, toolsDir, target, verbosity);
+    await cake.runScript(scriptPath, toolsDir, target, verbosity);
   } catch (error) {
     core.setFailed(error.message);
   }

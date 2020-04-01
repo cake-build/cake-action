@@ -7,42 +7,40 @@ import { CakeParameter } from './cakeParameter';
 
 const dotnetCake = 'dotnet-cake';
 
-export class CakeTool {
-  static async runScript(
-    scriptPath: string = 'build.cake',
-    workingDirectory?: ToolsDirectory,
-    ...params: CakeParameter[]
-  ) {
-    const cakeToolPath = await CakeTool.resolveCakeToolPath(workingDirectory);
-    const cakeParams = CakeTool.formatParameters(params);
-    const exitCode = await exec(cakeToolPath, [scriptPath, ...cakeParams]);
+export async function runScript(
+  scriptPath: string = 'build.cake',
+  workingDirectory?: ToolsDirectory,
+  ...params: CakeParameter[]
+) {
+  const cakeToolPath = await resolveCakeToolPath(workingDirectory);
+  const cakeParams = formatParameters(params);
+  const exitCode = await exec(cakeToolPath, [scriptPath, ...cakeParams]);
 
-    if (exitCode != 0) {
-      throw new Error(`Failed to run the build script. Exit code: ${exitCode}`);
-    }
+  if (exitCode != 0) {
+    throw new Error(`Failed to run the build script. Exit code: ${exitCode}`);
   }
+}
 
-  static async bootstrapScript(
-    scriptPath: string = 'build.cake',
-    workingDirectory?: ToolsDirectory
-    ) {
-    const cakeToolPath = await CakeTool.resolveCakeToolPath(workingDirectory);
-    const exitCode = await exec(cakeToolPath, [scriptPath, '--bootstrap']);
+export async function bootstrapScript(
+  scriptPath: string = 'build.cake',
+  workingDirectory?: ToolsDirectory
+) {
+  const cakeToolPath = await resolveCakeToolPath(workingDirectory);
+  const exitCode = await exec(cakeToolPath, [scriptPath, '--bootstrap']);
 
-    if (exitCode != 0) {
-      throw new Error(`Failed to bootstrap the build script. Exit code: ${exitCode}`);
-    }
+  if (exitCode != 0) {
+    throw new Error(`Failed to bootstrap the build script. Exit code: ${exitCode}`);
   }
+}
 
-  private static async resolveCakeToolPath(workingDirectory?: ToolsDirectory): Promise<string> {
-    return workingDirectory
-      ? workingDirectory.append(dotnetCake)
-      : await which(dotnetCake);
-  }
+async function resolveCakeToolPath(workingDirectory?: ToolsDirectory): Promise<string> {
+  return workingDirectory
+    ? workingDirectory.append(dotnetCake)
+    : await which(dotnetCake);
+}
 
-  private static formatParameters(params: CakeParameter[]): string[] {
-    return params
-      .filter(p => p.isValid())
-      .map(p => p.format());
-  }
+function formatParameters(params: CakeParameter[]): string[] {
+  return params
+    .filter(p => p.isValid())
+    .map(p => p.format());
 }

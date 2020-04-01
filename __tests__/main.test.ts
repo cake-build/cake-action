@@ -2,8 +2,8 @@ import * as core from '@actions/core';
 import { when } from 'jest-when';
 import { run } from '../src/main';
 import { ToolsDirectory } from '../src/toolsDirectory';
-import { DotNet } from '../src/dotnet';
-import { CakeTool } from '../src/cake';
+import * as dotnet from '../src/dotnet';
+import * as cake from '../src/cake';
 import { CakeArgument } from '../src/cakeParameter';
 
 jest.mock('@actions/core');
@@ -13,8 +13,6 @@ jest.mock('../src/cake');
 
 describe('When running the action without any input arguments', () => {
   const fakeToolsDirectory = ToolsDirectory as jest.MockedClass<typeof ToolsDirectory>;
-  const fakeDotNet = DotNet as jest.MockedClass<typeof DotNet>;
-  const fakeCakeTool = CakeTool as jest.MockedClass<typeof CakeTool>;
 
   test('it should create the tools directory', async () => {
     await run();
@@ -23,23 +21,23 @@ describe('When running the action without any input arguments', () => {
 
   test('it should disable the .NET Core telemetry', async () => {
     await run();
-    expect(fakeDotNet.disableTelemetry).toHaveBeenCalled();
+    expect(dotnet.disableTelemetry).toHaveBeenCalled();
   });
 
   test('it should install the Cake tool locally', async () => {
     await run();
-    expect(fakeDotNet.installLocalCakeTool).toHaveBeenCalled();
+    expect(dotnet.installLocalCakeTool).toHaveBeenCalled();
   });
 
   test('it should run the default Cake script', async () => {
     await run();
-    expect(fakeCakeTool.runScript).toHaveBeenCalled();
+    expect(cake.runScript).toHaveBeenCalled();
   });
 });
 
 describe('When running the action with the script path input argument', () => {
   const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
-  const fakeRunScript = CakeTool.runScript as jest.MockedFunction<typeof CakeTool.runScript>;
+  const fakeRunScript = cake.runScript as jest.MockedFunction<typeof cake.runScript>;
 
   beforeAll(() => {
     when(fakeGetInput).calledWith('script-path').mockReturnValue('path/to/script.cake');
@@ -54,7 +52,7 @@ describe('When running the action with the script path input argument', () => {
 describe('When running the action with the Cake version input argument', () => {
   const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
   const fakeInstallLocalCakeTool =
-    DotNet.installLocalCakeTool as jest.MockedFunction<typeof DotNet.installLocalCakeTool>;
+    dotnet.installLocalCakeTool as jest.MockedFunction<typeof dotnet.installLocalCakeTool>;
 
   beforeAll(() => {
     when(fakeGetInput).calledWith('cake-version').mockReturnValue('the.version.number');
@@ -68,7 +66,7 @@ describe('When running the action with the Cake version input argument', () => {
 
 describe('When running the action with the target input argument', () => {
   const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
-  const fakeRunScript = CakeTool.runScript as jest.MockedFunction<typeof CakeTool.runScript>;
+  const fakeRunScript = cake.runScript as jest.MockedFunction<typeof cake.runScript>;
 
   beforeAll(() => {
     when(fakeGetInput).calledWith('target').mockReturnValue('Task-To-Run');
@@ -83,7 +81,7 @@ describe('When running the action with the target input argument', () => {
 
 describe('When running the action with the verbosity input argument', () => {
   const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
-  const fakeRunScript = CakeTool.runScript as jest.MockedFunction<typeof CakeTool.runScript>;
+  const fakeRunScript = cake.runScript as jest.MockedFunction<typeof cake.runScript>;
 
   beforeAll(() => {
     when(fakeGetInput).calledWith('verbosity').mockReturnValue('Verbosity-Level');
@@ -98,9 +96,10 @@ describe('When running the action with the verbosity input argument', () => {
 
 describe('When the script fails to run', () => {
   const fakeSetFailed = core.setFailed as jest.MockedFunction<typeof core.setFailed>;
+  const fakeRunScript = cake.runScript as jest.MockedFunction<typeof cake.runScript>;
 
   beforeAll(() => {
-    CakeTool.runScript = jest.fn(async () => {
+    when(fakeRunScript).calledWith(expect.anything()).mockImplementation(async () => {
       throw new Error('the error message');
     });
   });
@@ -113,7 +112,7 @@ describe('When the script fails to run', () => {
 
 describe('When running the action with the cake-bootstrap input argument', () => {
   const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
-  const fakeBootstrapScript = CakeTool.bootstrapScript as jest.MockedFunction<typeof CakeTool.bootstrapScript>;
+  const fakeBootstrapScript = cake.bootstrapScript as jest.MockedFunction<typeof cake.bootstrapScript>;
 
   beforeAll(() => {
     when(fakeGetInput).calledWith('cake-bootstrap').mockReturnValue('true');
