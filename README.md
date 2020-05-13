@@ -11,7 +11,7 @@ Using the Cake action from a GitHub Actions workflow is as simple as referencing
 ```yml
 steps:
   - name: Run the Cake script
-    uses: ecampidoglio/cake-action@master
+    uses: ecampidoglio/cake-action@v1
 ```
 
 The Cake action will look for a script named `build.cake` in your repository's root directory and run it for you using the [Cake Tool](https://www.nuget.org/packages/Cake.Tool/). All output from the Cake script will be automatically redirected to the build log for inspection.
@@ -25,7 +25,7 @@ If your script is in another location, you can specify the path with the `script
 ```yml
 steps:
   - name: Run the Cake script
-    uses: ecampidoglio/cake-action@master
+    uses: ecampidoglio/cake-action@v1
     with:
       script-path: path/to/script.cake
 ```
@@ -37,7 +37,7 @@ You'll likely want to specify which task to run out of the ones defined in the C
 ```yml
 steps:
   - name: Run the Cake script
-    uses: ecampidoglio/cake-action@master
+    uses: ecampidoglio/cake-action@v1
     with:
       target: Task-To-Run
 ```
@@ -49,7 +49,7 @@ You can adjust the amount of information Cake sends to the build log by changing
 ```yml
 steps:
   - name: Run the Cake script
-    uses: ecampidoglio/cake-action@master
+    uses: ecampidoglio/cake-action@v1
     with:
       verbosity: Diagnostic
 ```
@@ -63,7 +63,7 @@ By default, the Cake action will run your script using the latest _stable_ versi
 ```yml
 steps:
   - name: Run the Cake script
-    uses: ecampidoglio/cake-action@master
+    uses: ecampidoglio/cake-action@v1
     with:
       cake-version: 0.30.0
 ```
@@ -75,7 +75,7 @@ If you're referencing any [custom modules](https://cakebuild.net/docs/fundamenta
 ```yml
 steps:
   - name: Run the Cake script
-    uses: ecampidoglio/cake-action@master
+    uses: ecampidoglio/cake-action@v1
     with:
       cake-bootstrap: true
 ```
@@ -97,7 +97,7 @@ jobs:
       - name: Get the sources
         uses: actions/checkout@v1
       - name: Run the build script
-        uses: ecampidoglio/cake-action@master
+        uses: ecampidoglio/cake-action@v1
         with:
           target: Build
 ```
