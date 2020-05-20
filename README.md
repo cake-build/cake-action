@@ -1,17 +1,17 @@
 # Cake for GitHub Actions
 
-[![GitHub Marketplace](https://img.shields.io/github/v/release/ecampidoglio/cake-action?label=Marketplace&sort=semver)](https://github.com/marketplace/actions/cake-action) [![GitHub Actions Build](https://github.com/ecampidoglio/cake-action/workflows/Build/badge.svg)](https://github.com/ecampidoglio/cake-action/actions?workflow=Build) [![GitHub Actions Tests](https://github.com/ecampidoglio/cake-action/workflows/Tests/badge.svg)](https://github.com/ecampidoglio/cake-action/actions?workflow=Tests) [![Coveralls](https://coveralls.io/repos/github/ecampidoglio/cake-action/badge.svg?branch=master)](https://coveralls.io/github/ecampidoglio/cake-action?branch=master)
+[![GitHub Marketplace](https://img.shields.io/github/v/release/cake-build/cake-action?label=Marketplace&sort=semver)](https://github.com/marketplace/actions/cake-action) [![GitHub Actions Build](https://github.com/cake-build/cake-action/workflows/Build/badge.svg)](https://github.com/cake-build/cake-action/actions?workflow=Build) [![GitHub Actions Tests](https://github.com/cake-build/cake-action/workflows/Tests/badge.svg)](https://github.com/cake-build/cake-action/actions?workflow=Tests) [![Coveralls](https://coveralls.io/repos/github/cake-build/cake-action/badge.svg?branch=master)](https://coveralls.io/github/cake-build/cake-action?branch=master)
 
 This action allows you to run a Cake script from your GitHub Actions workflow without having to use a [bootstrapper](https://github.com/cake-build/resources).
 
 ## Usage
 
-Using the Cake action from a GitHub Actions workflow is as simple as referencing [this repository](https://github.com/ecampidoglio/cake-action) from a [build step](https://help.github.com/en/github/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#jobsjob_idsteps):
+Using the Cake action from a GitHub Actions workflow is as simple as referencing [this repository](https://github.com/cake-build/cake-action) from a [build step](https://help.github.com/en/github/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#jobsjob_idsteps):
 
 ```yml
 steps:
   - name: Run the Cake script
-    uses: ecampidoglio/cake-action@v1
+    uses: cake-build/cake-action@v1
 ```
 
 The Cake action will look for a script named `build.cake` in your repository's root directory and run it for you using the [Cake Tool](https://www.nuget.org/packages/Cake.Tool/). All output from the Cake script will be automatically redirected to the build log for inspection.
@@ -25,7 +25,7 @@ If your script is in another location, you can specify the path with the `script
 ```yml
 steps:
   - name: Run the Cake script
-    uses: ecampidoglio/cake-action@v1
+    uses: cake-build/cake-action@v1
     with:
       script-path: path/to/script.cake
 ```
@@ -37,7 +37,7 @@ You'll likely want to specify which task to run out of the ones defined in the C
 ```yml
 steps:
   - name: Run the Cake script
-    uses: ecampidoglio/cake-action@v1
+    uses: cake-build/cake-action@v1
     with:
       target: Task-To-Run
 ```
@@ -49,7 +49,7 @@ You can adjust the amount of information Cake sends to the build log by changing
 ```yml
 steps:
   - name: Run the Cake script
-    uses: ecampidoglio/cake-action@v1
+    uses: cake-build/cake-action@v1
     with:
       verbosity: Diagnostic
 ```
@@ -63,7 +63,7 @@ By default, the Cake action will run your script using the latest _stable_ versi
 ```yml
 steps:
   - name: Run the Cake script
-    uses: ecampidoglio/cake-action@v1
+    uses: cake-build/cake-action@v1
     with:
       cake-version: 0.30.0
 ```
@@ -75,7 +75,7 @@ If you're referencing any [custom modules](https://cakebuild.net/docs/fundamenta
 ```yml
 steps:
   - name: Run the Cake script
-    uses: ecampidoglio/cake-action@v1
+    uses: cake-build/cake-action@v1
     with:
       cake-bootstrap: true
 ```
@@ -97,7 +97,7 @@ jobs:
       - name: Get the sources
         uses: actions/checkout@v1
       - name: Run the build script
-        uses: ecampidoglio/cake-action@v1
+        uses: cake-build/cake-action@v1
         with:
           target: Build
 ```
