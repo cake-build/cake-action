@@ -12,9 +12,9 @@ jest.mock('@actions/exec');
 describe('When disabling the .NET Core telemetry', () => {
   const fakeExportVariable = core.exportVariable as jest.MockedFunction<typeof core.exportVariable>;
 
-  test('it should set the DOTNET_CLI_TELEMETRY_OPTOUT environment variable to 1', () => {
+  test('it should set the DOTNET_CLI_TELEMETRY_OPTOUT environment variable to true', () => {
     dotnet.disableTelemetry();
-    expect(fakeExportVariable).toHaveBeenCalledWith('DOTNET_CLI_TELEMETRY_OPTOUT', '1');
+    expect(fakeExportVariable).toHaveBeenCalledWith('DOTNET_CLI_TELEMETRY_OPTOUT', 'true');
   });
 });
 

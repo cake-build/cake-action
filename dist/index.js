@@ -1062,7 +1062,7 @@ const dotnetToolInstall = 'dotnet tool install';
 const dotnetToolUnInstall = 'dotnet tool uninstall';
 const dotnetCake = 'dotnet-cake';
 function disableTelemetry() {
-    core.exportVariable('DOTNET_CLI_TELEMETRY_OPTOUT', '1');
+    core.exportVariable('DOTNET_CLI_TELEMETRY_OPTOUT', 'true');
 }
 exports.disableTelemetry = disableTelemetry;
 function installLocalCakeTool(targetDirectory = new toolsDirectory_1.ToolsDirectory(), version) {

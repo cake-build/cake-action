@@ -7,7 +7,7 @@ const dotnetToolUnInstall = 'dotnet tool uninstall';
 const dotnetCake = 'dotnet-cake';
 
 export function disableTelemetry() {
-  core.exportVariable('DOTNET_CLI_TELEMETRY_OPTOUT', '1');
+  core.exportVariable('DOTNET_CLI_TELEMETRY_OPTOUT', 'true');
 }
 
 export async function installLocalCakeTool(
