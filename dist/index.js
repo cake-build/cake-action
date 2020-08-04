@@ -1003,6 +1003,7 @@ function run() {
             const toolsDir = new toolsDirectory_1.ToolsDirectory();
             toolsDir.create();
             dotnet.disableTelemetry();
+            dotnet.disableWelcomeMessage();
             yield dotnet.installLocalCakeTool(toolsDir, version);
             if (bootstrap) {
                 yield cake.bootstrapScript(scriptPath, toolsDir);

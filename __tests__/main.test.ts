@@ -24,6 +24,11 @@ describe('When running the action without any input arguments', () => {
     expect(dotnet.disableTelemetry).toHaveBeenCalled();
   });
 
+  test('it should disable the .NET Core CLI welcome message', async () => {
+    await run();
+    expect(dotnet.disableWelcomeMessage).toHaveBeenCalled();
+  });
+
   test('it should install the Cake tool locally', async () => {
     await run();
     expect(dotnet.installLocalCakeTool).toHaveBeenCalled();

@@ -16,6 +16,7 @@ export async function run() {
     toolsDir.create();
 
     dotnet.disableTelemetry();
+    dotnet.disableWelcomeMessage();
 
     await dotnet.installLocalCakeTool(toolsDir, version);
 
