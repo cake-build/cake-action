@@ -18,6 +18,15 @@ describe('When disabling the .NET Core telemetry', () => {
   });
 });
 
+describe('When disabling the .NET Core CLI welcome message', () => {
+  const fakeExportVariable = core.exportVariable as jest.MockedFunction<typeof core.exportVariable>;
+
+  test('it should set the DOTNET_NOLOGO environment variable to true', () => {
+    dotnet.disableWelcomeMessage();
+    expect(fakeExportVariable).toHaveBeenCalledWith('DOTNET_NOLOGO', 'true');
+  });
+});
+
 describe('When successfully installing the Cake Tool locally', () => {
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 

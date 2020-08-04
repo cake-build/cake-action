@@ -1054,7 +1054,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uninstallLocalTool = exports.installLocalTool = exports.installLocalCakeTool = exports.disableTelemetry = void 0;
+exports.uninstallLocalTool = exports.installLocalTool = exports.installLocalCakeTool = exports.disableWelcomeMessage = exports.disableTelemetry = void 0;
 const core = __importStar(__webpack_require__(470));
 const exec_1 = __webpack_require__(986);
 const toolsDirectory_1 = __webpack_require__(348);
@@ -1065,6 +1065,10 @@ function disableTelemetry() {
     core.exportVariable('DOTNET_CLI_TELEMETRY_OPTOUT', 'true');
 }
 exports.disableTelemetry = disableTelemetry;
+function disableWelcomeMessage() {
+    core.exportVariable('DOTNET_NOLOGO', 'true');
+}
+exports.disableWelcomeMessage = disableWelcomeMessage;
 function installLocalCakeTool(targetDirectory = new toolsDirectory_1.ToolsDirectory(), version) {
     return __awaiter(this, void 0, void 0, function* () {
         return installLocalTool('Cake.Tool', dotnetCake, targetDirectory, version);

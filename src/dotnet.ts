@@ -10,6 +10,10 @@ export function disableTelemetry() {
   core.exportVariable('DOTNET_CLI_TELEMETRY_OPTOUT', 'true');
 }
 
+export function disableWelcomeMessage() {
+  core.exportVariable('DOTNET_NOLOGO', 'true');
+}
+
 export async function installLocalCakeTool(
   targetDirectory: ToolsDirectory = new ToolsDirectory(),
   version?: string
