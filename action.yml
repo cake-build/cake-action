@@ -2,7 +2,7 @@ name: 'Cake Action'
 description: 'Run a Cake script as part of your build.'
 author: 'Enrico Campidoglio'
 branding:
-  icon: 'tool'
+  icon: 'box'
   color: 'yellow'
 inputs:
   script-path:
