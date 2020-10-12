@@ -84,6 +84,35 @@ describe('When running the action with the target input argument', () => {
   });
 });
 
+  describe('When running the action with the script-arguments input argument', () => {
+    const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
+    const fakeRunScript = cake.runScript as jest.MockedFunction<typeof cake.runScript>;
+
+    test('it should run script with the specified arguments', async () => {
+      when(fakeGetInput).calledWith('script-arguments').mockReturnValue('--assemblyVersion=1.0.1');
+
+      await run();
+      expect(fakeRunScript.mock.calls[0][4]).toMatchObject(
+        new CakeArgument('assemblyVersion', '1.0.1'));
+    });
+  });
+
+  describe('When running the action with multiple script-arguments input argument', () => {
+    const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
+    const fakeRunScript = cake.runScript as jest.MockedFunction<typeof cake.runScript>;
+
+    test('it should run script with the specified arguments', async () => {
+      when(fakeGetInput).calledWith('script-arguments').mockReturnValue('--assemblyVersion=1.0.1 --secondArg="Second value"');
+
+      await run();
+      expect(fakeRunScript.mock.calls[0][4]).toMatchObject(
+        new CakeArgument('assemblyVersion', '1.0.1'));
+
+        expect(fakeRunScript.mock.calls[0][5]).toMatchObject(
+          new CakeArgument('secondArg', 'Second value'));
+    });
+  });
+
 describe('When running the action with the verbosity input argument', () => {
   const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
   const fakeRunScript = cake.runScript as jest.MockedFunction<typeof cake.runScript>;
