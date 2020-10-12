@@ -80,6 +80,23 @@ steps:
       cake-bootstrap: true
 ```
 
+### `script-arguments`
+
+If you need pass same additional [argument](https://cakebuild.net/docs/writing-builds/args-and-environment-vars) value to CakeBuild, you can use `script-arguments`. 
+
+When you add an Argument: eg. 
+`var assemblyVersion = Argument<string>("versionTag", "refs/tag/v0.0.0.0");`
+then your step can look like that:
+
+```yml
+steps:
+  - name: Update-Assembly-Version
+    uses: jwickowski/cake-action@v0.0.2
+    with:
+      target: "Update-Assembly-Version"
+      script-arguments: --versionTag=${{ github.ref }}
+```
+
 ## Cross-platform
 
 Since the [Cake Tool](https://www.nuget.org/packages/Cake.Tool/) is built on .NET Core, the Cake action will run on any of the [virtual environments](https://help.github.com/en/github/automating-your-workflow-with-github-actions/software-in-virtual-environments-for-github-actions) supported by GitHub Actions, namely Linux, Windows and macOS.
