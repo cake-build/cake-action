@@ -26,9 +26,11 @@
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/exec": "^1.0.1",
-    "@actions/io": "^1.0.1"
+    "@actions/io": "^1.0.1",
+    "yargs-parser": "^20.2.1"
   },
   "devDependencies": {
+    "@types/command-line-args": "^5.0.0",
     "@types/jest": "^25.2.2",
     "@types/jest-when": "^2.7.1",
     "@types/node": "^12.11.2",

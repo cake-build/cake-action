@@ -23,6 +23,10 @@ inputs:
     description: 'Flag for if Cake modules should be installed/bootstrapped.'
     required: false
     default: 'false'
+  script-arguments:
+    description: 'The place to pass script arguments that will be passes to runner.'
+    required: false
+    default: ''
 runs:
   using: 'node12'
   main: 'dist/index.js'
