@@ -116,6 +116,15 @@ describe('When running the action with the script-arguments input argument', () 
     expect(fakeRunScript.mock.calls[0][4]).toStrictEqual(
       new CakeArgument('assemblyVersion', '1.0.1'));
   });
+
+  test('it should run script with the specified arguments with one dash', async () => {
+    when(fakeGetInput)
+      .calledWith('script-arguments').mockReturnValue('-foo=bar');
+
+    await run();
+    expect(fakeRunScript.mock.calls[0][4]).toStrictEqual(
+      new CakeArgument('foo', 'bar'));
+  });
 });
 
 describe('When running the action with multiple script-arguments', () => {

@@ -49,7 +49,8 @@ export async function run() {
 function getScriptArguments(): CakeParameter[] {
   var input: string = core.getInput('script-arguments');
 
-  const options = yargsParser(input);
+  const yargsOptions = { configuration: { 'short-option-groups': false } };
+  const options = yargsParser(input, yargsOptions);
   const optionsKeys: string[] = Object.keys(options);
 
   const result: CakeParameter[] = optionsKeys

@@ -1092,7 +1092,8 @@ function run() {
 exports.run = run;
 function getScriptArguments() {
     var input = core.getInput('script-arguments');
-    const options = yargs_parser_1.default(input);
+    const yargsOptions = { configuration: { 'short-option-groups': false } };
+    const options = yargs_parser_1.default(input, yargsOptions);
     const optionsKeys = Object.keys(options);
     const result = optionsKeys
         .filter(key => key !== '_') // we ignore that because of yargs-parser implementation
