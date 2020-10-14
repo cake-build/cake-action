@@ -2,6 +2,13 @@ import * as core from '@actions/core';
 import { ToolsDirectory } from './toolsDirectory';
 import * as dotnet from './dotnet';
 import * as cake from './cake';
+// It is disabled, because CakeParameter is an interface and eslit tells us that is 'is defined but never used'. I would suggest option 1 or 2, but can we do it in next PR?
+// There are options:
+// 1. We can change that one eslint rules
+// 2. We can add rules "plugin:@typescript-eslint/recommended" to eslintrc.json, but it will require more changes
+// 3. Leave like it is
+// 4. Use 'function getScriptArguments(): [] {' instead of 'function getScriptArguments(): CakeParameter[] {'
+// eslint-disable-next-line no-unused-vars
 import { CakeArgument, CakeParameter, CakeSwitch } from './cakeParameter';
 import yargsParser from 'yargs-parser';
 
@@ -51,7 +58,7 @@ function getScriptArguments(): CakeParameter[] {
   optionsKeys
     .filter(key => key !== '_') // we ignore that because of yargs-parser implementation
     .map(optionsKey => {
-      const value = options[optionsKey]
+      const value = options[optionsKey];
       if (value === true) {
         return new CakeSwitch(optionsKey);
       }
