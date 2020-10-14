@@ -48,15 +48,16 @@ function getScriptArguments(): CakeParameter[] {
 
   const options = yargsParser(input);
   const optionsKeys: string[] = Object.keys(options);
-  optionsKeys.forEach((optionsKey) => {
-    // we ignore that because of yargs-parser implementation
-    if (optionsKey === "_") {
-      return;
-    }
+  optionsKeys
+    .filter(key => key !== '_') // we ignore that because of yargs-parser implementation
+    .map(optionsKey => {
+      const value = options[optionsKey]
+      if (value === true) {
+        return new CakeSwitch(optionsKey);
+      }
 
-    const cakeArgument = new CakeArgument(optionsKey, options[optionsKey]);
-    result.push(cakeArgument);
-  });
+      return new CakeArgument(optionsKey, value);
+    });
   return result;
 }
 
