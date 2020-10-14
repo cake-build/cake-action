@@ -82,7 +82,7 @@ steps:
 
 ### `script-arguments`
 
-If you need pass same additional [argument](https://cakebuild.net/docs/writing-builds/args-and-environment-vars) value to CakeBuild, you can use `script-arguments`. 
+If you need pass same additional [argument](https://cakebuild.net/docs/writing-builds/args-and-environment-vars#passing-and-reading-arguments) value to CakeBuild, you can use `script-arguments`.
 
 When you add an Argument: eg. 
 `var assemblyVersion = Argument<string>("versionTag", "refs/tag/v0.0.0.0");`
@@ -91,7 +91,7 @@ then your step can look like that:
 ```yml
 steps:
   - name: Update-Assembly-Version
-    uses: jwickowski/cake-action@v0.0.2
+    uses: cake-build/cake-action@v1
     with:
       target: "Update-Assembly-Version"
       script-arguments: --versionTag=${{ github.ref }}
