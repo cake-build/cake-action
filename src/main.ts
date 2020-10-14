@@ -1,18 +1,18 @@
-import * as core from "@actions/core";
-import { ToolsDirectory } from "./toolsDirectory";
-import * as dotnet from "./dotnet";
-import * as cake from "./cake";
-import { CakeArgument } from "./cakeParameter";
-import yargsParser from "yargs-parser";
+import * as core from '@actions/core';
+import { ToolsDirectory } from './toolsDirectory';
+import * as dotnet from './dotnet';
+import * as cake from './cake';
+import { CakeArgument, CakeParameter, CakeSwitch } from './cakeParameter';
+import yargsParser from 'yargs-parser';
 
 export async function run() {
   try {
-    const scriptPath = core.getInput("script-path");
-    const version = core.getInput("cake-version");
+    const scriptPath = core.getInput('script-path');
+    const version = core.getInput('cake-version');
     const bootstrap =
-      (core.getInput("cake-bootstrap") || "").toLowerCase() === "true";
-    const target = new CakeArgument("target", core.getInput("target"));
-    const verbosity = new CakeArgument("verbosity", core.getInput("verbosity"));
+      (core.getInput('cake-bootstrap') || '').toLowerCase() === 'true';
+    const target = new CakeArgument('target', core.getInput('target'));
+    const verbosity = new CakeArgument('verbosity', core.getInput('verbosity'));
     const scriptArgs = getScriptArguments();
 
     const toolsDir = new ToolsDirectory();
@@ -39,9 +39,9 @@ export async function run() {
   }
 }
 
-function getScriptArguments(): CakeArgument[] {
-  const result: CakeArgument[] = [];
-  const input: string = core.getInput("script-arguments");
+function getScriptArguments(): CakeParameter[] {
+  const result: CakeParameter[] = [];
+  const input: string = core.getInput('script-arguments');
   if (!input) {
     return [];
   }

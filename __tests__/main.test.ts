@@ -4,7 +4,7 @@ import { run } from '../src/main';
 import { ToolsDirectory } from '../src/toolsDirectory';
 import * as dotnet from '../src/dotnet';
 import * as cake from '../src/cake';
-import { CakeArgument } from '../src/cakeParameter';
+import { CakeArgument, CakeSwitch } from '../src/cakeParameter';
 
 jest.mock('@actions/core');
 jest.mock('../src/toolsDirectory');
