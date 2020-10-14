@@ -13,6 +13,11 @@ jest.mock('../src/cake');
 
 describe('When running the action without any input arguments', () => {
   const fakeToolsDirectory = ToolsDirectory as jest.MockedClass<typeof ToolsDirectory>;
+  const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
+
+  beforeAll(() => {
+    when(fakeGetInput).calledWith('script-arguments').mockReturnValue('');
+  });
 
   test('it should create the tools directory', async () => {
     await run();

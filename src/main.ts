@@ -47,15 +47,12 @@ export async function run() {
 }
 
 function getScriptArguments(): CakeParameter[] {
-  const result: CakeParameter[] = [];
-  const input: string = core.getInput('script-arguments');
-  if (!input) {
-    return [];
-  }
+  var input: string = core.getInput('script-arguments');
 
   const options = yargsParser(input);
   const optionsKeys: string[] = Object.keys(options);
-  optionsKeys
+
+  const result: CakeParameter[] = optionsKeys
     .filter(key => key !== '_') // we ignore that because of yargs-parser implementation
     .map(optionsKey => {
       const value = options[optionsKey];
