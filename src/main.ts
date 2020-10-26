@@ -16,8 +16,7 @@ export async function run() {
   try {
     const scriptPath = core.getInput('script-path');
     const version = core.getInput('cake-version');
-    const bootstrap =
-      (core.getInput('cake-bootstrap') || '').toLowerCase() === 'true';
+    const bootstrap = (core.getInput('cake-bootstrap') || '').toLowerCase() === 'true';
     const target = new CakeArgument('target', core.getInput('target'));
     const verbosity = new CakeArgument('verbosity', core.getInput('verbosity'));
     const scriptArgs = getScriptArguments();
