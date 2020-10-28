@@ -1053,15 +1053,14 @@ const core = __importStar(__webpack_require__(470));
 const toolsDirectory_1 = __webpack_require__(348);
 const dotnet = __importStar(__webpack_require__(193));
 const cake = __importStar(__webpack_require__(245));
-const cakeParameter_1 = __webpack_require__(947);
+const action = __importStar(__webpack_require__(960));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const scriptPath = core.getInput('script-path');
-            const version = core.getInput('cake-version');
-            const bootstrap = (core.getInput('cake-bootstrap') || '').toLowerCase() === 'true';
-            const target = new cakeParameter_1.CakeArgument('target', core.getInput('target'));
-            const verbosity = new cakeParameter_1.CakeArgument('verbosity', core.getInput('verbosity'));
+            const inputs = action.getInputs();
+            const scriptPath = inputs.scriptPath;
+            const version = inputs.cakeVersion;
+            const bootstrap = inputs.cakeBootstrap;
             const toolsDir = new toolsDirectory_1.ToolsDirectory();
             toolsDir.create();
             dotnet.disableTelemetry();
@@ -1070,7 +1069,7 @@ function run() {
             if (bootstrap) {
                 yield cake.bootstrapScript(scriptPath, toolsDir);
             }
-            yield cake.runScript(scriptPath, toolsDir, target, verbosity);
+            yield cake.runScript(scriptPath, toolsDir, ...inputs.scriptArguments);
         }
         catch (error) {
             core.setFailed(error.message);
@@ -1893,6 +1892,68 @@ class CakeSwitch {
     }
 }
 exports.CakeSwitch = CakeSwitch;
+
+
+/***/ }),
+
+/***/ 960:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getInputs = void 0;
+const core = __importStar(__webpack_require__(470));
+const cakeParameter_1 = __webpack_require__(947);
+function getInputs() {
+    return {
+        scriptPath: core.getInput('script-path'),
+        cakeVersion: core.getInput('cake-version'),
+        cakeBootstrap: (core.getInput('cake-bootstrap') || '').toLowerCase() === 'true',
+        scriptArguments: getScriptInputs()
+    };
+}
+exports.getInputs = getInputs;
+function getScriptInputs() {
+    return [
+        new cakeParameter_1.CakeArgument('target', core.getInput('target')),
+        new cakeParameter_1.CakeArgument('verbosity', core.getInput('verbosity')),
+        ...parseCustomArguments()
+    ];
+}
+function parseCustomArguments() {
+    return core.getInput('arguments')
+        .split(/\r?\n/)
+        .filter(line => containsArgumentDefinition(line))
+        .map(line => parseNameAndValue(line))
+        .map(([name, value]) => new cakeParameter_1.CakeArgument(name, value));
+}
+function containsArgumentDefinition(line) {
+    return /.+:.+/.test(line);
+}
+function parseNameAndValue(line) {
+    const nameValue = line.split(':');
+    return [nameValue[0].trim(), nameValue[1].trim()];
+}
 
 
 /***/ }),

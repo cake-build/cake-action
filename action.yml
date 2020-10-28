@@ -16,6 +16,9 @@ inputs:
     description: 'The verbosity level with which to run the script. Valid values are: Quiet, Minimal, Normal, Verbose or Diagnostic.'
     required: false
     default: 'Normal'
+  arguments:
+    description: 'Any custom parameters to pass to the script. Multiple parameters are defined on separate lines.'
+    required: false
   cake-version:
     description: 'The version of Cake to install.'
     required: false
