@@ -1,4 +1,7 @@
 var target = Argument("Target", "Successful-Task");
+var stringArgument = Argument("String-Parameter", string.Empty);
+var numericArgument = Argument("Numeric-Parameter", 0);
+var booleanArgument = Argument("Boolean-Parameter", false);
 
 Task("Successful-Task")
     .Does(() =>
@@ -56,6 +59,55 @@ Task("Test-Verbosity")
     if (expectedVerbosity != actualVerbosity)
     {
         throw new Exception($"✕ Expected verbosity {expectedVerbosity} but got {actualVerbosity}");
+    }
+
+    Information("✓ Passed");
+});
+
+Task("Test-Script-Parameters")
+    .Does(() =>
+{
+    var expectedStringArgument = EnvironmentVariable("EXPECTED_STRING_ARGUMENT");
+
+    var hasExpectedNumericArgument = int.TryParse(
+        EnvironmentVariable("EXPECTED_NUMERIC_ARGUMENT"),
+        out int expectedNumericArgument);
+
+    var hasExpectedBooleanArgument = bool.TryParse(
+        EnvironmentVariable("EXPECTED_BOOLEAN_ARGUMENT"),
+        out bool expectedBooleanArgument);
+
+    if (string.IsNullOrEmpty(expectedStringArgument))
+    {
+        throw new Exception(
+            "✕ The EXPECTED_STRING_ARGUMENT environment variable is not set");
+    }
+
+    if (!hasExpectedNumericArgument)
+    {
+        throw new Exception(
+            "✕ The EXPECTED_NUMERIC_ARGUMENT environment variable is not set");
+    }
+
+    if (!hasExpectedBooleanArgument)
+    {
+        throw new Exception(
+            "✕ The EXPECTED_BOOLEAN_ARGUMENT environment variable is not set");
+    }
+
+    if (expectedStringArgument != stringArgument)
+    {
+        throw new Exception($"✕ Expected string argument {expectedStringArgument} but got {stringArgument}");
+    }
+
+    if (expectedNumericArgument != numericArgument)
+    {
+        throw new Exception($"✕ Expected numeric argument {expectedNumericArgument} but got {numericArgument}");
+    }
+
+    if (expectedBooleanArgument != booleanArgument)
+    {
+        throw new Exception($"✕ Expected boolean argument {expectedBooleanArgument} but got {booleanArgument}");
     }
 
     Information("✓ Passed");

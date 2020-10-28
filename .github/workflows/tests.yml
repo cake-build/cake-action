@@ -49,3 +49,16 @@ jobs:
         with:
           verbosity: Diagnostic
           target: Test-Verbosity
+      - name: Run with custom script parameters
+        uses: ./
+        env:
+          EXPECTED_STRING_ARGUMENT: '''value'''
+          EXPECTED_NUMERIC_ARGUMENT: '3'
+          EXPECTED_BOOLEAN_ARGUMENT: 'true'
+        with:
+          script-path: build.cake
+          target: Test-Script-Parameters
+          arguments: |
+            string-parameter: 'value'
+            numeric-parameter: 3
+            boolean-parameter: true
