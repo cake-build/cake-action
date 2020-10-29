@@ -56,6 +56,22 @@ steps:
 
 The supported verbosity levels are `Quiet`, `Minimal`, `Normal`, `Verbose` and `Diagnostic`. The default level is set to `Normal`.
 
+### `arguments`
+
+If your script defines any custom parameters, you can specify arguments for them by using the `arguments` parameter:
+
+```yml
+steps:
+  - name: Run the Cake script
+    uses: cake-build/cake-action@v1
+    with:
+      arguments: |
+        name: value
+        configuration: Release
+```
+
+The arguments are defined in a [multi-line string literal](https://yaml.org/spec/1.2/spec.html#id2795688) where each argument is on a separate line in the format `name: value`. Keep in mind that the values you specify here are passed _as is_ to the Cake script; this means that characters like quotes are kept intact (for example, `name: 'value'` will result in `--name='value'` being passed to the script).
+
 ### `cake-version`
 
 By default, the Cake action will run your script using the latest _stable_ version of the [Cake .NET Core Global tool](https://www.nuget.org/packages/Cake.Tool/). However, if for some reason you want to [use a specific version of Cake](https://cakebuild.net/docs/tutorials/pinning-cake-version) (for compatibility with older third-party addins, for example), you can do so by specifying the version number in the `cake-version` parameter:
