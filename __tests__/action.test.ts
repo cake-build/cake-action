@@ -46,7 +46,7 @@ describe('When getting the documented script input arguments from the action', (
   });
 });
 
-describe('When getting custom script input arguments from the action', () => {
+describe('When getting multiple custom script input arguments from the action', () => {
   const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
 
   beforeAll(() => {
@@ -67,6 +67,32 @@ describe('When getting custom script input arguments from the action', () => {
 
   test('it should return the argument for a custom boolean parameter', () => {
     expect(action.getInputs().scriptArguments).toContainEqual(new CakeArgument('boolean-parameter', 'true'));
+  });
+});
+
+describe('When getting a single custom script input argument from the action', () => {
+  const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
+
+  beforeAll(() => {
+    when(fakeGetInput).calledWith('arguments').mockReturnValue(`
+      name: value
+    `);
+  });
+
+  test('it should return the argument for the custom parameter', () => {
+    expect(action.getInputs().scriptArguments).toContainEqual(new CakeArgument('name', 'value'));
+  });
+});
+
+describe('When getting a single custom script input argument on one line from the action', () => {
+  const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
+
+  beforeAll(() => {
+    when(fakeGetInput).calledWith('arguments').mockReturnValue('name: value');
+  });
+
+  test('it should return the argument for the custom parameter', () => {
+    expect(action.getInputs().scriptArguments).toContainEqual(new CakeArgument('name', 'value'));
   });
 });
 
