@@ -16,6 +16,10 @@ inputs:
     description: 'The verbosity level with which to run the script. Valid values are: Quiet, Minimal, Normal, Verbose or Diagnostic.'
     required: false
     default: 'Normal'
+  dry-run:
+    description: 'Tells Cake to do a dry run of the script.'
+    required: false
+    default: 'false'
   arguments:
     description: 'Any custom parameters to pass to the script. Multiple parameters are defined on separate lines.'
     required: false

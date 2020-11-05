@@ -28,8 +28,15 @@ function getScriptInputs(): script.CakeParameter[] {
   return [
     new script.CakeArgument('target', core.getInput('target')),
     new script.CakeArgument('verbosity', core.getInput('verbosity')),
+    ...parseDryRunSwitch(),
     ...parseCustomArguments()
   ];
+}
+
+function parseDryRunSwitch(): script.CakeParameter[] {
+  return getBooleanInput('dry-run')
+    ? [new script.CakeSwitch('dryrun')]
+    : [];
 }
 
 function parseCustomArguments(): script.CakeParameter[] {

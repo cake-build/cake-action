@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 import { when } from 'jest-when';
 import * as action from '../src/action';
-import { CakeArgument } from '../src/cakeParameter';
+import { CakeArgument, CakeSwitch } from '../src/cakeParameter';
 
 jest.mock('@actions/core');
 
@@ -12,6 +12,7 @@ describe('When getting the Cake input arguments from the action', () => {
     when(fakeGetInput).calledWith('script-path').mockReturnValue('path/to/script.cake');
     when(fakeGetInput).calledWith('cake-version').mockReturnValue('the.version.number');
     when(fakeGetInput).calledWith('cake-bootstrap').mockReturnValue('true');
+    when(fakeGetInput).calledWith('dry-run').mockReturnValue('');
     when(fakeGetInput).calledWith('arguments').mockReturnValue('');
   });
 
@@ -34,6 +35,7 @@ describe('When getting the documented script input arguments from the action', (
   beforeAll(() => {
     when(fakeGetInput).calledWith('target').mockReturnValue('Task-To-Run');
     when(fakeGetInput).calledWith('verbosity').mockReturnValue('Verbosity-Level');
+    when(fakeGetInput).calledWith('dry-run').mockReturnValue('true');
     when(fakeGetInput).calledWith('arguments').mockReturnValue('');
   });
 
@@ -43,6 +45,23 @@ describe('When getting the documented script input arguments from the action', (
 
   test('it should return the argument for the verbosity script parameter', () => {
     expect(action.getInputs().scriptArguments).toContainEqual(new CakeArgument('verbosity', 'Verbosity-Level'));
+  });
+
+  test('it should return the argument for the dry-run script parameter', () => {
+    expect(action.getInputs().scriptArguments).toContainEqual(new CakeSwitch('dryrun'));
+  });
+});
+
+describe('When getting the dry-run script input argument set to false from the action', () => {
+  const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
+
+  beforeAll(() => {
+    when(fakeGetInput).calledWith('dry-run').mockReturnValue('false');
+    when(fakeGetInput).calledWith('arguments').mockReturnValue('');
+  });
+
+  test('it should not pass the dry run switch to the script', () => {
+    expect(action.getInputs().scriptArguments).not.toContainEqual(new CakeSwitch('dryrun'));
   });
 });
 
@@ -131,6 +150,7 @@ describe('When getting no input arguments from the action', () => {
     when(fakeGetInput).calledWith('cake-bootstrap').mockReturnValue('');
     when(fakeGetInput).calledWith('target').mockReturnValue('');
     when(fakeGetInput).calledWith('verbosity').mockReturnValue('');
+    when(fakeGetInput).calledWith('dry-run').mockReturnValue('');
     when(fakeGetInput).calledWith('arguments').mockReturnValue('');
   });
 
@@ -152,5 +172,9 @@ describe('When getting no input arguments from the action', () => {
 
   test('it should return an empty string for the verbosity script parameter', () => {
     expect(action.getInputs().scriptArguments).toContainEqual(new CakeArgument('verbosity', ''));
+  });
+
+  test('it should not pass the dry run switch to the script', () => {
+    expect(action.getInputs().scriptArguments).not.toContainEqual(new CakeSwitch('dryrun'));
   });
 });
