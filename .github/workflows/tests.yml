@@ -49,6 +49,11 @@ jobs:
         with:
           verbosity: Diagnostic
           target: Test-Verbosity
+      - name: Do a dry run
+        uses: ./
+        with:
+          dry-run: true
+          target: Test-Dry-Run
       - name: Run with custom script parameters
         uses: ./
         env:
