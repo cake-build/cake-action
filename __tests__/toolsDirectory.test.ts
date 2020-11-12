@@ -56,7 +56,7 @@ describe('When checking whether the directory contains a specific file', () => {
 
   beforeAll(() => {
     fs.mkdirSync(sut.path);
-    fs.writeFileSync(path.join(sut.path, fileName), {});
+    fs.writeFileSync(path.join(sut.path, fileName), '');
   });
 
   afterAll(() => {
@@ -79,7 +79,7 @@ describe('When checking whether the directory contains a specific file in a subd
 
   beforeAll(() => {
     fs.mkdirSync(subdirectoryPath, { recursive: true });
-    fs.writeFileSync(path.join(subdirectoryPath, fileName), {});
+    fs.writeFileSync(path.join(subdirectoryPath, fileName), '');
   });
 
   afterAll(() => {
@@ -101,7 +101,7 @@ describe('When checking whether the directory contains a specific tool on Posix'
 
   beforeAll(() => {
     fs.mkdirSync(sut.path);
-    fs.writeFileSync(path.join(sut.path, toolName), {});
+    fs.writeFileSync(path.join(sut.path, toolName), '');
     Platform.isWindows = jest.fn().mockImplementation(() => false);
   });
 
@@ -124,7 +124,7 @@ describe('When checking whether the directory contains a specific tool on Window
 
   beforeAll(() => {
     fs.mkdirSync(sut.path);
-    fs.writeFileSync(path.join(sut.path, `${toolName}.exe`), {});
+    fs.writeFileSync(path.join(sut.path, `${toolName}.exe`), '');
     Platform.isWindows = jest.fn().mockImplementation(() => true);
   });
 
@@ -150,7 +150,7 @@ describe('When checking whether the directory contains a specific version of a t
 
   beforeAll(() => {
     fs.mkdirSync(toolDirectoryPath, { recursive: true });
-    fs.writeFileSync(path.join(toolDirectoryPath, packageMetadata), {});
+    fs.writeFileSync(path.join(toolDirectoryPath, packageMetadata), '');
   });
 
   afterAll(() => {
