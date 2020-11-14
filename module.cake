@@ -5,7 +5,8 @@
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=5.0.1"
 
 Task("GitVersion")
-    .Does(() => {
+    .Does(() =>
+{
     Information("Calculating Semantic Version");
 
     var assertedVersions = GitVersion();
