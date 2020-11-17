@@ -1923,7 +1923,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getInputs = void 0;
 const core = __importStar(__webpack_require__(470));
-const cakeParameter_1 = __webpack_require__(947);
+const script = __importStar(__webpack_require__(947));
 function getInputs() {
     return {
         scriptPath: core.getInput('script-path'),
@@ -1935,8 +1935,8 @@ function getInputs() {
 exports.getInputs = getInputs;
 function getScriptInputs() {
     return [
-        new cakeParameter_1.CakeArgument('target', core.getInput('target')),
-        new cakeParameter_1.CakeArgument('verbosity', core.getInput('verbosity')),
+        new script.CakeArgument('target', core.getInput('target')),
+        new script.CakeArgument('verbosity', core.getInput('verbosity')),
         ...parseCustomArguments()
     ];
 }
@@ -1945,7 +1945,7 @@ function parseCustomArguments() {
         .split(/\r?\n/)
         .filter(line => containsArgumentDefinition(line))
         .map(line => parseNameAndValue(line))
-        .map(([name, value]) => new cakeParameter_1.CakeArgument(name, value));
+        .map(([name, value]) => new script.CakeArgument(name, value));
 }
 function containsArgumentDefinition(line) {
     return /.+:.+/.test(line);

@@ -1,5 +1,5 @@
 import * as core from '@actions/core';
-import { CakeArgument } from "./cakeParameter";
+import * as script from "./cakeParameter";
 
 interface CakeInputs {
   readonly scriptPath?: string,
@@ -8,7 +8,7 @@ interface CakeInputs {
 }
 
 interface ScriptInputs {
-  readonly scriptArguments: CakeArgument[];
+  readonly scriptArguments: script.CakeParameter[];
 }
 
 export function getInputs(): CakeInputs & ScriptInputs {
@@ -20,20 +20,20 @@ export function getInputs(): CakeInputs & ScriptInputs {
   };
 }
 
-function getScriptInputs(): CakeArgument[] {
+function getScriptInputs(): script.CakeParameter[] {
   return [
-    new CakeArgument('target', core.getInput('target')),
-    new CakeArgument('verbosity', core.getInput('verbosity')),
+    new script.CakeArgument('target', core.getInput('target')),
+    new script.CakeArgument('verbosity', core.getInput('verbosity')),
     ...parseCustomArguments()
   ];
 }
 
-function parseCustomArguments(): CakeArgument[] {
+function parseCustomArguments(): script.CakeParameter[] {
   return core.getInput('arguments')
     .split(/\r?\n/)
     .filter(line => containsArgumentDefinition(line))
     .map(line => parseNameAndValue(line))
-    .map(([name, value]) => new CakeArgument(name, value));
+    .map(([name, value]) => new script.CakeArgument(name, value));
 }
 
 function containsArgumentDefinition(line: string): boolean {
