@@ -1928,11 +1928,14 @@ function getInputs() {
     return {
         scriptPath: core.getInput('script-path'),
         cakeVersion: core.getInput('cake-version'),
-        cakeBootstrap: (core.getInput('cake-bootstrap') || '').toLowerCase() === 'true',
+        cakeBootstrap: getBooleanInput('cake-bootstrap'),
         scriptArguments: getScriptInputs()
     };
 }
 exports.getInputs = getInputs;
+function getBooleanInput(name) {
+    return core.getInput(name).toLowerCase() === 'true';
+}
 function getScriptInputs() {
     return [
         new script.CakeArgument('target', core.getInput('target')),
