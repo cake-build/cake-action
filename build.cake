@@ -64,6 +64,17 @@ Task("Test-Verbosity")
     Information("✓ Passed");
 });
 
+Task("Test-Dry-Run")
+    .Does(() =>
+{
+    if (!IsDryRun())
+    {
+        throw new Exception("✕ Expected this to be a dry run, but it isn't");
+    }
+
+    Information("✓ Passed");
+});
+
 Task("Test-Script-Parameters")
     .Does(() =>
 {

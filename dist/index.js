@@ -1940,8 +1940,14 @@ function getScriptInputs() {
     return [
         new script.CakeArgument('target', core.getInput('target')),
         new script.CakeArgument('verbosity', core.getInput('verbosity')),
+        ...parseDryRunSwitch(),
         ...parseCustomArguments()
     ];
+}
+function parseDryRunSwitch() {
+    return getBooleanInput('dry-run')
+        ? [new script.CakeSwitch('dryrun')]
+        : [];
 }
 function parseCustomArguments() {
     return core.getInput('arguments')

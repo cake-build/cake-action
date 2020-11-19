@@ -56,6 +56,20 @@ steps:
 
 The supported verbosity levels are `Quiet`, `Minimal`, `Normal`, `Verbose` and `Diagnostic`. The default level is set to `Normal`.
 
+### `dry-run`
+
+While developing a script, you'll sometimes want to see which tasks would be triggered by a given target _without_ actually running them. That's exactly what the `dry-run` parameter is for:
+
+```yml
+steps:
+  - name: Run the Cake script
+    uses: cake-build/cake-action@v1
+    with:
+      dry-run: true
+```
+
+When `dry-run` is set to `true`, Cake will print out the names of the tasks to run according to the dependency graph, but it won't perform any of the instructions defined in them.
+
 ### `arguments`
 
 If your script defines any custom parameters, you can specify arguments for them by using the `arguments` parameter:
