@@ -21,7 +21,7 @@ export function getInputs(): CakeInputs & ScriptInputs {
 }
 
 function getBooleanInput(name: string): boolean {
-return core.getInput(name).toLowerCase() === 'true';
+  return core.getInput(name).toLowerCase() === 'true';
 }
 
 function getScriptInputs(): script.CakeParameter[] {
