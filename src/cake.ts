@@ -1,18 +1,19 @@
 import { exec } from '@actions/exec';
 import { which } from '@actions/io';
 /* eslint @typescript-eslint/no-unused-vars: off */
-import { ToolsDirectory } from './toolsDirectory';
+import { CakeToolSettings } from './cakeToolSettings';
 import { CakeParameter } from './cakeParameter';
 /* eslint @typescript-eslint/no-unused-vars: error */
 
 const dotnetCake = 'dotnet-cake';
+const dotnetManifestCake = 'dotnet tool run dotnet-cake';
 
 export async function runScript(
   scriptPath: string = 'build.cake',
-  workingDirectory?: ToolsDirectory,
+  cakeToolSettings?: CakeToolSettings,
   ...params: CakeParameter[]
 ) {
-  const cakeToolPath = await resolveCakeToolPath(workingDirectory);
+  const cakeToolPath = await resolveCakeToolPath(cakeToolSettings);
   const cakeParams = formatParameters(params);
   const exitCode = await exec(cakeToolPath, [scriptPath, ...cakeParams]);
 
@@ -23,9 +24,9 @@ export async function runScript(
 
 export async function bootstrapScript(
   scriptPath: string = 'build.cake',
-  workingDirectory?: ToolsDirectory
+  cakeToolSettings?: CakeToolSettings
 ) {
-  const cakeToolPath = await resolveCakeToolPath(workingDirectory);
+  const cakeToolPath = await resolveCakeToolPath(cakeToolSettings);
   const exitCode = await exec(cakeToolPath, [scriptPath, '--bootstrap']);
 
   if (exitCode != 0) {
@@ -33,10 +34,14 @@ export async function bootstrapScript(
   }
 }
 
-async function resolveCakeToolPath(workingDirectory?: ToolsDirectory): Promise<string> {
-  return workingDirectory
-    ? workingDirectory.append(dotnetCake)
-    : await which(dotnetCake);
+async function resolveCakeToolPath(
+  cakeToolSettings?: CakeToolSettings
+): Promise<string> {
+  return cakeToolSettings?.useToolManifest
+    ? dotnetManifestCake
+    : cakeToolSettings?.workingDirectory
+      ? cakeToolSettings.workingDirectory.append(dotnetCake)
+      : await which(dotnetCake);
 }
 
 function formatParameters(params: CakeParameter[]): string[] {

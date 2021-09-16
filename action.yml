@@ -24,7 +24,8 @@ inputs:
     description: 'Any custom parameters to pass to the script. Multiple parameters are defined on separate lines.'
     required: false
   cake-version:
-    description: 'The version of Cake to install.'
+    description: 'The version of Cake to install. Either a specific version, "latest" (default) or "tool-manifest".'
+    default: 'latest'
     required: false
   cake-bootstrap:
     description: 'Flag for if Cake modules should be installed/bootstrapped.'

@@ -188,3 +188,28 @@ describe('When failing to uninstall a tool locally', () => {
     await expect(dotnet.uninstallLocalTool('The.Tool', new ToolsDirectory(targetDirectory))).rejects.toThrow('-99');
   });
 });
+
+describe('When successfully restoring tools', () => {
+  const fakeExec = exec as jest.MockedFunction<typeof exec>;
+
+  beforeAll(() => {
+    fakeExec.mockReturnValue(Promise.resolve(0));
+  });
+
+  test('it should restore tools', async () => {
+    await dotnet.restoreTool();
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool restore');
+  });
+});
+
+describe('When failing to restore tools', () => {
+  const fakeExec = exec as jest.MockedFunction<typeof exec>;
+
+  beforeAll(() => {
+    fakeExec.mockReturnValue(Promise.resolve(-99));
+  });
+
+  test('it should throw an error containing the exit code', async () => {
+    await expect(dotnet.restoreTool()).rejects.toThrow('-99');
+  });
+});

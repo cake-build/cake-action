@@ -1051,6 +1051,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.run = void 0;
 const core = __importStar(__webpack_require__(470));
 const toolsDirectory_1 = __webpack_require__(348);
+const cakeToolSettings_1 = __webpack_require__(930);
 const dotnet = __importStar(__webpack_require__(193));
 const cake = __importStar(__webpack_require__(245));
 const action = __importStar(__webpack_require__(960));
@@ -1063,13 +1064,19 @@ function run() {
             const bootstrap = inputs.cakeBootstrap;
             const toolsDir = new toolsDirectory_1.ToolsDirectory();
             toolsDir.create();
+            const cakeTookSettings = new cakeToolSettings_1.CakeToolSettings(toolsDir, version === true);
             dotnet.disableTelemetry();
             dotnet.disableWelcomeMessage();
-            yield dotnet.installLocalCakeTool(toolsDir, version);
-            if (bootstrap) {
-                yield cake.bootstrapScript(scriptPath, toolsDir);
+            if (cakeTookSettings.useToolManifest) {
+                yield dotnet.restoreTool();
             }
-            yield cake.runScript(scriptPath, toolsDir, ...inputs.scriptArguments);
+            else {
+                yield dotnet.installLocalCakeTool(toolsDir, typeof version === "string" ? version : undefined);
+            }
+            if (bootstrap) {
+                yield cake.bootstrapScript(scriptPath, cakeTookSettings);
+            }
+            yield cake.runScript(scriptPath, cakeTookSettings, ...inputs.scriptArguments);
         }
         catch (error) {
             core.setFailed(error.message);
@@ -1116,12 +1123,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uninstallLocalTool = exports.installLocalTool = exports.installLocalCakeTool = exports.disableWelcomeMessage = exports.disableTelemetry = void 0;
+exports.restoreTool = exports.uninstallLocalTool = exports.installLocalTool = exports.installLocalCakeTool = exports.disableWelcomeMessage = exports.disableTelemetry = void 0;
 const core = __importStar(__webpack_require__(470));
 const exec_1 = __webpack_require__(986);
 const toolsDirectory_1 = __webpack_require__(348);
 const dotnetToolInstall = 'dotnet tool install';
 const dotnetToolUnInstall = 'dotnet tool uninstall';
+const dotnetToolRestore = 'dotnet tool restore';
 const dotnetCake = 'dotnet-cake';
 function disableTelemetry() {
     core.exportVariable('DOTNET_CLI_TELEMETRY_OPTOUT', 'true');
@@ -1168,6 +1176,15 @@ function uninstallLocalTool(packageId, targetDirectory = new toolsDirectory_1.To
     });
 }
 exports.uninstallLocalTool = uninstallLocalTool;
+function restoreTool() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const exitCode = yield exec_1.exec(dotnetToolRestore);
+        if (exitCode != 0) {
+            throw new Error(`Failed to restore tools. Exit code: ${exitCode}`);
+        }
+    });
+}
+exports.restoreTool = restoreTool;
 
 
 /***/ }),
@@ -1192,9 +1209,10 @@ const exec_1 = __webpack_require__(986);
 const io_1 = __webpack_require__(1);
 /* eslint @typescript-eslint/no-unused-vars: error */
 const dotnetCake = 'dotnet-cake';
-function runScript(scriptPath = 'build.cake', workingDirectory, ...params) {
+const dotnetManifestCake = 'dotnet tool run dotnet-cake';
+function runScript(scriptPath = 'build.cake', cakeToolSettings, ...params) {
     return __awaiter(this, void 0, void 0, function* () {
-        const cakeToolPath = yield resolveCakeToolPath(workingDirectory);
+        const cakeToolPath = yield resolveCakeToolPath(cakeToolSettings);
         const cakeParams = formatParameters(params);
         const exitCode = yield exec_1.exec(cakeToolPath, [scriptPath, ...cakeParams]);
         if (exitCode != 0) {
@@ -1203,9 +1221,9 @@ function runScript(scriptPath = 'build.cake', workingDirectory, ...params) {
     });
 }
 exports.runScript = runScript;
-function bootstrapScript(scriptPath = 'build.cake', workingDirectory) {
+function bootstrapScript(scriptPath = 'build.cake', cakeToolSettings) {
     return __awaiter(this, void 0, void 0, function* () {
-        const cakeToolPath = yield resolveCakeToolPath(workingDirectory);
+        const cakeToolPath = yield resolveCakeToolPath(cakeToolSettings);
         const exitCode = yield exec_1.exec(cakeToolPath, [scriptPath, '--bootstrap']);
         if (exitCode != 0) {
             throw new Error(`Failed to bootstrap the build script. Exit code: ${exitCode}`);
@@ -1213,11 +1231,11 @@ function bootstrapScript(scriptPath = 'build.cake', workingDirectory) {
     });
 }
 exports.bootstrapScript = bootstrapScript;
-function resolveCakeToolPath(workingDirectory) {
+function resolveCakeToolPath(cakeToolSettings) {
     return __awaiter(this, void 0, void 0, function* () {
-        return workingDirectory
-            ? workingDirectory.append(dotnetCake)
-            : yield io_1.which(dotnetCake);
+        return (cakeToolSettings === null || cakeToolSettings === void 0 ? void 0 : cakeToolSettings.useToolManifest) ? dotnetManifestCake
+            : (cakeToolSettings === null || cakeToolSettings === void 0 ? void 0 : cakeToolSettings.workingDirectory) ? cakeToolSettings.workingDirectory.append(dotnetCake)
+                : yield io_1.which(dotnetCake);
     });
 }
 function formatParameters(params) {
@@ -1860,6 +1878,25 @@ module.exports = require("fs");
 
 /***/ }),
 
+/***/ 930:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CakeToolSettings = void 0;
+/* eslint @typescript-eslint/no-unused-vars: error */
+class CakeToolSettings {
+    constructor(workingDirectory, useToolManifest = false) {
+        this.workingDirectory = workingDirectory;
+        this.useToolManifest = useToolManifest;
+    }
+}
+exports.CakeToolSettings = CakeToolSettings;
+
+
+/***/ }),
+
 /***/ 947:
 /***/ (function(__unusedmodule, exports) {
 
@@ -1927,7 +1964,7 @@ const script = __importStar(__webpack_require__(947));
 function getInputs() {
     return {
         scriptPath: core.getInput('script-path'),
-        cakeVersion: core.getInput('cake-version'),
+        cakeVersion: getInputCakeVersion(),
         cakeBootstrap: getBooleanInput('cake-bootstrap'),
         scriptArguments: getScriptInputs()
     };
@@ -1962,6 +1999,17 @@ function containsArgumentDefinition(line) {
 function parseNameAndValue(line) {
     const nameValue = line.split(':');
     return [nameValue[0].trim(), nameValue[1].trim()];
+}
+function getInputCakeVersion() {
+    const version = core.getInput('cake-version');
+    switch (version.toLowerCase()) {
+        case 'tool-manifest':
+            return true;
+        case 'latest':
+            return false;
+        default:
+            return version || false;
+    }
 }
 
 

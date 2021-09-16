@@ -98,6 +98,17 @@ steps:
       cake-version: 0.30.0
 ```
 
+If you're pinning your Cake version using a [tool manifest file](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools#install-a-local-tool), then you can have the action restore any local tools, including Cake, by specifying `tool-manifest` as the argument for `cake-version`:
+
+
+```yml
+steps:
+  - name: Run the Cake script
+    uses: cake-build/cake-action@v1
+    with:
+      cake-version: tool-manifest
+```
+
 ### `cake-bootstrap`
 
 If you're referencing any [custom modules](https://cakebuild.net/docs/fundamentals/modules) from within your script, you'll have to [bootstrap](https://cakebuild.net/docs/fundamentals/preprocessor-directives#module-directive) them _before_ the script runs. The Cake action can do this extra step for you; all you have to do is set the `cake-bootstrap` parameter to `true`:

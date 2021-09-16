@@ -67,3 +67,10 @@ jobs:
             string-parameter: 'value'
             numeric-parameter: 3
             boolean-parameter: true
+      - name: Run with tool manifest
+        env:
+          EXPECTED_CAKE_VERSION: 1.2.0
+        uses: ./
+        with:
+          cake-version: tool-manifest
+          target: Test-Cake-Version
