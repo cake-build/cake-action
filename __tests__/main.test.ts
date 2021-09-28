@@ -190,3 +190,20 @@ describe('When running the action with the cake-bootstrap input argument', () =>
       expect.anything());
   });
 });
+
+describe('When running the action with the Cake tool manifest input argument', () => {
+  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeRestoreTool = dotnet.restoreTool as jest.MockedFunction<typeof dotnet.restoreTool>;
+
+  beforeAll(() => {
+    fakeGetInputs.mockReturnValue({
+      scriptArguments: [],
+      cakeVersion: true
+    });
+  });
+
+  test('it should restore dotnet tools', async () => {
+    await run();
+    expect(fakeRestoreTool).toHaveBeenCalled();
+  });
+});

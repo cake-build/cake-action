@@ -158,8 +158,8 @@ describe('When getting no input arguments from the action', () => {
     expect(action.getInputs().scriptPath).toBe('');
   });
 
-  test('it should return an empty string for the cake-version parameter', () => {
-    expect(action.getInputs().cakeVersion).toBe('');
+  test('it should return an false for the cake-version parameter', () => {
+    expect(action.getInputs().cakeVersion).toBe(false);
   });
 
   test('it should return false for the cake-bootstrap parameter', () => {
@@ -176,5 +176,29 @@ describe('When getting no input arguments from the action', () => {
 
   test('it should not pass the dry run switch to the script', () => {
     expect(action.getInputs().scriptArguments).not.toContainEqual(new CakeSwitch('dryrun'));
+  });
+});
+
+describe('When getting the cake-version script input argument set to tool-manifest from the action', () => {
+  const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
+
+  beforeAll(() => {
+    when(fakeGetInput).calledWith('cake-version').mockReturnValue('tool-manifest');
+  });
+
+  test('it should return cakeVersion as true and no version for cake-version parameter', () => {
+    expect(action.getInputs().cakeVersion).toBe(true);
+  });
+});
+
+describe('When getting the cake-version script input argument set to latest from the action', () => {
+  const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
+
+  beforeAll(() => {
+    when(fakeGetInput).calledWith('cake-version').mockReturnValue('latest');
+  });
+
+  test('it should return cakeVersion as false and no version for cake-version parameter', () => {
+    expect(action.getInputs().cakeVersion).toBe(false);
   });
 });

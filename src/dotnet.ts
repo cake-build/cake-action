@@ -4,6 +4,7 @@ import { ToolsDirectory } from './toolsDirectory';
 
 const dotnetToolInstall = 'dotnet tool install';
 const dotnetToolUnInstall = 'dotnet tool uninstall';
+const dotnetToolRestore = 'dotnet tool restore';
 const dotnetCake = 'dotnet-cake';
 
 export function disableTelemetry() {
@@ -59,5 +60,13 @@ export async function uninstallLocalTool(
 
   if (exitCode != 0) {
     throw new Error(`Failed to uninstall ${packageId}. Exit code: ${exitCode}`);
+  }
+}
+
+export async function restoreTool() {
+  const exitCode = await exec(dotnetToolRestore);
+
+  if (exitCode != 0) {
+    throw new Error(`Failed to restore tools. Exit code: ${exitCode}`);
   }
 }

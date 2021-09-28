@@ -3,7 +3,7 @@ import * as script from "./cakeParameter";
 
 interface CakeInputs {
   readonly scriptPath?: string,
-  readonly cakeVersion?: string,
+  readonly cakeVersion?: string | boolean,
   readonly cakeBootstrap?: boolean;
 }
 
@@ -14,7 +14,7 @@ interface ScriptInputs {
 export function getInputs(): CakeInputs & ScriptInputs {
   return {
     scriptPath: core.getInput('script-path'),
-    cakeVersion: core.getInput('cake-version'),
+    cakeVersion: getInputCakeVersion(),
     cakeBootstrap: getBooleanInput('cake-bootstrap'),
     scriptArguments: getScriptInputs()
   };
@@ -54,4 +54,16 @@ function containsArgumentDefinition(line: string): boolean {
 function parseNameAndValue(line: string): [string, string] {
   const nameValue = line.split(':');
   return [nameValue[0].trim(), nameValue[1].trim()];
+}
+
+function getInputCakeVersion(): string | boolean {
+  const version = core.getInput('cake-version');
+  switch (version.toLowerCase()) {
+    case 'tool-manifest':
+      return true;
+    case 'latest':
+      return false;
+    default:
+      return version || false;
+  }
 }
