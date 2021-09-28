@@ -56,14 +56,14 @@ function parseNameAndValue(line: string): [string, string] {
   return [nameValue[0].trim(), nameValue[1].trim()];
 }
 
-function getInputCakeVersion() : string | boolean {
+function getInputCakeVersion(): string | boolean {
   const version = core.getInput('cake-version');
-    switch (version.toLowerCase()) {
-      case 'tool-manifest':
-        return true;
-      case 'latest':
-        return false;
-      default:
-        return version || false;
-    }
+  switch (version.toLowerCase()) {
+    case 'tool-manifest':
+      return true;
+    case 'latest':
+      return false;
+    default:
+      return version || false;
+  }
 }

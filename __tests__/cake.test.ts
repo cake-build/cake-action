@@ -151,7 +151,6 @@ describe('When failing to bootstrap a script using the local Cake tool', () => {
   });
 });
 
-
 describe('When running a script successfully using the tool manifest', () => {
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
