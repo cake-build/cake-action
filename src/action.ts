@@ -14,7 +14,7 @@ interface ScriptInputs {
 export function getInputs(): CakeInputs & ScriptInputs {
   return {
     scriptPath: core.getInput('script-path'),
-    cakeVersion: getInputCakeVersion(),
+    cakeVersion: parseCakeVersion(),
     cakeBootstrap: getBooleanInput('cake-bootstrap'),
     scriptArguments: getScriptInputs()
   };
@@ -22,6 +22,18 @@ export function getInputs(): CakeInputs & ScriptInputs {
 
 function getBooleanInput(name: string): boolean {
   return core.getInput(name).toLowerCase() === 'true';
+}
+
+function parseCakeVersion(): string | boolean {
+  const version = core.getInput('cake-version');
+  switch (version.toLowerCase()) {
+    case 'tool-manifest':
+      return true;
+    case 'latest':
+      return false;
+    default:
+      return version || false;
+  }
 }
 
 function getScriptInputs(): script.CakeParameter[] {
@@ -54,16 +66,4 @@ function containsArgumentDefinition(line: string): boolean {
 function parseNameAndValue(line: string): [string, string] {
   const nameValue = line.split(':');
   return [nameValue[0].trim(), nameValue[1].trim()];
-}
-
-function getInputCakeVersion(): string | boolean {
-  const version = core.getInput('cake-version');
-  switch (version.toLowerCase()) {
-    case 'tool-manifest':
-      return true;
-    case 'latest':
-      return false;
-    default:
-      return version || false;
-  }
 }
