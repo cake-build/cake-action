@@ -1,5 +1,6 @@
 import * as core from '@actions/core';
 import * as script from "./cakeParameter";
+import * as input from "./input";
 
 interface CakeInputs {
   readonly scriptPath?: string,
@@ -15,13 +16,9 @@ export function getInputs(): CakeInputs & ScriptInputs {
   return {
     scriptPath: core.getInput('script-path'),
     cakeVersion: parseCakeVersion(),
-    cakeBootstrap: getBooleanInput('cake-bootstrap'),
+    cakeBootstrap: input.getBooleanInput('cake-bootstrap'),
     scriptArguments: getScriptInputs()
   };
-}
-
-function getBooleanInput(name: string): boolean {
-  return core.getInput(name).toLowerCase() === 'true';
 }
 
 function parseCakeVersion(): string | boolean {
@@ -46,7 +43,7 @@ function getScriptInputs(): script.CakeParameter[] {
 }
 
 function parseDryRunSwitch(): script.CakeParameter[] {
-  return getBooleanInput('dry-run')
+  return input.getBooleanInput('dry-run')
     ? [new script.CakeSwitch('dryrun')]
     : [];
 }
