@@ -29,17 +29,17 @@ jobs:
         shell: bash
       - name: Run with a specific Cake version
         env:
-          EXPECTED_CAKE_VERSION: 0.34.1
+          EXPECTED_CAKE_VERSION: 2.1.0
         uses: ./
         with:
-          cake-version: 0.34.1
+          cake-version: 2.1.0
           target: Test-Cake-Version
       - name: Run with a different Cake version in the same build
         env:
-          EXPECTED_CAKE_VERSION: 0.33.0
+          EXPECTED_CAKE_VERSION: 2.0.0
         uses: ./
         with:
-          cake-version: 0.33.0
+          cake-version: 2.0.0
           target: Test-Cake-Version
       - name: Run with tool manifest
         env:
