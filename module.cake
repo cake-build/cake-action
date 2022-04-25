@@ -2,7 +2,7 @@
 #module nuget:?package=Cake.DotNetTool.Module&version=0.3.1
 
 // Install .NET Core Global tools
-#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=5.5.1"
+#tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=5.10.1"
 
 Task("GitVersion")
     .Does(() =>
