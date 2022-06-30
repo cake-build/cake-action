@@ -49,8 +49,7 @@ function parseDryRunSwitch(): script.CakeParameter[] {
 }
 
 function parseCustomArguments(): script.CakeParameter[] {
-  return core.getInput('arguments')
-    .split(/\r?\n/)
+  return input.getMultilineInput('arguments')
     .filter(line => containsArgumentDefinition(line))
     .map(line => parseNameAndValue(line))
     .map(([name, value]) => new script.CakeArgument(name, value));

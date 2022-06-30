@@ -1658,12 +1658,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBooleanInput = void 0;
+exports.getMultilineInput = exports.getBooleanInput = void 0;
 const core = __importStar(__webpack_require__(470));
 function getBooleanInput(name) {
     return core.getInput(name).toLowerCase() === 'true';
 }
 exports.getBooleanInput = getBooleanInput;
+function getMultilineInput(name) {
+    var _a;
+    return (_a = core.getMultilineInput(name)) !== null && _a !== void 0 ? _a : [];
+}
+exports.getMultilineInput = getMultilineInput;
 
 
 /***/ }),
@@ -3220,8 +3225,7 @@ function parseDryRunSwitch() {
         : [];
 }
 function parseCustomArguments() {
-    return core.getInput('arguments')
-        .split(/\r?\n/)
+    return input.getMultilineInput('arguments')
         .filter(line => containsArgumentDefinition(line))
         .map(line => parseNameAndValue(line))
         .map(([name, value]) => new script.CakeArgument(name, value));
