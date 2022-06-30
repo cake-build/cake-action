@@ -66,14 +66,14 @@ describe('When getting the dry-run script input argument set to false from the a
 });
 
 describe('When getting multiple custom script input arguments from the action', () => {
-  const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
+  const fakeGetMultilineInput = core.getMultilineInput as jest.MockedFunction<typeof core.getMultilineInput>;
 
   beforeAll(() => {
-    when(fakeGetInput).calledWith('arguments').mockReturnValue(`
-      string-parameter: 'value'
-      numeric-parameter: 3
-      boolean-parameter: true
-    `);
+    when(fakeGetMultilineInput).calledWith('arguments').mockReturnValue([
+      `string-parameter: 'value'`,
+      'numeric-parameter: 3',
+      'boolean-parameter: true'
+    ]);
   });
 
   test('it should return the argument for a custom string parameter', () => {
@@ -90,12 +90,12 @@ describe('When getting multiple custom script input arguments from the action', 
 });
 
 describe('When getting a single custom script input argument from the action', () => {
-  const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
+  const fakeGetInput = core.getMultilineInput as jest.MockedFunction<typeof core.getMultilineInput>;
 
   beforeAll(() => {
-    when(fakeGetInput).calledWith('arguments').mockReturnValue(`
-      name: value
-    `);
+    when(fakeGetInput).calledWith('arguments').mockReturnValue([
+      'name: value'
+    ]);
   });
 
   test('it should return the argument for the custom parameter', () => {
@@ -116,20 +116,20 @@ describe('When getting a single custom script input argument on one line from th
 });
 
 describe('When getting improperly formatted custom script input arguments from the action', () => {
-  const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
+  const fakeGetMultilineInput = core.getMultilineInput as jest.MockedFunction<typeof core.getMultilineInput>;
 
   beforeAll(() => {
-    when(fakeGetInput).calledWith('arguments').mockReturnValue(`
-      --name=value
-      -name=value
-      name=value
-      --name value
-      -name value
-      name value
-      --nameOnly
-      -nameOnly
-      nameOnly
-    `);
+    when(fakeGetMultilineInput).calledWith('arguments').mockReturnValue([
+      '--name=value',
+      '-name=value',
+      'name=value',
+      '--name value',
+      '-name value',
+      'name value',
+      '--nameOnly',
+      '-nameOnly',
+      'nameOnly'
+    ]);
   });
 
   test('it should not parse the invalid parameter names and values', () => {

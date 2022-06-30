@@ -1,5 +1,6 @@
 import * as core from '@actions/core';
 import * as script from "./cakeParameter";
+import * as input from "./input";
 
 interface CakeInputs {
   readonly scriptPath?: string,
@@ -14,14 +15,22 @@ interface ScriptInputs {
 export function getInputs(): CakeInputs & ScriptInputs {
   return {
     scriptPath: core.getInput('script-path'),
-    cakeVersion: getInputCakeVersion(),
-    cakeBootstrap: getBooleanInput('cake-bootstrap'),
+    cakeVersion: parseCakeVersion(),
+    cakeBootstrap: input.getBooleanInput('cake-bootstrap'),
     scriptArguments: getScriptInputs()
   };
 }
 
-function getBooleanInput(name: string): boolean {
-  return core.getInput(name).toLowerCase() === 'true';
+function parseCakeVersion(): string | boolean {
+  const version = core.getInput('cake-version');
+  switch (version.toLowerCase()) {
+    case 'tool-manifest':
+      return true;
+    case 'latest':
+      return false;
+    default:
+      return version || false;
+  }
 }
 
 function getScriptInputs(): script.CakeParameter[] {
@@ -34,14 +43,13 @@ function getScriptInputs(): script.CakeParameter[] {
 }
 
 function parseDryRunSwitch(): script.CakeParameter[] {
-  return getBooleanInput('dry-run')
+  return input.getBooleanInput('dry-run')
     ? [new script.CakeSwitch('dryrun')]
     : [];
 }
 
 function parseCustomArguments(): script.CakeParameter[] {
-  return core.getInput('arguments')
-    .split(/\r?\n/)
+  return input.getMultilineInput('arguments')
     .filter(line => containsArgumentDefinition(line))
     .map(line => parseNameAndValue(line))
     .map(([name, value]) => new script.CakeArgument(name, value));
@@ -54,16 +62,4 @@ function containsArgumentDefinition(line: string): boolean {
 function parseNameAndValue(line: string): [string, string] {
   const nameValue = line.split(':');
   return [nameValue[0].trim(), nameValue[1].trim()];
-}
-
-function getInputCakeVersion(): string | boolean {
-  const version = core.getInput('cake-version');
-  switch (version.toLowerCase()) {
-    case 'tool-manifest':
-      return true;
-    case 'latest':
-      return false;
-    default:
-      return version || false;
-  }
 }
