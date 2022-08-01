@@ -72,7 +72,8 @@ describe('When getting multiple custom script input arguments from the action', 
     when(fakeGetMultilineInput).calledWith('arguments').mockReturnValue([
       `string-parameter: 'value'`,
       'numeric-parameter: 3',
-      'boolean-parameter: true'
+      'boolean-parameter: true',
+      'url: \'https://www.google.com\''
     ]);
   });
 
@@ -86,6 +87,10 @@ describe('When getting multiple custom script input arguments from the action', 
 
   test('it should return the argument for a custom boolean parameter', () => {
     expect(action.getInputs().scriptArguments).toContainEqual(new CakeArgument('boolean-parameter', 'true'));
+  });
+
+  test('it should return the argument for a custom string parameter containing a colon', () => {
+    expect(action.getInputs().scriptArguments).toContainEqual(new CakeArgument('url', '\'https://www.google.com\''));
   });
 });
 

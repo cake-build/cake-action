@@ -60,6 +60,8 @@ function containsArgumentDefinition(line: string): boolean {
 }
 
 function parseNameAndValue(line: string): [string, string] {
-  const nameValue = line.split(':');
-  return [nameValue[0].trim(), nameValue[1].trim()];
+  const idx = line.indexOf(':');
+  const name = line.substring(0, idx);
+  const value = line.substring(idx + 1);
+  return [name.trim(), value.trim()];
 }
