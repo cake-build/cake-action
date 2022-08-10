@@ -3234,8 +3234,9 @@ function containsArgumentDefinition(line) {
     return /.+:.+/.test(line);
 }
 function parseNameAndValue(line) {
-    const nameValue = line.split(':');
-    return [nameValue[0].trim(), nameValue[1].trim()];
+    // Splits the line into two groups on the first occurrence of ':'
+    const nameValue = line.match(/([^:]+):(.+)/);
+    return [nameValue[1].trim(), nameValue[2].trim()];
 }
 
 

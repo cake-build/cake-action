@@ -115,6 +115,20 @@ describe('When getting a single custom script input argument on one line from th
   });
 });
 
+describe('When getting a custom script input argument that contains colons (e.g. an URL)', () => {
+  const fakeGetInput = core.getMultilineInput as jest.MockedFunction<typeof core.getMultilineInput>;
+
+  beforeAll(() => {
+    when(fakeGetInput).calledWith('arguments').mockReturnValue([
+      'url: https://example.com'
+    ]);
+  });
+
+  test('it should return the argument for the custom parameter', () => {
+    expect(action.getInputs().scriptArguments).toContainEqual(new CakeArgument('url', 'https://example.com'));
+  });
+});
+
 describe('When getting improperly formatted custom script input arguments from the action', () => {
   const fakeGetMultilineInput = core.getMultilineInput as jest.MockedFunction<typeof core.getMultilineInput>;
 
