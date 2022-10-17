@@ -5,7 +5,7 @@ import { Platform } from './platform';
 export class ToolsDirectory {
   private readonly _path: string;
 
-  constructor(path: string = 'tools') {
+  constructor(path = 'tools') {
     this._path = path;
   }
 

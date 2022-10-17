@@ -9,7 +9,7 @@ const dotnetCake = 'dotnet-cake';
 const dotnetManifestCake = 'dotnet tool run dotnet-cake';
 
 export async function runScript(
-  scriptPath: string = 'build.cake',
+  scriptPath = 'build.cake',
   cakeToolSettings?: CakeToolSettings,
   ...params: CakeParameter[]
 ) {
@@ -23,7 +23,7 @@ export async function runScript(
 }
 
 export async function bootstrapScript(
-  scriptPath: string = 'build.cake',
+  scriptPath = 'build.cake',
   cakeToolSettings?: CakeToolSettings
 ) {
   const cakeToolPath = await resolveCakeToolPath(cakeToolSettings);
