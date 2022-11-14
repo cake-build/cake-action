@@ -70,7 +70,7 @@ describe('When getting multiple custom script input arguments from the action', 
 
   beforeAll(() => {
     when(fakeGetMultilineInput).calledWith('arguments').mockReturnValue([
-      `string-parameter: 'value'`,
+      'string-parameter: \'value\'',
       'numeric-parameter: 3',
       'boolean-parameter: true'
     ]);

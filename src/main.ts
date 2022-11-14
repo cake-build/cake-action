@@ -24,7 +24,7 @@ export async function run() {
     if (cakeTookSettings.useToolManifest) {
       await dotnet.restoreTool();
     } else {
-      await dotnet.installLocalCakeTool(toolsDir, typeof version === "string" ? version : undefined);
+      await dotnet.installLocalCakeTool(toolsDir, typeof version === 'string' ? version : undefined);
     }
 
     if (bootstrap) {

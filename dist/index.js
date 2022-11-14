@@ -4381,7 +4381,7 @@ function run() {
                 yield dotnet.restoreTool();
             }
             else {
-                yield dotnet.installLocalCakeTool(toolsDir, typeof version === "string" ? version : undefined);
+                yield dotnet.installLocalCakeTool(toolsDir, typeof version === 'string' ? version : undefined);
             }
             if (bootstrap) {
                 yield cake.bootstrapScript(scriptPath, cakeTookSettings);
