@@ -1,6 +1,7 @@
 import * as core from '@actions/core';
 import { ToolsDirectory } from './toolsDirectory';
 import { CakeToolSettings } from './cakeToolSettings';
+import { isError, isString } from './guards';
 import * as dotnet from './dotnet';
 import * as cake from './cake';
 import * as action from './action';
@@ -32,7 +33,11 @@ export async function run() {
 
     await cake.runScript(scriptPath, cakeTookSettings, ...inputs.scriptArguments);
   } catch (error) {
-    core.setFailed(error.message);
+    if (isError(error)) {
+      core.setFailed(error.message);
+    } else if (isString(error)) {
+      core.setFailed(error);
+    }
   }
 }
 

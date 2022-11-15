@@ -150,13 +150,29 @@ describe('When running the action with custom script input arguments', () => {
   });
 });
 
-describe('When the script fails to run', () => {
+describe('When the script fails with an Error object', () => {
   const fakeSetFailed = core.setFailed as jest.MockedFunction<typeof core.setFailed>;
   const fakeRunScript = cake.runScript as jest.MockedFunction<typeof cake.runScript>;
 
   beforeAll(() => {
     fakeRunScript.mockImplementation(async () => {
       throw new Error('the error message');
+    });
+  });
+
+  test('it should mark the action as failed with the specific error message', async () => {
+    await run();
+    expect(fakeSetFailed).toHaveBeenCalledWith('the error message');
+  });
+});
+
+describe('When the script fails with a string', () => {
+  const fakeSetFailed = core.setFailed as jest.MockedFunction<typeof core.setFailed>;
+  const fakeRunScript = cake.runScript as jest.MockedFunction<typeof cake.runScript>;
+
+  beforeAll(() => {
+    fakeRunScript.mockImplementation(async () => {
+      throw 'the error message';
     });
   });
 
