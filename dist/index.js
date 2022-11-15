@@ -4057,7 +4057,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.bootstrapScript = exports.runScript = void 0;
 const exec_1 = __nccwpck_require__(1514);
 const io_1 = __nccwpck_require__(7436);
-/* eslint @typescript-eslint/no-unused-vars: error */
 const dotnetCake = 'dotnet-cake';
 const dotnetManifestCake = 'dotnet tool run dotnet-cake';
 function runScript(scriptPath = 'build.cake', cakeToolSettings, ...params) {
@@ -4142,7 +4141,6 @@ exports.CakeSwitch = CakeSwitch;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CakeToolSettings = void 0;
-/* eslint @typescript-eslint/no-unused-vars: error */
 class CakeToolSettings {
     constructor(workingDirectory, useToolManifest = false) {
         this.workingDirectory = workingDirectory;
