@@ -4,7 +4,7 @@ import { CakeToolSettings } from './cakeToolSettings';
 import { CakeParameter } from './cakeParameter';
 
 const dotnetCake = 'dotnet-cake';
-const dotnetManifestCake = 'dotnet tool run dotnet-cake';
+const dotnetLocalToolCake = 'dotnet tool run dotnet-cake';
 
 export async function runScript(
   scriptPath = 'build.cake',
@@ -36,7 +36,7 @@ async function resolveCakeToolPath(
   cakeToolSettings?: CakeToolSettings
 ): Promise<string> {
   return cakeToolSettings?.useToolManifest
-    ? dotnetManifestCake
+    ? dotnetLocalToolCake
     : cakeToolSettings?.workingDirectory
       ? cakeToolSettings.workingDirectory.append(dotnetCake)
       : await which(dotnetCake);

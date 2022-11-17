@@ -4058,7 +4058,7 @@ exports.bootstrapScript = exports.runScript = void 0;
 const exec_1 = __nccwpck_require__(1514);
 const io_1 = __nccwpck_require__(7436);
 const dotnetCake = 'dotnet-cake';
-const dotnetManifestCake = 'dotnet tool run dotnet-cake';
+const dotnetLocalToolCake = 'dotnet tool run dotnet-cake';
 function runScript(scriptPath = 'build.cake', cakeToolSettings, ...params) {
     return __awaiter(this, void 0, void 0, function* () {
         const cakeToolPath = yield resolveCakeToolPath(cakeToolSettings);
@@ -4083,7 +4083,7 @@ exports.bootstrapScript = bootstrapScript;
 function resolveCakeToolPath(cakeToolSettings) {
     return __awaiter(this, void 0, void 0, function* () {
         return (cakeToolSettings === null || cakeToolSettings === void 0 ? void 0 : cakeToolSettings.useToolManifest)
-            ? dotnetManifestCake
+            ? dotnetLocalToolCake
             : (cakeToolSettings === null || cakeToolSettings === void 0 ? void 0 : cakeToolSettings.workingDirectory)
                 ? cakeToolSettings.workingDirectory.append(dotnetCake)
                 : yield (0, io_1.which)(dotnetCake);
