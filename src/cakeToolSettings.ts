@@ -5,7 +5,7 @@ export class CakeToolSettings {
   readonly useToolManifest: boolean;
 
   constructor(
-    workingDirectory: ToolsDirectory | undefined,
+    workingDirectory?: ToolsDirectory,
     useToolManifest = false
   ) {
     this.workingDirectory = workingDirectory;
