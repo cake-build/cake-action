@@ -4374,19 +4374,19 @@ function run() {
             const bootstrap = inputs.cakeBootstrap;
             const toolsDir = new toolsDirectory_1.ToolsDirectory();
             toolsDir.create();
-            const cakeTookSettings = new cakeToolSettings_1.CakeToolSettings(toolsDir, version === true);
+            const cakeToolSettings = new cakeToolSettings_1.CakeToolSettings(toolsDir, version === true);
             dotnet.disableTelemetry();
             dotnet.disableWelcomeMessage();
-            if (cakeTookSettings.useToolManifest) {
+            if (cakeToolSettings.useToolManifest) {
                 yield dotnet.restoreTool();
             }
             else {
                 yield dotnet.installLocalCakeTool(toolsDir, typeof version === 'string' ? version : undefined);
             }
             if (bootstrap) {
-                yield cake.bootstrapScript(scriptPath, cakeTookSettings);
+                yield cake.bootstrapScript(scriptPath, cakeToolSettings);
             }
-            yield cake.runScript(scriptPath, cakeTookSettings, ...inputs.scriptArguments);
+            yield cake.runScript(scriptPath, cakeToolSettings, ...inputs.scriptArguments);
         }
         catch (error) {
             if ((0, guards_1.isError)(error)) {

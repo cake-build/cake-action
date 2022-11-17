@@ -16,22 +16,22 @@ export async function run() {
     const toolsDir = new ToolsDirectory();
     toolsDir.create();
 
-    const cakeTookSettings = new CakeToolSettings(toolsDir, version === true);
+    const cakeToolSettings = new CakeToolSettings(toolsDir, version === true);
 
     dotnet.disableTelemetry();
     dotnet.disableWelcomeMessage();
 
-    if (cakeTookSettings.useToolManifest) {
+    if (cakeToolSettings.useToolManifest) {
       await dotnet.restoreTool();
     } else {
       await dotnet.installLocalCakeTool(toolsDir, typeof version === 'string' ? version : undefined);
     }
 
     if (bootstrap) {
-      await cake.bootstrapScript(scriptPath, cakeTookSettings);
+      await cake.bootstrapScript(scriptPath, cakeToolSettings);
     }
 
-    await cake.runScript(scriptPath, cakeTookSettings, ...inputs.scriptArguments);
+    await cake.runScript(scriptPath, cakeToolSettings, ...inputs.scriptArguments);
   } catch (error) {
     if (isError(error)) {
       core.setFailed(error.message);
