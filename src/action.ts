@@ -4,7 +4,7 @@ import * as input from './input';
 
 interface CakeInputs {
   readonly scriptPath?: string,
-  readonly cakeVersion?: string | boolean,
+  readonly cakeVersion?: CakeVersion,
   readonly cakeBootstrap?: boolean;
 }
 
@@ -12,25 +12,32 @@ interface ScriptInputs {
   readonly scriptArguments: script.CakeParameter[];
 }
 
+export type CakeVersion =
+  | ToolManifest
+  | Latest
+  | Specific;
+type ToolManifest = {
+  version: 'tool-manifest';
+};
+type Latest = {
+  version: 'latest';
+};
+type Specific = {
+  version: string;
+};
+
 export function getInputs(): CakeInputs & ScriptInputs {
   return {
     scriptPath: core.getInput('script-path'),
-    cakeVersion: parseCakeVersion(),
+    cakeVersion: getCakeVersionInput(),
     cakeBootstrap: input.getBooleanInput('cake-bootstrap'),
     scriptArguments: getScriptInputs()
   };
 }
 
-function parseCakeVersion(): string | boolean {
-  const version = core.getInput('cake-version');
-  switch (version.toLowerCase()) {
-    case 'tool-manifest':
-      return true;
-    case 'latest':
-      return false;
-    default:
-      return version || false;
-  }
+function getCakeVersionInput(): CakeVersion {
+  const version = core.getInput('cake-version').toLowerCase();
+  return version === '' ? { version: 'latest' } : { version: version };
 }
 
 function getScriptInputs(): script.CakeParameter[] {

@@ -3991,22 +3991,15 @@ const input = __importStar(__nccwpck_require__(6747));
 function getInputs() {
     return {
         scriptPath: core.getInput('script-path'),
-        cakeVersion: parseCakeVersion(),
+        cakeVersion: getCakeVersionInput(),
         cakeBootstrap: input.getBooleanInput('cake-bootstrap'),
         scriptArguments: getScriptInputs()
     };
 }
 exports.getInputs = getInputs;
-function parseCakeVersion() {
-    const version = core.getInput('cake-version');
-    switch (version.toLowerCase()) {
-        case 'tool-manifest':
-            return true;
-        case 'latest':
-            return false;
-        default:
-            return version || false;
-    }
+function getCakeVersionInput() {
+    const version = core.getInput('cake-version').toLowerCase();
+    return version === '' ? { version: 'latest' } : { version: version };
 }
 function getScriptInputs() {
     return [
@@ -4374,14 +4367,19 @@ function run() {
             const bootstrap = inputs.cakeBootstrap;
             const toolsDir = new toolsDirectory_1.ToolsDirectory();
             toolsDir.create();
-            const cakeToolSettings = new cakeToolSettings_1.CakeToolSettings(toolsDir, version === true);
+            const cakeToolSettings = new cakeToolSettings_1.CakeToolSettings(toolsDir, (version === null || version === void 0 ? void 0 : version.version) === 'tool-manifest');
             dotnet.disableTelemetry();
             dotnet.disableWelcomeMessage();
             if (cakeToolSettings.useToolManifest) {
                 yield dotnet.restoreTool();
             }
             else {
-                yield dotnet.installLocalCakeTool(toolsDir, typeof version === 'string' ? version : undefined);
+                if ((version === null || version === void 0 ? void 0 : version.version) === 'latest') {
+                    yield dotnet.installLocalCakeTool(toolsDir);
+                }
+                else {
+                    yield dotnet.installLocalCakeTool(toolsDir, version === null || version === void 0 ? void 0 : version.version);
+                }
             }
             if (bootstrap) {
                 yield cake.bootstrapScript(scriptPath, cakeToolSettings);

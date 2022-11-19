@@ -65,14 +65,49 @@ describe('When running the action with the script path input argument', () => {
   });
 });
 
-describe('When running the action with the Cake version input argument', () => {
+describe('When running the action with tool-manifest as the Cake version input argument', () => {
+  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeRestoreTool = dotnet.restoreTool as jest.MockedFunction<typeof dotnet.restoreTool>;
+
+  beforeAll(() => {
+    fakeGetInputs.mockReturnValue({
+      cakeVersion: { version: 'tool-manifest' },
+      scriptArguments: []
+    });
+  });
+
+  test('it should restore the dotnet local tools', async () => {
+    await run();
+    expect(fakeRestoreTool).toHaveBeenCalled();
+  });
+});
+
+describe('When running the action with latest as the Cake version input argument', () => {
   const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
   const fakeInstallLocalCakeTool =
     dotnet.installLocalCakeTool as jest.MockedFunction<typeof dotnet.installLocalCakeTool>;
 
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
-      cakeVersion: 'the.version.number',
+      cakeVersion: { version: 'latest' },
+      scriptArguments: []
+    });
+  });
+
+  test('it should install the latest version of Cake', async () => {
+    await run();
+    expect(fakeInstallLocalCakeTool.mock.calls[0][1]).toBeUndefined();
+  });
+});
+
+describe('When running the action with a specific version as the Cake version input argument', () => {
+  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeInstallLocalCakeTool =
+    dotnet.installLocalCakeTool as jest.MockedFunction<typeof dotnet.installLocalCakeTool>;
+
+  beforeAll(() => {
+    fakeGetInputs.mockReturnValue({
+      cakeVersion: { version: 'the.version.number' },
       scriptArguments: []
     });
   });
@@ -204,22 +239,5 @@ describe('When running the action with the cake-bootstrap input argument', () =>
     expect(fakeBootstrapScript).toHaveBeenCalledWith(
       'custom.cake',
       expect.anything());
-  });
-});
-
-describe('When running the action with the Cake tool manifest input argument', () => {
-  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
-  const fakeRestoreTool = dotnet.restoreTool as jest.MockedFunction<typeof dotnet.restoreTool>;
-
-  beforeAll(() => {
-    fakeGetInputs.mockReturnValue({
-      scriptArguments: [],
-      cakeVersion: true
-    });
-  });
-
-  test('it should restore dotnet tools', async () => {
-    await run();
-    expect(fakeRestoreTool).toHaveBeenCalled();
   });
 });

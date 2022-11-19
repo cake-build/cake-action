@@ -21,7 +21,7 @@ describe('When getting the Cake input arguments from the action', () => {
   });
 
   test('it should return the argument for the cake-version parameter', () => {
-    expect(action.getInputs().cakeVersion).toBe('the.version.number');
+    expect(action.getInputs().cakeVersion).toMatchObject({ version: 'the.version.number'});
   });
 
   test('it should return the argument for the cake-bootstrap parameter', () => {
@@ -172,8 +172,8 @@ describe('When getting no input arguments from the action', () => {
     expect(action.getInputs().scriptPath).toBe('');
   });
 
-  test('it should return an false for the cake-version parameter', () => {
-    expect(action.getInputs().cakeVersion).toBe(false);
+  test('it should return latest for the cake-version parameter', () => {
+    expect(action.getInputs().cakeVersion).toMatchObject({ version: 'latest' });
   });
 
   test('it should return false for the cake-bootstrap parameter', () => {
@@ -200,8 +200,8 @@ describe('When getting the cake-version script input argument set to tool-manife
     when(fakeGetInput).calledWith('cake-version').mockReturnValue('tool-manifest');
   });
 
-  test('it should return cakeVersion as true and no version for cake-version parameter', () => {
-    expect(action.getInputs().cakeVersion).toBe(true);
+  test('it should return tool-manifest the for cake-version parameter', () => {
+    expect(action.getInputs().cakeVersion).toMatchObject({ version: 'tool-manifest' });
   });
 });
 
@@ -212,7 +212,7 @@ describe('When getting the cake-version script input argument set to latest from
     when(fakeGetInput).calledWith('cake-version').mockReturnValue('latest');
   });
 
-  test('it should return cakeVersion as false and no version for cake-version parameter', () => {
-    expect(action.getInputs().cakeVersion).toBe(false);
+  test('it should return latest for the cake-version parameter', () => {
+    expect(action.getInputs().cakeVersion).toMatchObject({ version: 'latest' });
   });
 });

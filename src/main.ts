@@ -16,7 +16,7 @@ export async function run() {
     const toolsDir = new ToolsDirectory();
     toolsDir.create();
 
-    const cakeToolSettings = new CakeToolSettings(toolsDir, version === true);
+    const cakeToolSettings = new CakeToolSettings(toolsDir, version?.version === 'tool-manifest');
 
     dotnet.disableTelemetry();
     dotnet.disableWelcomeMessage();
@@ -24,7 +24,11 @@ export async function run() {
     if (cakeToolSettings.useToolManifest) {
       await dotnet.restoreTool();
     } else {
-      await dotnet.installLocalCakeTool(toolsDir, typeof version === 'string' ? version : undefined);
+      if (version?.version === 'latest') {
+        await dotnet.installLocalCakeTool(toolsDir);
+      } else {
+        await dotnet.installLocalCakeTool(toolsDir, version?.version);
+      }
     }
 
     if (bootstrap) {
