@@ -24,7 +24,7 @@ export async function run() {
 
     await cakeTool.install(toolsDir, version);
 
-    if (bootstrap) {
+    if (bootstrap === 'explicit') {
       await cake.bootstrapScript(scriptPath, cakeToolSettings);
     }
 

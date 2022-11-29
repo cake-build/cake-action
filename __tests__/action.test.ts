@@ -11,7 +11,7 @@ describe('When getting the Cake input arguments from the action', () => {
   beforeAll(() => {
     when(fakeGetInput).calledWith('script-path').mockReturnValue('path/to/script.cake');
     when(fakeGetInput).calledWith('cake-version').mockReturnValue('the.version.number');
-    when(fakeGetInput).calledWith('cake-bootstrap').mockReturnValue('true');
+    when(fakeGetInput).calledWith('cake-bootstrap').mockReturnValue('auto');
     when(fakeGetInput).calledWith('dry-run').mockReturnValue('');
     when(fakeGetInput).calledWith('arguments').mockReturnValue('');
   });
@@ -28,7 +28,7 @@ describe('When getting the Cake input arguments from the action', () => {
   });
 
   test('it should return the argument for the cake-bootstrap parameter', () => {
-    expect(action.getInputs().cakeBootstrap).toBe(true);
+    expect(action.getInputs().cakeBootstrap).toBe('auto');
   });
 });
 
@@ -179,8 +179,8 @@ describe('When getting no input arguments from the action', () => {
     expect(action.getInputs().cakeVersion).toMatchObject({ version: 'latest' });
   });
 
-  test('it should return false for the cake-bootstrap parameter', () => {
-    expect(action.getInputs().cakeBootstrap).toBe(false);
+  test('it should return auto for the cake-bootstrap parameter', () => {
+    expect(action.getInputs().cakeBootstrap).toBe('auto');
   });
 
   test('it should return an empty string for the target script parameter', () => {
@@ -217,5 +217,53 @@ describe('When getting the cake-version script input argument set to latest from
 
   test('it should return latest for the cake-version parameter', () => {
     expect(action.getInputs().cakeVersion).toMatchObject({ version: 'latest' });
+  });
+});
+
+describe('When getting the cake-bootstrap script input argument set to auto from the action', () => {
+  const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
+
+  beforeAll(() => {
+    when(fakeGetInput).calledWith('cake-bootstrap').mockReturnValue('auto');
+  });
+
+  test('it should return auto for the cake-bootstrap parameter', () => {
+    expect(action.getInputs().cakeBootstrap).toBe('auto');
+  });
+
+  test('it should not pass the skip-bootstrap switch to the script', () => {
+    expect(action.getInputs().scriptArguments).not.toContainEqual(new CakeSwitch('skip-bootstrap'));
+  });
+});
+
+describe('When getting the cake-bootstrap script input argument set to explicit from the action', () => {
+  const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
+
+  beforeAll(() => {
+    when(fakeGetInput).calledWith('cake-bootstrap').mockReturnValue('explicit');
+  });
+
+  test('it should return explicit for the cake-bootstrap parameter', () => {
+    expect(action.getInputs().cakeBootstrap).toBe('explicit');
+  });
+
+  test('it should not pass the skip-bootstrap switch to the script', () => {
+    expect(action.getInputs().scriptArguments).not.toContainEqual(new CakeSwitch('skip-bootstrap'));
+  });
+});
+
+describe('When getting the cake-bootstrap script input argument set to skip from the action', () => {
+  const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
+
+  beforeAll(() => {
+    when(fakeGetInput).calledWith('cake-bootstrap').mockReturnValue('skip');
+  });
+
+  test('it should return skip for the cake-bootstrap parameter', () => {
+    expect(action.getInputs().cakeBootstrap).toBe('skip');
+  });
+
+  test('it should pass the skip-bootstrap switch to the script', () => {
+    expect(action.getInputs().scriptArguments).toContainEqual(new CakeSwitch('skip-bootstrap'));
   });
 });

@@ -5,7 +5,7 @@ import * as input from './input';
 interface CakeInputs {
   readonly scriptPath?: string,
   readonly cakeVersion?: CakeVersion,
-  readonly cakeBootstrap?: boolean;
+  readonly cakeBootstrap?: CakeBootstrap;
 }
 
 interface ScriptInputs {
@@ -27,11 +27,16 @@ type Specific = {
   number: string;
 };
 
+export type CakeBootstrap =
+  | 'auto'
+  | 'explicit'
+  | 'skip'
+
 export function getInputs(): CakeInputs & ScriptInputs {
   return {
     scriptPath: core.getInput('script-path'),
     cakeVersion: getCakeVersionInput(),
-    cakeBootstrap: input.getBooleanInput('cake-bootstrap'),
+    cakeBootstrap: getCakeBootstrapInput(),
     scriptArguments: getScriptInputs()
   };
 }
@@ -49,13 +54,30 @@ function getCakeVersionInput(): CakeVersion {
   }
 }
 
+function getCakeBootstrapInput(): CakeBootstrap {
+  const bootstrap = core.getInput('cake-bootstrap').toLowerCase();
+  switch (bootstrap) {
+    case 'auto': return 'auto';
+    case 'explicit': return 'explicit';
+    case 'skip': return 'skip';
+    default: return 'auto';
+  }
+}
+
 function getScriptInputs(): script.CakeParameter[] {
   return [
     new script.CakeArgument('target', core.getInput('target')),
     new script.CakeArgument('verbosity', core.getInput('verbosity')),
+    ...parseSkipBootstrapSwitch(),
     ...parseDryRunSwitch(),
     ...parseCustomArguments()
   ];
+}
+
+function parseSkipBootstrapSwitch() : script.CakeParameter[] {
+  return getCakeBootstrapInput() === 'skip'
+    ? [new script.CakeSwitch('skip-bootstrap')]
+    : [];
 }
 
 function parseDryRunSwitch(): script.CakeParameter[] {
