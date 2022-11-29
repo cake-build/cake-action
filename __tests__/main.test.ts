@@ -1,16 +1,18 @@
 import * as core from '@actions/core';
-import { run } from '../src/main';
-import { ToolsDirectory } from '../src/toolsDirectory';
 import * as action from '../src/action';
 import * as dotnet from '../src/dotnet';
+import * as cakeTool from '../src/cakeTool';
 import * as cake from '../src/cake';
+import { ToolsDirectory } from '../src/toolsDirectory';
 import { CakeArgument } from '../src/cakeParameter';
+import { run } from '../src/main';
 
 jest.mock('@actions/core');
-jest.mock('../src/toolsDirectory');
 jest.mock('../src/action');
 jest.mock('../src/dotnet');
+jest.mock('../src/cakeTool');
 jest.mock('../src/cake');
+jest.mock('../src/toolsDirectory');
 
 describe('When running the action without any input arguments', () => {
   const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
@@ -39,7 +41,7 @@ describe('When running the action without any input arguments', () => {
 
   test('it should install the Cake tool locally', async () => {
     await run();
-    expect(dotnet.installLocalCakeTool).toHaveBeenCalled();
+    expect(cakeTool.install).toHaveBeenCalled();
   });
 
   test('it should run the default Cake script', async () => {
@@ -67,7 +69,7 @@ describe('When running the action with the script path input argument', () => {
 
 describe('When running the action with tool-manifest as the Cake version input argument', () => {
   const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
-  const fakeRestoreTool = dotnet.restoreTool as jest.MockedFunction<typeof dotnet.restoreTool>;
+  const fakeInstallCakeTool = cakeTool.install as jest.MockedFunction<typeof cakeTool.install>;
 
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
@@ -76,16 +78,15 @@ describe('When running the action with tool-manifest as the Cake version input a
     });
   });
 
-  test('it should restore the dotnet local tools', async () => {
+  test('it should install Cake from the tool manifest', async () => {
     await run();
-    expect(fakeRestoreTool).toHaveBeenCalled();
+    expect(fakeInstallCakeTool.mock.calls[0][1]).toMatchObject({ version: 'tool-manifest' });
   });
 });
 
 describe('When running the action with latest as the Cake version input argument', () => {
   const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
-  const fakeInstallLocalCakeTool =
-    dotnet.installLocalCakeTool as jest.MockedFunction<typeof dotnet.installLocalCakeTool>;
+  const fakeInstallCakeTool = cakeTool.install as jest.MockedFunction<typeof cakeTool.install>;
 
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
@@ -96,14 +97,13 @@ describe('When running the action with latest as the Cake version input argument
 
   test('it should install the latest version of Cake', async () => {
     await run();
-    expect(fakeInstallLocalCakeTool.mock.calls[0][1]).toBeUndefined();
+    expect(fakeInstallCakeTool.mock.calls[0][1]).toMatchObject({ version: 'latest' });
   });
 });
 
 describe('When running the action with a specific version as the Cake version input argument', () => {
   const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
-  const fakeInstallLocalCakeTool =
-    dotnet.installLocalCakeTool as jest.MockedFunction<typeof dotnet.installLocalCakeTool>;
+  const fakeInstallCakeTool = cakeTool.install as jest.MockedFunction<typeof cakeTool.install>;
 
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
@@ -114,7 +114,7 @@ describe('When running the action with a specific version as the Cake version in
 
   test('it should install the specified version of Cake', async () => {
     await run();
-    expect(fakeInstallLocalCakeTool.mock.calls[0][1]).toBe('the.version.number');
+    expect(fakeInstallCakeTool.mock.calls[0][1]).toMatchObject({ version: 'the.version.number' });
   });
 });
 

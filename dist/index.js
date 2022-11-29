@@ -4127,6 +4127,72 @@ exports.CakeSwitch = CakeSwitch;
 
 /***/ }),
 
+/***/ 4574:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.install = void 0;
+const dotnet = __importStar(__nccwpck_require__(9870));
+const toolsDirectory_1 = __nccwpck_require__(6745);
+function install(toolsDir, version) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if ((version === null || version === void 0 ? void 0 : version.version) === 'tool-manifest') {
+            yield dotnet.restoreTool();
+        }
+        else {
+            if ((version === null || version === void 0 ? void 0 : version.version) === 'latest') {
+                yield installCakeLocalTool(toolsDir);
+            }
+            else {
+                yield installCakeLocalTool(toolsDir, version === null || version === void 0 ? void 0 : version.version);
+            }
+        }
+    });
+}
+exports.install = install;
+function installCakeLocalTool(targetDirectory = new toolsDirectory_1.ToolsDirectory(), version) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return dotnet.installLocalTool('Cake.Tool', 'dotnet-cake', targetDirectory, version);
+    });
+}
+
+
+/***/ }),
+
 /***/ 6881:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -4183,14 +4249,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.restoreTool = exports.uninstallLocalTool = exports.installLocalTool = exports.installLocalCakeTool = exports.disableWelcomeMessage = exports.disableTelemetry = void 0;
+exports.restoreTool = exports.uninstallLocalTool = exports.installLocalTool = exports.disableWelcomeMessage = exports.disableTelemetry = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const exec_1 = __nccwpck_require__(1514);
 const toolsDirectory_1 = __nccwpck_require__(6745);
 const dotnetToolInstall = 'dotnet tool install';
 const dotnetToolUnInstall = 'dotnet tool uninstall';
 const dotnetToolRestore = 'dotnet tool restore';
-const dotnetCake = 'dotnet-cake';
 function disableTelemetry() {
     core.exportVariable('DOTNET_CLI_TELEMETRY_OPTOUT', 'true');
 }
@@ -4199,12 +4264,6 @@ function disableWelcomeMessage() {
     core.exportVariable('DOTNET_NOLOGO', 'true');
 }
 exports.disableWelcomeMessage = disableWelcomeMessage;
-function installLocalCakeTool(targetDirectory = new toolsDirectory_1.ToolsDirectory(), version) {
-    return __awaiter(this, void 0, void 0, function* () {
-        return installLocalTool('Cake.Tool', dotnetCake, targetDirectory, version);
-    });
-}
-exports.installLocalCakeTool = installLocalCakeTool;
 function installLocalTool(packageId, toolName, targetDirectory = new toolsDirectory_1.ToolsDirectory(), version) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!version && targetDirectory.containsTool(toolName)) {
@@ -4356,6 +4415,7 @@ const toolsDirectory_1 = __nccwpck_require__(6745);
 const cakeToolSettings_1 = __nccwpck_require__(6881);
 const guards_1 = __nccwpck_require__(3265);
 const dotnet = __importStar(__nccwpck_require__(9870));
+const cakeTool = __importStar(__nccwpck_require__(4574));
 const cake = __importStar(__nccwpck_require__(9275));
 const action = __importStar(__nccwpck_require__(7672));
 function run() {
@@ -4370,17 +4430,7 @@ function run() {
             const cakeToolSettings = new cakeToolSettings_1.CakeToolSettings(toolsDir, (version === null || version === void 0 ? void 0 : version.version) === 'tool-manifest');
             dotnet.disableTelemetry();
             dotnet.disableWelcomeMessage();
-            if (cakeToolSettings.useToolManifest) {
-                yield dotnet.restoreTool();
-            }
-            else {
-                if ((version === null || version === void 0 ? void 0 : version.version) === 'latest') {
-                    yield dotnet.installLocalCakeTool(toolsDir);
-                }
-                else {
-                    yield dotnet.installLocalCakeTool(toolsDir, version === null || version === void 0 ? void 0 : version.version);
-                }
-            }
+            yield cakeTool.install(toolsDir, version);
             if (bootstrap) {
                 yield cake.bootstrapScript(scriptPath, cakeToolSettings);
             }

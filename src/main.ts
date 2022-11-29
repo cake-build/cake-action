@@ -3,6 +3,7 @@ import { ToolsDirectory } from './toolsDirectory';
 import { CakeToolSettings } from './cakeToolSettings';
 import { isError, isString } from './guards';
 import * as dotnet from './dotnet';
+import * as cakeTool from './cakeTool';
 import * as cake from './cake';
 import * as action from './action';
 
@@ -21,15 +22,7 @@ export async function run() {
     dotnet.disableTelemetry();
     dotnet.disableWelcomeMessage();
 
-    if (cakeToolSettings.useToolManifest) {
-      await dotnet.restoreTool();
-    } else {
-      if (version?.version === 'latest') {
-        await dotnet.installLocalCakeTool(toolsDir);
-      } else {
-        await dotnet.installLocalCakeTool(toolsDir, version?.version);
-      }
-    }
+    await cakeTool.install(toolsDir, version);
 
     if (bootstrap) {
       await cake.bootstrapScript(scriptPath, cakeToolSettings);

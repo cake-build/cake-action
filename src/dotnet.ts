@@ -5,7 +5,6 @@ import { ToolsDirectory } from './toolsDirectory';
 const dotnetToolInstall = 'dotnet tool install';
 const dotnetToolUnInstall = 'dotnet tool uninstall';
 const dotnetToolRestore = 'dotnet tool restore';
-const dotnetCake = 'dotnet-cake';
 
 export function disableTelemetry() {
   core.exportVariable('DOTNET_CLI_TELEMETRY_OPTOUT', 'true');
@@ -13,13 +12,6 @@ export function disableTelemetry() {
 
 export function disableWelcomeMessage() {
   core.exportVariable('DOTNET_NOLOGO', 'true');
-}
-
-export async function installLocalCakeTool(
-  targetDirectory: ToolsDirectory = new ToolsDirectory(),
-  version?: string
-) {
-  return installLocalTool('Cake.Tool', dotnetCake, targetDirectory, version);
 }
 
 export async function installLocalTool(
