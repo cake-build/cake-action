@@ -55,10 +55,10 @@ export async function uninstallLocalTool(
   }
 }
 
-export async function restoreTool() {
+export async function restoreLocalTools() {
   const exitCode = await exec(dotnetToolRestore);
 
   if (exitCode != 0) {
-    throw new Error(`Failed to restore tools. Exit code: ${exitCode}`);
+    throw new Error(`Failed to restore the local tools. Exit code: ${exitCode}`);
   }
 }

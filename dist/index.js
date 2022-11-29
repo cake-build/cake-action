@@ -4171,7 +4171,7 @@ const toolsDirectory_1 = __nccwpck_require__(6745);
 function install(toolsDir, version) {
     return __awaiter(this, void 0, void 0, function* () {
         if ((version === null || version === void 0 ? void 0 : version.version) === 'tool-manifest') {
-            yield dotnet.restoreTool();
+            yield dotnet.restoreLocalTools();
         }
         else {
             if ((version === null || version === void 0 ? void 0 : version.version) === 'latest') {
@@ -4249,7 +4249,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.restoreTool = exports.uninstallLocalTool = exports.installLocalTool = exports.disableWelcomeMessage = exports.disableTelemetry = void 0;
+exports.restoreLocalTools = exports.uninstallLocalTool = exports.installLocalTool = exports.disableWelcomeMessage = exports.disableTelemetry = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const exec_1 = __nccwpck_require__(1514);
 const toolsDirectory_1 = __nccwpck_require__(6745);
@@ -4295,15 +4295,15 @@ function uninstallLocalTool(packageId, targetDirectory = new toolsDirectory_1.To
     });
 }
 exports.uninstallLocalTool = uninstallLocalTool;
-function restoreTool() {
+function restoreLocalTools() {
     return __awaiter(this, void 0, void 0, function* () {
         const exitCode = yield (0, exec_1.exec)(dotnetToolRestore);
         if (exitCode != 0) {
-            throw new Error(`Failed to restore tools. Exit code: ${exitCode}`);
+            throw new Error(`Failed to restore the local tools. Exit code: ${exitCode}`);
         }
     });
 }
-exports.restoreTool = restoreTool;
+exports.restoreLocalTools = restoreLocalTools;
 
 
 /***/ }),

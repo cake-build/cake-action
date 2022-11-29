@@ -8,7 +8,7 @@ const targetDirectory = path.join('target', 'directory');
 jest.mock('../src/dotnet');
 
 describe('When installing the Cake Tool based on the tool manifest', () => {
-  const fakeRestoreTool = dotnet.restoreTool as jest.MockedFunction<typeof dotnet.restoreTool>;
+  const fakeRestoreTool = dotnet.restoreLocalTools as jest.MockedFunction<typeof dotnet.restoreLocalTools>;
   const fakeInstallLocalTool = dotnet.installLocalTool as jest.MockedFunction<typeof dotnet.installLocalTool>;
 
   beforeEach(async () => {
@@ -95,7 +95,7 @@ describe('When installing a specific version of the Cake Tool', () => {
 });
 
 describe('When failing to install the Cake Tool based on the tool manifest', () => {
-  const fakeRestoreTool = dotnet.restoreTool as jest.MockedFunction<typeof dotnet.restoreTool>;
+  const fakeRestoreTool = dotnet.restoreLocalTools as jest.MockedFunction<typeof dotnet.restoreLocalTools>;
   const installError = new Error('Failed to install Cake.Tool');
 
   beforeAll(() => {

@@ -4,7 +4,7 @@ import { CakeVersion } from './action';
 
 export async function install(toolsDir?: ToolsDirectory, version?: CakeVersion) {
   if (version?.version === 'tool-manifest') {
-    await dotnet.restoreTool();
+    await dotnet.restoreLocalTools();
   } else {
     if (version?.version === 'latest') {
       await installCakeLocalTool(toolsDir);
