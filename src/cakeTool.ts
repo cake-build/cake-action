@@ -3,14 +3,15 @@ import { ToolsDirectory } from './toolsDirectory';
 import { CakeVersion } from './action';
 
 export async function install(toolsDir?: ToolsDirectory, version?: CakeVersion) {
-  if (version?.version === 'tool-manifest') {
-    await dotnet.restoreLocalTools();
-  } else {
-    if (version?.version === 'latest') {
+  switch (version?.version) {
+    case 'tool-manifest':
+      await dotnet.restoreLocalTools();
+      break;
+    case 'latest':
       await installCakeLocalTool(toolsDir);
-    } else {
+      break;
+    default:
       await installCakeLocalTool(toolsDir, version?.version);
-    }
   }
 }
 

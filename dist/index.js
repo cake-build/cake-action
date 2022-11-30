@@ -4170,16 +4170,15 @@ const dotnet = __importStar(__nccwpck_require__(9870));
 const toolsDirectory_1 = __nccwpck_require__(6745);
 function install(toolsDir, version) {
     return __awaiter(this, void 0, void 0, function* () {
-        if ((version === null || version === void 0 ? void 0 : version.version) === 'tool-manifest') {
-            yield dotnet.restoreLocalTools();
-        }
-        else {
-            if ((version === null || version === void 0 ? void 0 : version.version) === 'latest') {
+        switch (version === null || version === void 0 ? void 0 : version.version) {
+            case 'tool-manifest':
+                yield dotnet.restoreLocalTools();
+                break;
+            case 'latest':
                 yield installCakeLocalTool(toolsDir);
-            }
-            else {
+                break;
+            default:
                 yield installCakeLocalTool(toolsDir, version === null || version === void 0 ? void 0 : version.version);
-            }
         }
     });
 }
