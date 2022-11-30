@@ -4,14 +4,12 @@
 // Install .NET Core Global tools
 #tool "dotnet:https://api.nuget.org/v3/index.json?package=GitVersion.Tool&version=5.10.1"
 
-Task("GitVersion")
+Task("Test-Module-Bootstrapping")
     .Does(() =>
 {
-    Information("Calculating Semantic Version");
+    GitVersion();
 
-    var assertedVersions = GitVersion();
-
-    Information("Calculated Semantic Version: {0}", assertedVersions.LegacySemVerPadded);
+    Information("✓ Passed");
 });
 
-RunTarget("GitVersion");
+RunTarget("Test-Module-Bootstrapping");
