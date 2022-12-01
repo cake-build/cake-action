@@ -23,7 +23,8 @@ type Latest = {
   version: 'latest';
 };
 type Specific = {
-  version: string;
+  version: 'specific',
+  number: string;
 };
 
 export function getInputs(): CakeInputs & ScriptInputs {
@@ -37,7 +38,15 @@ export function getInputs(): CakeInputs & ScriptInputs {
 
 function getCakeVersionInput(): CakeVersion {
   const version = core.getInput('cake-version').toLowerCase();
-  return version === '' ? { version: 'latest' } : { version: version };
+  switch (version) {
+    case 'tool-manifest':
+      return { version: 'tool-manifest' };
+    case 'latest':
+    case '':
+      return { version: 'latest' };
+    default:
+      return { version: 'specific', number: version };
+  }
 }
 
 function getScriptInputs(): script.CakeParameter[] {

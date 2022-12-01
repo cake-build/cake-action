@@ -8,10 +8,12 @@ export async function install(toolsDir?: ToolsDirectory, version?: CakeVersion) 
       await dotnet.restoreLocalTools();
       break;
     case 'latest':
+    case undefined:
       await installCakeLocalTool(toolsDir);
       break;
-    default:
-      await installCakeLocalTool(toolsDir, version?.version);
+    case 'specific':
+      await installCakeLocalTool(toolsDir, version.number);
+      break;
   }
 }
 

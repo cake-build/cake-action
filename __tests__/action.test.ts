@@ -21,7 +21,10 @@ describe('When getting the Cake input arguments from the action', () => {
   });
 
   test('it should return the argument for the cake-version parameter', () => {
-    expect(action.getInputs().cakeVersion).toMatchObject({ version: 'the.version.number'});
+    expect(action.getInputs().cakeVersion).toMatchObject({
+      version: 'specific',
+      number: 'the.version.number'
+    });
   });
 
   test('it should return the argument for the cake-bootstrap parameter', () => {

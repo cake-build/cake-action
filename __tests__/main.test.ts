@@ -107,14 +107,17 @@ describe('When running the action with a specific version as the Cake version in
 
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
-      cakeVersion: { version: 'the.version.number' },
+      cakeVersion: { version: 'specific', number: 'the.version.number' },
       scriptArguments: []
     });
   });
 
   test('it should install the specified version of Cake', async () => {
     await run();
-    expect(fakeInstallCakeTool.mock.calls[0][1]).toMatchObject({ version: 'the.version.number' });
+    expect(fakeInstallCakeTool.mock.calls[0][1]).toMatchObject({
+      version: 'specific',
+      number: 'the.version.number'
+    });
   });
 });
 

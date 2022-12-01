@@ -3999,7 +3999,15 @@ function getInputs() {
 exports.getInputs = getInputs;
 function getCakeVersionInput() {
     const version = core.getInput('cake-version').toLowerCase();
-    return version === '' ? { version: 'latest' } : { version: version };
+    switch (version) {
+        case 'tool-manifest':
+            return { version: 'tool-manifest' };
+        case 'latest':
+        case '':
+            return { version: 'latest' };
+        default:
+            return { version: 'specific', number: version };
+    }
 }
 function getScriptInputs() {
     return [
@@ -4175,10 +4183,12 @@ function install(toolsDir, version) {
                 yield dotnet.restoreLocalTools();
                 break;
             case 'latest':
+            case undefined:
                 yield installCakeLocalTool(toolsDir);
                 break;
-            default:
-                yield installCakeLocalTool(toolsDir, version === null || version === void 0 ? void 0 : version.version);
+            case 'specific':
+                yield installCakeLocalTool(toolsDir, version.number);
+                break;
         }
     });
 }
