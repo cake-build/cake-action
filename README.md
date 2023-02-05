@@ -100,7 +100,6 @@ steps:
 
 If you're pinning your Cake version using a [tool manifest file](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools#install-a-local-tool), then you can have the action restore any local tools, including Cake, by specifying `tool-manifest` as the argument for `cake-version`:
 
-
 ```yml
 steps:
   - name: Run the Cake script
