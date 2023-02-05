@@ -3992,7 +3992,7 @@ function getInputs() {
     return {
         scriptPath: core.getInput('script-path'),
         cakeVersion: getCakeVersionInput(),
-        cakeBootstrap: input.getBooleanInput('cake-bootstrap'),
+        cakeBootstrap: getCakeBootstrapInput(),
         scriptArguments: getScriptInputs()
     };
 }
@@ -4009,13 +4009,28 @@ function getCakeVersionInput() {
             return { version: 'specific', number: version };
     }
 }
+function getCakeBootstrapInput() {
+    const bootstrap = core.getInput('cake-bootstrap').toLowerCase();
+    switch (bootstrap) {
+        case 'auto': return 'auto';
+        case 'explicit': return 'explicit';
+        case 'skip': return 'skip';
+        default: return 'auto';
+    }
+}
 function getScriptInputs() {
     return [
         new script.CakeArgument('target', core.getInput('target')),
         new script.CakeArgument('verbosity', core.getInput('verbosity')),
+        ...parseSkipBootstrapSwitch(),
         ...parseDryRunSwitch(),
         ...parseCustomArguments()
     ];
+}
+function parseSkipBootstrapSwitch() {
+    return getCakeBootstrapInput() === 'skip'
+        ? [new script.CakeSwitch('skip-bootstrap')]
+        : [];
 }
 function parseDryRunSwitch() {
     return input.getBooleanInput('dry-run')
@@ -4440,7 +4455,7 @@ function run() {
             dotnet.disableTelemetry();
             dotnet.disableWelcomeMessage();
             yield cakeTool.install(toolsDir, version);
-            if (bootstrap) {
+            if (bootstrap === 'explicit') {
                 yield cake.bootstrapScript(scriptPath, cakeToolSettings);
             }
             yield cake.runScript(scriptPath, cakeToolSettings, ...inputs.scriptArguments);

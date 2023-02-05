@@ -52,11 +52,57 @@ jobs:
         with:
           cake-version: tool-manifest
           target: Test-Cake-Version
-      - name: Run bootstrapping of Cake module
+      - name: Run automatic bootstrapping of Cake modules (Cake >= 1.0.0)
         uses: ./
         with:
-          cake-bootstrap: true
+          cake-bootstrap: auto
+          cake-version: 1.0.0
           script-path: module.cake
+      - name: Remove the tools directory
+        run: rm -rf $TOOLS_DIRECTORY
+        shell: bash
+      - name: Run automatic bootstrapping of Cake modules (Cake < 1.0.0)
+        uses: ./
+        with:
+          cake-bootstrap: auto
+          cake-version: 0.38.5
+          script-path: build.cake
+          target: Successful-Task
+      - name: Remove the tools directory
+        run: rm -rf $TOOLS_DIRECTORY
+        shell: bash
+      - name: Run explicit bootstrapping of Cake modules (Cake >= 1.0.0)
+        uses: ./
+        with:
+          cake-bootstrap: explicit
+          cake-version: 1.0.0
+          script-path: module.cake
+      - name: Remove the tools directory
+        run: rm -rf $TOOLS_DIRECTORY
+        shell: bash
+      - name: Run explicit bootstrapping of Cake modules (Cake < 1.0.0)
+        uses: ./
+        with:
+          cake-bootstrap: explicit
+          cake-version: 0.38.5
+          script-path: module.cake
+      - name: Remove the tools directory
+        run: rm -rf $TOOLS_DIRECTORY
+        shell: bash
+      - name: Run skip bootstrapping of Cake modules (Cake >= 1.0.0)
+        uses: ./
+        with:
+          cake-bootstrap: skip
+          cake-version: 1.0.0
+          script-path: build.cake
+          target: Successful-Task
+      - name: Run skip bootstrapping of Cake modules (Cake < 1.0.0)
+        uses: ./
+        with:
+          cake-bootstrap: skip
+          cake-version: 0.38.5
+          script-path: build.cake
+          target: Successful-Task
       - name: Run with a specific verbosity level
         uses: ./
         env:

@@ -110,15 +110,30 @@ steps:
 
 ### `cake-bootstrap`
 
-If you're referencing any [custom modules](https://cakebuild.net/docs/fundamentals/modules) from within your script, you'll have to [bootstrap](https://cakebuild.net/docs/fundamentals/preprocessor-directives#module-directive) them _before_ the script runs. The Cake action can do this extra step for you; all you have to do is set the `cake-bootstrap` parameter to `true`:
+As of [Cake 1.0.0](https://github.com/cake-build/cake/releases/tag/v1.0.0), any [custom modules](https://cakebuild.net/docs/fundamentals/modules) that you reference in your script are [bootstrapped automatically](https://github.com/cake-build/cake/issues/2833) upon running it.
+
+If you're using an older version of Cake, however, you need to explicitly [bootstrap](https://cakebuild.net/docs/fundamentals/preprocessor-directives#module-directive) them before running the script. The Cake action can take care of this extra step for you by setting the `cake-bootstrap` parameter to `explicit`:
 
 ```yml
 steps:
   - name: Run the Cake script
-    uses: cake-build/cake-action@v1
+    uses: cake-build/cake-action@v2
     with:
-      cake-bootstrap: true
+      cake-bootstrap: explicit
+      cake-version: 0.38.5
 ```
+
+If you're using Cake 1.0.0 or later and wish to opt out of the automatic bootstrapping of modules, you can do so by setting the `cake-bootstrap` parameter to `skip`:
+
+```yml
+steps:
+  - name: Run the Cake script
+    uses: cake-build/cake-action@v2
+    with:
+      cake-bootstrap: skip
+```
+
+The default value is `auto`, which means that the modules will be automatically bootstrapped on Cake 1.0.0 or later.
 
 ## Cross-platform
 

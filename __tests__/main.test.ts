@@ -121,6 +121,58 @@ describe('When running the action with a specific version as the Cake version in
   });
 });
 
+describe('When running the action with auto as the Cake bootstrap input argument', () => {
+  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeBootstrapScript = cake.bootstrapScript as jest.MockedFunction<typeof cake.bootstrapScript>;
+
+  beforeAll(() => {
+    fakeGetInputs.mockReturnValue({
+      cakeBootstrap: 'auto',
+      scriptArguments: []
+    });
+  });
+
+  test('it should not bootstrap the Cake script', async () => {
+    await run();
+    expect(fakeBootstrapScript).not.toHaveBeenCalled();
+  });
+});
+
+describe('When running the action with explicit as the Cake bootstrap input argument', () => {
+  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeBootstrapScript = cake.bootstrapScript as jest.MockedFunction<typeof cake.bootstrapScript>;
+
+  beforeAll(() => {
+    fakeGetInputs.mockReturnValue({
+      scriptPath: 'custom.cake',
+      cakeBootstrap: 'explicit',
+      scriptArguments: []
+    });
+  });
+
+  test('it should bootstrap the specified Cake script', async () => {
+    await run();
+    expect(fakeBootstrapScript).toHaveBeenCalledWith('custom.cake', expect.anything());
+  });
+});
+
+describe('When running the action with skip as the Cake bootstrap input argument', () => {
+  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeBootstrapScript = cake.bootstrapScript as jest.MockedFunction<typeof cake.bootstrapScript>;
+
+  beforeAll(() => {
+    fakeGetInputs.mockReturnValue({
+      cakeBootstrap: 'skip',
+      scriptArguments: []
+    });
+  });
+
+  test('it should not bootstrap the Cake script', async () => {
+    await run();
+    expect(fakeBootstrapScript).not.toHaveBeenCalled();
+  });
+});
+
 describe('When running the action with the target input argument', () => {
   const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
   const fakeRunScript = cake.runScript as jest.MockedFunction<typeof cake.runScript>;
@@ -217,30 +269,5 @@ describe('When the script fails with a string', () => {
   test('it should mark the action as failed with the specific error message', async () => {
     await run();
     expect(fakeSetFailed).toHaveBeenCalledWith('the error message');
-  });
-});
-
-describe('When running the action with the cake-bootstrap input argument', () => {
-  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
-  const fakeBootstrapScript = cake.bootstrapScript as jest.MockedFunction<typeof cake.bootstrapScript>;
-
-  beforeAll(() => {
-    fakeGetInputs.mockReturnValue({
-      scriptPath: 'custom.cake',
-      cakeBootstrap: true,
-      scriptArguments: []
-    });
-  });
-
-  test('it should bootstrap the default Cake script', async () => {
-    await run();
-    expect(fakeBootstrapScript).toHaveBeenCalled();
-  });
-
-  test('it should bootstrap the specified Cake script', async () => {
-    await run();
-    expect(fakeBootstrapScript).toHaveBeenCalledWith(
-      'custom.cake',
-      expect.anything());
   });
 });
