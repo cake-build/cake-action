@@ -1,9 +1,11 @@
 import * as core from '@actions/core';
+
 import * as script from './cakeParameter';
 import * as input from './input';
 
 interface CakeInputs {
   readonly scriptPath?: string,
+  readonly csprojPath?: string,
   readonly cakeVersion?: CakeVersion,
   readonly cakeBootstrap?: CakeBootstrap;
 }
@@ -35,6 +37,7 @@ export type CakeBootstrap =
 export function getInputs(): CakeInputs & ScriptInputs {
   return {
     scriptPath: core.getInput('script-path'),
+    csprojPath: core.getInput('csproj-path'),
     cakeVersion: getCakeVersionInput(),
     cakeBootstrap: getCakeBootstrapInput(),
     scriptArguments: getScriptInputs()
