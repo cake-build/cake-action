@@ -2,7 +2,7 @@
 
 [![GitHub Marketplace](https://img.shields.io/github/v/release/cake-build/cake-action?label=Marketplace&sort=semver)](https://github.com/marketplace/actions/cake-action) [![GitHub Actions Build](https://github.com/cake-build/cake-action/workflows/Build/badge.svg)](https://github.com/cake-build/cake-action/actions?workflow=Build) [![GitHub Actions Tests](https://github.com/cake-build/cake-action/workflows/Tests/badge.svg)](https://github.com/cake-build/cake-action/actions?workflow=Tests) [![Coveralls](https://coveralls.io/repos/github/cake-build/cake-action/badge.svg?branch=master)](https://coveralls.io/github/cake-build/cake-action?branch=master)
 
-This action allows you to run a Cake script from your GitHub Actions workflow without having to use a [bootstrapper](https://github.com/cake-build/resources).
+This action allows you to run a Cake script or Cake Frosting project from your GitHub Actions workflow without having to use a [bootstrapper](https://github.com/cake-build/resources).
 
 ## Usage
 
@@ -14,7 +14,9 @@ steps:
     uses: cake-build/cake-action@v2
 ```
 
-The Cake action will look for a script named `build.cake` in your repository's root directory and run it for you using the [Cake Tool](https://www.nuget.org/packages/Cake.Tool/). All output from the Cake script will be automatically redirected to the build log for inspection.
+The Cake action will look for a script named `build.cake` in your repository's root directory and run it for you using the [Cake Tool](https://www.nuget.org/packages/Cake.Tool/).  If you are using a [Cake Frosting](https://cakebuild.net/docs/running-builds/runners/cake-frosting) project, the `csproj-path` parameter must be specified and the `script-path` is ignored.
+
+All output from the Cake script or Cake Frosting project will be automatically redirected to the build log for inspection.
 
 ## Inputs
 
@@ -30,9 +32,21 @@ steps:
       script-path: path/to/script.cake
 ```
 
+### `csproj-path`
+
+If you are using [Cake Frosting](https://cakebuild.net/docs/running-builds/runners/cake-frosting), you can specify the path with the `csproj-path` [input parameter](https://help.github.com/en/github/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#jobsjob_idstepswith):
+
+```yml
+steps:
+  - name: Run Cake Frosting
+    uses: cake-build/cake-action@v2
+    with:
+      csproj-path: path/to/build.csproj
+```
+
 ### `target`
 
-You'll likely want to specify which task to run out of the ones defined in the Cake script. For that, you can use the `target` parameter:
+You'll likely want to specify which task to run out of the ones defined in the Cake script or Cake Frosting project. For that, you can use the `target` parameter:
 
 ```yml
 steps:
@@ -88,7 +102,11 @@ The arguments are defined in a [multi-line string literal](https://yaml.org/spec
 
 ### `cake-version`
 
-By default, the Cake action will run your script using the latest _stable_ version of the [Cake .NET Core Global tool](https://www.nuget.org/packages/Cake.Tool/). However, if for some reason you want to [use a specific version of Cake](https://cakebuild.net/docs/tutorials/pinning-cake-version) (for compatibility with older third-party addins, for example), you can do so by specifying the version number in the `cake-version` parameter:
+By default, the Cake action will run your script using the latest _stable_ version of the [Cake .NET Core Global tool](https://www.nuget.org/packages/Cake.Tool/).
+
+_Ignored_ for Cake Frosting Project.
+
+If for some reason you want to [use a specific version of Cake](https://cakebuild.net/docs/tutorials/pinning-cake-version) (for compatibility with older third-party addins, for example), you can do so by specifying the version number in the `cake-version` parameter.:
 
 ```yml
 steps:
@@ -111,6 +129,8 @@ steps:
 ### `cake-bootstrap`
 
 As of [Cake 1.0.0](https://github.com/cake-build/cake/releases/tag/v1.0.0), any [custom modules](https://cakebuild.net/docs/fundamentals/modules) that you reference in your script are [bootstrapped automatically](https://github.com/cake-build/cake/issues/2833) upon running it.
+
+_Ignored_ for Cake Frosting Project.
 
 If you're using an older version of Cake, however, you need to explicitly [bootstrap](https://cakebuild.net/docs/fundamentals/preprocessor-directives#module-directive) them before running the script. The Cake action can take care of this extra step for you by setting the `cake-bootstrap` parameter to `explicit`:
 
@@ -137,7 +157,7 @@ The default value is `auto`, which means that the modules will be automatically 
 
 ## Cross-platform
 
-Since the [Cake Tool](https://www.nuget.org/packages/Cake.Tool/) is built on .NET Core, the Cake action will run on any of the [virtual environments](https://help.github.com/en/github/automating-your-workflow-with-github-actions/software-in-virtual-environments-for-github-actions) supported by GitHub Actions, namely Linux, Windows and macOS.
+Since the [Cake Tool](https://www.nuget.org/packages/Cake.Tool/) and [Cake Frosting](https://www.nuget.org/packages/Cake.Frosting) are built on .NET Core, the Cake action will run on any of the [virtual environments](https://help.github.com/en/github/automating-your-workflow-with-github-actions/software-in-virtual-environments-for-github-actions) supported by GitHub Actions, namely Linux, Windows and macOS.
 
 This allows you to define your build step exactly _once_ and run it on multiple operating systems _in parallel_ by defining a [build matrix](https://help.github.com/en/github/automating-your-workflow-with-github-actions/configuring-a-workflow#configuring-a-build-matrix):
 

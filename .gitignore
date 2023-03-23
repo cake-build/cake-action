@@ -68,3 +68,9 @@ typings/
 
 # Secret files
 .secrets
+
+# bin folder
+bin/
+
+# obj folder
+obj/

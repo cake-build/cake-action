@@ -67,6 +67,28 @@ describe('When running the action with the script path input argument', () => {
   });
 });
 
+describe('When running the action with the csproj path input argument', () => {
+  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeRunProject = cake.runProject as jest.MockedFunction<typeof cake.runProject>;
+
+  beforeAll(() => {
+    fakeGetInputs.mockReturnValue({
+      csprojPath: './path/to/build.csproj',
+      scriptArguments: []
+    });
+  });
+
+  test('it should run the Cake Frosting Project', async () => {
+    await run();
+    expect(cake.runProject).toHaveBeenCalled();
+  });
+
+  test('it should run the specified Cake Frosting project', async () => {
+    await run();
+    expect(fakeRunProject.mock.calls[0][0]).toBe('./path/to/build.csproj');
+  });
+});
+
 describe('When running the action with tool-manifest as the Cake version input argument', () => {
   const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
   const fakeInstallCakeTool = cakeTool.install as jest.MockedFunction<typeof cakeTool.install>;
