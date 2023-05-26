@@ -13,7 +13,7 @@ jobs:
       - name: Get the sources
         uses: actions/checkout@v1
       - name: Install Node 16
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '16'
       - name: Install the .NET 6 SDK
