@@ -1,14 +1,15 @@
-name: Tests
+name: Test
 on: [push, pull_request]
 jobs:
-  test:
-    name: Test
+  test-with-script:
+    name: Test with Cake Script
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
     env:
-      TOOLS_DIRECTORY: tools
+      script-directory: integrationtests/script
+      tools-directory: integrationtests/script/tools
     steps:
       - name: Get the sources
         uses: actions/checkout@v1
@@ -23,13 +24,14 @@ jobs:
       - name: Run a specific Cake script
         uses: ./
         with:
-          script-path: build.cake
+          script-path: ${{ env.script-directory }}/build.cake
       - name: Run a specific target
         uses: ./
         with:
+          script-path: ${{ env.script-directory }}/build.cake
           target: Successful-Task
       - name: Remove the tools directory
-        run: rm -rf $TOOLS_DIRECTORY
+        run: rm -rf ${{ env.tools-directory }}
         shell: bash
       - name: Run with a specific Cake version
         env:
@@ -37,6 +39,7 @@ jobs:
         uses: ./
         with:
           cake-version: 2.1.0
+          script-path: ${{ env.script-directory }}/build.cake
           target: Test-Cake-Version
       - name: Run with a different Cake version in the same build
         env:
@@ -44,6 +47,7 @@ jobs:
         uses: ./
         with:
           cake-version: 2.0.0
+          script-path: ${{ env.script-directory }}/build.cake
           target: Test-Cake-Version
       - name: Run with tool manifest
         env:
@@ -51,57 +55,58 @@ jobs:
         uses: ./
         with:
           cake-version: tool-manifest
+          script-path: ${{ env.script-directory }}/build.cake
           target: Test-Cake-Version
       - name: Run automatic bootstrapping of Cake modules (Cake >= 1.0.0)
         uses: ./
         with:
           cake-bootstrap: auto
           cake-version: 1.0.0
-          script-path: module.cake
+          script-path: ${{ env.script-directory }}/module.cake
       - name: Remove the tools directory
-        run: rm -rf $TOOLS_DIRECTORY
+        run: rm -rf ${{ env.tools-directory }}
         shell: bash
       - name: Run automatic bootstrapping of Cake modules (Cake < 1.0.0)
         uses: ./
         with:
           cake-bootstrap: auto
           cake-version: 0.38.5
-          script-path: build.cake
+          script-path: ${{ env.script-directory }}/build.cake
           target: Successful-Task
       - name: Remove the tools directory
-        run: rm -rf $TOOLS_DIRECTORY
+        run: rm -rf ${{ env.tools-directory }}
         shell: bash
       - name: Run explicit bootstrapping of Cake modules (Cake >= 1.0.0)
         uses: ./
         with:
           cake-bootstrap: explicit
           cake-version: 1.0.0
-          script-path: module.cake
+          script-path: ${{ env.script-directory }}/module.cake
       - name: Remove the tools directory
-        run: rm -rf $TOOLS_DIRECTORY
+        run: rm -rf ${{ env.tools-directory }}
         shell: bash
       - name: Run explicit bootstrapping of Cake modules (Cake < 1.0.0)
         uses: ./
         with:
           cake-bootstrap: explicit
           cake-version: 0.38.5
-          script-path: module.cake
+          script-path: ${{ env.script-directory }}/module.cake
       - name: Remove the tools directory
-        run: rm -rf $TOOLS_DIRECTORY
+        run: rm -rf ${{ env.tools-directory }}
         shell: bash
       - name: Run skip bootstrapping of Cake modules (Cake >= 1.0.0)
         uses: ./
         with:
           cake-bootstrap: skip
           cake-version: 1.0.0
-          script-path: build.cake
+          script-path: ${{ env.script-directory }}/build.cake
           target: Successful-Task
       - name: Run skip bootstrapping of Cake modules (Cake < 1.0.0)
         uses: ./
         with:
           cake-bootstrap: skip
           cake-version: 0.38.5
-          script-path: build.cake
+          script-path: ${{ env.script-directory }}/build.cake
           target: Successful-Task
       - name: Run with a specific verbosity level
         uses: ./
@@ -109,11 +114,13 @@ jobs:
           EXPECTED_VERBOSITY: Diagnostic
         with:
           verbosity: Diagnostic
+          script-path: ${{ env.script-directory }}/build.cake
           target: Test-Verbosity
       - name: Do a dry run
         uses: ./
         with:
           dry-run: true
+          script-path: ${{ env.script-directory }}/build.cake
           target: Test-Dry-Run
       - name: Run with custom script parameters
         uses: ./
@@ -122,7 +129,7 @@ jobs:
           EXPECTED_NUMERIC_ARGUMENT: '3'
           EXPECTED_BOOLEAN_ARGUMENT: 'true'
         with:
-          script-path: build.cake
+          script-path: ${{ env.script-directory }}/build.cake
           target: Test-Script-Parameters
           arguments: |
             string-parameter: 'value'
