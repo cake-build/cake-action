@@ -3991,6 +3991,7 @@ const input = __importStar(__nccwpck_require__(6747));
 function getInputs() {
     return {
         scriptPath: core.getInput('script-path'),
+        csprojPath: core.getInput('csproj-path'),
         cakeVersion: getCakeVersionInput(),
         cakeBootstrap: getCakeBootstrapInput(),
         scriptArguments: getScriptInputs()
@@ -4070,11 +4071,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.bootstrapScript = exports.runScript = void 0;
+exports.bootstrapScript = exports.runProject = exports.runScript = void 0;
 const exec_1 = __nccwpck_require__(1514);
 const io_1 = __nccwpck_require__(7436);
 const dotnetCake = 'dotnet-cake';
 const dotnetLocalToolCake = 'dotnet tool run dotnet-cake';
+const dotnetRun = 'dotnet run';
 function runScript(scriptPath = 'build.cake', cakeToolSettings, ...params) {
     return __awaiter(this, void 0, void 0, function* () {
         const cakeToolPath = yield resolveCakeToolPath(cakeToolSettings);
@@ -4086,6 +4088,23 @@ function runScript(scriptPath = 'build.cake', cakeToolSettings, ...params) {
     });
 }
 exports.runScript = runScript;
+function runProject(csprojPath, toolsDir, ...params) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const cakeParams = formatParameters(params);
+        const exitCode = yield (0, exec_1.exec)(dotnetRun, [
+            '--project', csprojPath,
+            '--no-launch-profile',
+            '--verbosity', 'minimal',
+            '--configuration', 'Release',
+            `--paths_tools="${toolsDir}"`,
+            ...cakeParams
+        ]);
+        if (exitCode != 0) {
+            throw new Error(`Failed to run the csproj. Exit code: ${exitCode}`);
+        }
+    });
+}
+exports.runProject = runProject;
 function bootstrapScript(scriptPath = 'build.cake', cakeToolSettings) {
     return __awaiter(this, void 0, void 0, function* () {
         const cakeToolPath = yield resolveCakeToolPath(cakeToolSettings);
@@ -4435,18 +4454,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core = __importStar(__nccwpck_require__(2186));
-const toolsDirectory_1 = __nccwpck_require__(6745);
-const cakeToolSettings_1 = __nccwpck_require__(6881);
-const guards_1 = __nccwpck_require__(3265);
-const dotnet = __importStar(__nccwpck_require__(9870));
-const cakeTool = __importStar(__nccwpck_require__(4574));
-const cake = __importStar(__nccwpck_require__(9275));
 const action = __importStar(__nccwpck_require__(7672));
+const cake = __importStar(__nccwpck_require__(9275));
+const cakeTool = __importStar(__nccwpck_require__(4574));
+const cakeToolSettings_1 = __nccwpck_require__(6881);
+const dotnet = __importStar(__nccwpck_require__(9870));
+const guards_1 = __nccwpck_require__(3265);
+const toolsDirectory_1 = __nccwpck_require__(6745);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const inputs = action.getInputs();
             const scriptPath = inputs.scriptPath;
+            const csprojPath = inputs.csprojPath;
             const version = inputs.cakeVersion;
             const bootstrap = inputs.cakeBootstrap;
             const toolsDir = new toolsDirectory_1.ToolsDirectory();
@@ -4454,11 +4474,16 @@ function run() {
             const cakeToolSettings = new cakeToolSettings_1.CakeToolSettings(toolsDir, (version === null || version === void 0 ? void 0 : version.version) === 'tool-manifest');
             dotnet.disableTelemetry();
             dotnet.disableWelcomeMessage();
-            yield cakeTool.install(toolsDir, version);
-            if (bootstrap === 'explicit') {
-                yield cake.bootstrapScript(scriptPath, cakeToolSettings);
+            if (!csprojPath) {
+                yield cakeTool.install(toolsDir, version);
+                if (bootstrap === 'explicit') {
+                    yield cake.bootstrapScript(scriptPath, cakeToolSettings);
+                }
+                yield cake.runScript(scriptPath, cakeToolSettings, ...inputs.scriptArguments);
             }
-            yield cake.runScript(scriptPath, cakeToolSettings, ...inputs.scriptArguments);
+            else {
+                yield cake.runProject(csprojPath, toolsDir, ...inputs.scriptArguments);
+            }
         }
         catch (error) {
             if ((0, guards_1.isError)(error)) {
