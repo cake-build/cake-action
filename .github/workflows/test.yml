@@ -13,10 +13,10 @@ jobs:
     steps:
       - name: Get the sources
         uses: actions/checkout@v1
-      - name: Install Node 16
+      - name: Install Node 20
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '20'
       - name: Install the .NET 6 SDK
         uses: actions/setup-dotnet@v2
         with:
