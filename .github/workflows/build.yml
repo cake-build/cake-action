@@ -21,7 +21,6 @@ jobs:
       - name: Run the tests with code coverage
         run: npm run test
       - name: Upload the code coverage report to Coveralls
-        if: github.event_name != 'pull_request'
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.github_token }}
