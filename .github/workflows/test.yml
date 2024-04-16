@@ -49,7 +49,7 @@ jobs:
           cake-version: 2.0.0
           script-path: ${{ env.script-directory }}/build.cake
           target: Test-Cake-Version
-      - name: Run with tool manifest
+      - name: Run with a Cake version set by the tool manifest
         env:
           EXPECTED_CAKE_VERSION: 1.2.0
         uses: ./
