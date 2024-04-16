@@ -43,6 +43,11 @@ describe('When successfully installing a local tool', () => {
     await dotnet.installLocalTool('The.Tool', 'dotnet-tool', new ToolsDirectory(targetDirectory));
     expect(fakeExec).toHaveBeenCalledWith('dotnet tool install', ['--tool-path', targetDirectory, 'The.Tool']);
   });
+
+  test('it should install the specified version of the specified tool', async () => {
+    await dotnet.installLocalTool('The.Tool', 'dotnet-tool', undefined, 'theVersion');
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool install', ['--version', 'theVersion', '--tool-path', 'tools', 'The.Tool']);
+  });
 });
 
 describe('When installing a local tool in a directory where it already exists', () => {
