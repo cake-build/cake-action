@@ -57,6 +57,24 @@ jobs:
           cake-version: tool-manifest
           script-path: ${{ env.script-directory }}/build.cake
           target: Test-Cake-Version
+      - name: Get the latest Cake release from GitHub
+        id: get-latest-cake-release
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/cake-build/cake/releases/latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set the EXPECTED_CAKE_VERSION environment variable
+        shell: bash
+        run: |
+          version=$(echo ${{ fromJson(steps.get-latest-cake-release.outputs.data).tag_name }} | sed 's/v//')
+          echo "EXPECTED_CAKE_VERSION=$version" >> $GITHUB_ENV
+      - name: Run with the latest Cake version
+        uses: ./
+        with:
+          cake-version: latest
+          script-path: ${{ env.script-directory }}/build.cake
+          target: Test-Cake-Version
       - name: Run automatic bootstrapping of Cake modules (Cake >= 1.0.0)
         uses: ./
         with:
