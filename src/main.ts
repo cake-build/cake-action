@@ -11,6 +11,7 @@ export async function run() {
   try {
     const inputs = action.getInputs();
     const scriptPath = inputs.scriptPath;
+    const csprojPath = inputs.csprojPath;
     const version = inputs.cakeVersion;
     const bootstrap = inputs.cakeBootstrap;
 
@@ -22,13 +23,18 @@ export async function run() {
     dotnet.disableTelemetry();
     dotnet.disableWelcomeMessage();
 
-    await cakeTool.install(toolsDir, version);
+    if (csprojPath) {
+      await cake.runProject(csprojPath, toolsDir, ...inputs.scriptArguments);
+    } else {
+      await cakeTool.install(toolsDir, version);
 
-    if (bootstrap === 'explicit') {
-      await cake.bootstrapScript(scriptPath, cakeToolSettings);
+      if (bootstrap === 'explicit') {
+        await cake.bootstrapScript(scriptPath, cakeToolSettings);
+      }
+
+      await cake.runScript(scriptPath, cakeToolSettings, ...inputs.scriptArguments);
     }
 
-    await cake.runScript(scriptPath, cakeToolSettings, ...inputs.scriptArguments);
   } catch (error) {
     if (isError(error)) {
       core.setFailed(error.message);

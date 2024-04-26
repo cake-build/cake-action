@@ -8,7 +8,9 @@ import { CakeArgument, CakeSwitch } from '../src/cakeParameter';
 
 const pathToLocalToolsDirectory = path.join('path', 'to', 'tool');
 const pathToLocalTool = path.join(pathToLocalToolsDirectory, 'dotnet-cake');
+const pathToCsprojFile = path.join('build', 'Build.csproj');
 const dotnetManifestCake = 'dotnet tool run dotnet-cake';
+const dotnetRun = 'dotnet run';
 
 jest.mock('@actions/exec');
 jest.mock('@actions/io');
@@ -188,5 +190,62 @@ describe('When running a script successfully using the tool manifest', () => {
     expect(fakeExec).toHaveBeenCalledWith(
       dotnetManifestCake,
       ['script.cake', '--switch']);
+  });
+});
+
+describe('When running a Cake Frosting project successfully', () => {
+  const fakeExec = exec as jest.MockedFunction<typeof exec>;
+  const fakeToolsDirectory = new ToolsDirectory();
+
+  beforeAll(async () => {
+    fakeExec.mockReturnValue(Promise.resolve(0));
+  });
+
+  test('it should run with the default non-required parameters', async () => {
+    await cake.runProject(pathToCsprojFile, fakeToolsDirectory);
+
+    expect(fakeExec).toHaveBeenCalledWith(
+      dotnetRun,
+      [
+        '--project', pathToCsprojFile,
+        '--no-launch-profile',
+        '--verbosity', 'minimal',
+        '--configuration', 'Release',
+        '--',
+        `--paths_tools="${fakeToolsDirectory.path}"`
+      ]);
+  });
+
+  test('it should run with the specified parameters', async () => {
+    await cake.runProject(
+      pathToCsprojFile,
+      fakeToolsDirectory,
+      new CakeArgument('param', 'arg'),
+      new CakeSwitch('switch'));
+
+    expect(fakeExec).toHaveBeenCalledWith(
+      dotnetRun,
+      [
+        '--project', pathToCsprojFile,
+        '--no-launch-profile',
+        '--verbosity', 'minimal',
+        '--configuration', 'Release',
+        '--',
+        `--paths_tools="${fakeToolsDirectory.path}"`,
+        '--param=arg',
+        '--switch'
+      ]);
+  });
+});
+
+describe('When failing to run a Cake Frosting Project', () => {
+  const fakeExec = exec as jest.MockedFunction<typeof exec>;
+
+  beforeAll(() => {
+    fakeExec.mockReturnValue(Promise.resolve(-21));
+  });
+
+  test('it should throw an error containing the exit code', async () => {
+    await expect(cake.runProject('', new ToolsDirectory())).rejects.toThrow('-21');
   });
 });
