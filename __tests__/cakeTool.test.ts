@@ -1,11 +1,13 @@
 import * as path from 'path';
 import * as dotnet from '../src/dotnet';
 import * as cakeTool from '../src/cakeTool';
+import * as cakeRelease from '../src/cakeRelease';
 import { ToolsDirectory } from '../src/toolsDirectory';
 
 const targetDirectory = path.join('target', 'directory');
 
 jest.mock('../src/dotnet');
+jest.mock('../src/cakeRelease');
 
 describe('When installing the Cake Tool based on the tool manifest', () => {
   const fakeRestoreTool = dotnet.restoreLocalTools as jest.MockedFunction<typeof dotnet.restoreLocalTools>;
@@ -26,6 +28,11 @@ describe('When installing the Cake Tool based on the tool manifest', () => {
 
 describe('When installing the Cake Tool without a version number', () => {
   const fakeInstallLocalTool = dotnet.installLocalTool as jest.MockedFunction<typeof dotnet.installLocalTool>;
+  const fakeGetLatestVersion = cakeRelease.getLatestVersion as jest.MockedFunction<typeof cakeRelease.getLatestVersion>;
+
+  beforeAll(() => {
+    fakeGetLatestVersion.mockResolvedValue('theLatestVersion');
+  });
 
   test('it should install the latest version of the Cake.Tool in the tools directory', async () => {
     await cakeTool.install();
@@ -33,7 +40,7 @@ describe('When installing the Cake Tool without a version number', () => {
       'Cake.Tool',
       'dotnet-cake',
       new ToolsDirectory(),
-      undefined);
+      'theLatestVersion');
   });
 
   test('it should install the latest version of the Cake.Tool in the specified target directory', async () => {
@@ -43,13 +50,17 @@ describe('When installing the Cake Tool without a version number', () => {
       'Cake.Tool',
       'dotnet-cake',
       targetDir,
-      undefined);
+      'theLatestVersion');
   });
-
 });
 
 describe('When installing the latest version of the Cake Tool', () => {
   const fakeInstallLocalTool = dotnet.installLocalTool as jest.MockedFunction<typeof dotnet.installLocalTool>;
+  const fakeGetLatestVersion = cakeRelease.getLatestVersion as jest.MockedFunction<typeof cakeRelease.getLatestVersion>;
+
+  beforeAll(() => {
+    fakeGetLatestVersion.mockResolvedValue('theLatestVersion');
+  });
 
   test('it should install the latest version of the Cake.Tool in the tools directory', async () => {
     await cakeTool.install(undefined, { version: 'latest' });
@@ -57,7 +68,7 @@ describe('When installing the latest version of the Cake Tool', () => {
       'Cake.Tool',
       'dotnet-cake',
       new ToolsDirectory(),
-      undefined);
+      'theLatestVersion');
   });
 
   test('it should install the latest version of the Cake.Tool in the specified target directory', async () => {
@@ -67,7 +78,7 @@ describe('When installing the latest version of the Cake Tool', () => {
       'Cake.Tool',
       'dotnet-cake',
       targetDir,
-      undefined);
+      'theLatestVersion');
   });
 });
 
@@ -145,5 +156,34 @@ describe('When failing to install a specific version of the Cake Tool', () => {
     await expect(cakeTool.install(undefined, { version: 'specific', number: 'the.version.number' }))
       .rejects
       .toThrow(installError);
+  });
+});
+
+describe('When failing to retrieve the latest version of the Cake Tool', () => {
+  const fakeInstallLocalTool = dotnet.installLocalTool as jest.MockedFunction<typeof dotnet.installLocalTool>;
+  const fakeGetLatestVersion = cakeRelease.getLatestVersion as jest.MockedFunction<typeof cakeRelease.getLatestVersion>;
+
+  beforeAll(() => {
+    fakeInstallLocalTool.mockReset();
+    fakeGetLatestVersion.mockResolvedValue(null);
+  });
+
+  test('it should install the Cake.Tool without a version number in the tools directory', async () => {
+    await cakeTool.install();
+    expect(fakeInstallLocalTool).toHaveBeenCalledWith(
+      'Cake.Tool',
+      'dotnet-cake',
+      new ToolsDirectory(),
+      undefined);
+  });
+
+  test('it should install the Cake.Tool without a version number in the specified target directory', async () => {
+    const targetDir = new ToolsDirectory(targetDirectory);
+    await cakeTool.install(targetDir);
+    expect(fakeInstallLocalTool).toHaveBeenCalledWith(
+      'Cake.Tool',
+      'dotnet-cake',
+      targetDir,
+      undefined);
   });
 });
