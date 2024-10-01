@@ -18,20 +18,20 @@ export type CakeVersion =
   | Latest
   | Specific;
 type ToolManifest = {
-  version: 'tool-manifest';
+  readonly version: 'tool-manifest';
 };
 type Latest = {
-  version: 'latest';
+  readonly version: 'latest';
 };
 type Specific = {
-  version: 'specific',
+  readonly version: 'specific',
   number: string;
 };
 
 export type CakeBootstrap =
   | 'auto'
   | 'explicit'
-  | 'skip'
+  | 'skip';
 
 export function getInputs(): CakeInputs & ScriptInputs {
   return {
