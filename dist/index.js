@@ -3990,14 +3990,30 @@ const script = __importStar(__nccwpck_require__(8714));
 const input = __importStar(__nccwpck_require__(6747));
 function getInputs() {
     return {
-        scriptPath: core.getInput('script-path'),
-        csprojPath: core.getInput('csproj-path'),
+        file: getFileInput(),
         cakeVersion: getCakeVersionInput(),
         cakeBootstrap: getCakeBootstrapInput(),
         scriptArguments: getScriptInputs()
     };
 }
 exports.getInputs = getInputs;
+function getFileInput() {
+    const scriptPath = core.getInput('script-path');
+    const projectPath = core.getInput('csproj-path');
+    // When both script and project paths are specified,
+    // the project path takes precedence.
+    // If neither is provided, the default 'build.cake' script
+    // is used, as per Cake's convention.
+    if (projectPath) {
+        return { type: 'project', path: projectPath };
+    }
+    else if (scriptPath) {
+        return { type: 'script', path: scriptPath };
+    }
+    else {
+        return { type: 'script', path: 'build.cake' };
+    }
+}
 function getCakeVersionInput() {
     const version = core.getInput('cake-version').toLowerCase();
     switch (version) {
@@ -4534,8 +4550,7 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const inputs = action.getInputs();
-            const scriptPath = inputs.scriptPath;
-            const csprojPath = inputs.csprojPath;
+            const file = inputs.file;
             const version = inputs.cakeVersion;
             const bootstrap = inputs.cakeBootstrap;
             const toolsDir = new toolsDirectory_1.ToolsDirectory();
@@ -4543,15 +4558,15 @@ function run() {
             const cakeToolSettings = new cakeToolSettings_1.CakeToolSettings(toolsDir, (version === null || version === void 0 ? void 0 : version.version) === 'tool-manifest');
             dotnet.disableTelemetry();
             dotnet.disableWelcomeMessage();
-            if (csprojPath) {
-                yield cake.runProject(csprojPath, toolsDir, ...inputs.scriptArguments);
+            if (file.type === 'project') {
+                yield cake.runProject(file.path, toolsDir, ...inputs.scriptArguments);
             }
             else {
                 yield cakeTool.install(toolsDir, version);
                 if (bootstrap === 'explicit') {
-                    yield cake.bootstrapScript(scriptPath, cakeToolSettings);
+                    yield cake.bootstrapScript(file.path, cakeToolSettings);
                 }
-                yield cake.runScript(scriptPath, cakeToolSettings, ...inputs.scriptArguments);
+                yield cake.runScript(file.path, cakeToolSettings, ...inputs.scriptArguments);
             }
         }
         catch (error) {

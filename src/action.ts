@@ -3,8 +3,7 @@ import * as script from './cakeParameter';
 import * as input from './input';
 
 interface CakeInputs {
-  readonly scriptPath?: string,
-  readonly csprojPath?: string,
+  readonly file: File,
   readonly cakeVersion?: CakeVersion,
   readonly cakeBootstrap?: CakeBootstrap;
 }
@@ -12,6 +11,16 @@ interface CakeInputs {
 interface ScriptInputs {
   readonly scriptArguments: script.CakeParameter[];
 }
+
+export type File = ScriptFile | ProjectFile;
+type ScriptFile = {
+  readonly type: 'script',
+  path: string;
+};
+type ProjectFile = {
+  readonly type: 'project',
+  path: string;
+};
 
 export type CakeVersion =
   | ToolManifest
@@ -35,12 +44,28 @@ export type CakeBootstrap =
 
 export function getInputs(): CakeInputs & ScriptInputs {
   return {
-    scriptPath: core.getInput('script-path'),
-    csprojPath: core.getInput('csproj-path'),
+    file: getFileInput(),
     cakeVersion: getCakeVersionInput(),
     cakeBootstrap: getCakeBootstrapInput(),
     scriptArguments: getScriptInputs()
   };
+}
+
+function getFileInput(): File {
+  const scriptPath = core.getInput('script-path');
+  const projectPath = core.getInput('csproj-path');
+
+  // When both script and project paths are specified,
+  // the project path takes precedence.
+  // If neither is provided, the default 'build.cake' script
+  // is used, as per Cake's convention.
+  if (projectPath) {
+    return { type: 'project', path: projectPath };
+  } else if (scriptPath) {
+    return { type: 'script', path: scriptPath };
+  } else {
+    return { type: 'script', path: 'build.cake' };
+  }
 }
 
 function getCakeVersionInput(): CakeVersion {
@@ -76,7 +101,7 @@ function getScriptInputs(): script.CakeParameter[] {
   ];
 }
 
-function parseSkipBootstrapSwitch() : script.CakeParameter[] {
+function parseSkipBootstrapSwitch(): script.CakeParameter[] {
   return getCakeBootstrapInput() === 'skip'
     ? [new script.CakeSwitch('skip-bootstrap')]
     : [];

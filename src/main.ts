@@ -10,8 +10,7 @@ import * as action from './action';
 export async function run() {
   try {
     const inputs = action.getInputs();
-    const scriptPath = inputs.scriptPath;
-    const csprojPath = inputs.csprojPath;
+    const file = inputs.file;
     const version = inputs.cakeVersion;
     const bootstrap = inputs.cakeBootstrap;
 
@@ -23,18 +22,17 @@ export async function run() {
     dotnet.disableTelemetry();
     dotnet.disableWelcomeMessage();
 
-    if (csprojPath) {
-      await cake.runProject(csprojPath, toolsDir, ...inputs.scriptArguments);
+    if (file.type === 'project') {
+      await cake.runProject(file.path, toolsDir, ...inputs.scriptArguments);
     } else {
       await cakeTool.install(toolsDir, version);
 
       if (bootstrap === 'explicit') {
-        await cake.bootstrapScript(scriptPath, cakeToolSettings);
+        await cake.bootstrapScript(file.path, cakeToolSettings);
       }
 
-      await cake.runScript(scriptPath, cakeToolSettings, ...inputs.scriptArguments);
+      await cake.runScript(file.path, cakeToolSettings, ...inputs.scriptArguments);
     }
-
   } catch (error) {
     if (isError(error)) {
       core.setFailed(error.message);

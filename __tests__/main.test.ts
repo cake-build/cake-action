@@ -20,6 +20,7 @@ describe('When running the action without any input arguments', () => {
 
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
+      file: { type: 'script', path: 'build.cake' },
       scriptArguments: []
     });
   });
@@ -56,7 +57,7 @@ describe('When running the action with the script path input argument', () => {
 
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
-      scriptPath: 'path/to/script.cake',
+      file: { type: 'script', path: 'path/to/script.cake' },
       scriptArguments: []
     });
   });
@@ -73,7 +74,7 @@ describe('When running the action with the csproj path input argument', () => {
 
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
-      csprojPath: './path/to/build.csproj',
+      file: { type: 'project', path: 'path/to/build.csproj' },
       scriptArguments: []
     });
   });
@@ -85,7 +86,7 @@ describe('When running the action with the csproj path input argument', () => {
 
   test('it should run the specified Cake Frosting project', async () => {
     await run();
-    expect(fakeRunProject.mock.calls[0][0]).toBe('./path/to/build.csproj');
+    expect(fakeRunProject.mock.calls[0][0]).toBe('path/to/build.csproj');
   });
 });
 
@@ -95,6 +96,7 @@ describe('When running the action with tool-manifest as the Cake version input a
 
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
+      file: { type: 'script', path: 'build.cake' },
       cakeVersion: { version: 'tool-manifest' },
       scriptArguments: []
     });
@@ -112,6 +114,7 @@ describe('When running the action with latest as the Cake version input argument
 
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
+      file: { type: 'script', path: 'build.cake' },
       cakeVersion: { version: 'latest' },
       scriptArguments: []
     });
@@ -129,6 +132,7 @@ describe('When running the action with a specific version as the Cake version in
 
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
+      file: { type: 'script', path: 'build.cake' },
       cakeVersion: { version: 'specific', number: 'the.version.number' },
       scriptArguments: []
     });
@@ -149,6 +153,7 @@ describe('When running the action with auto as the Cake bootstrap input argument
 
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
+      file: { type: 'script', path: 'build.cake' },
       cakeBootstrap: 'auto',
       scriptArguments: []
     });
@@ -166,7 +171,7 @@ describe('When running the action with explicit as the Cake bootstrap input argu
 
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
-      scriptPath: 'custom.cake',
+      file: { type: 'script', path: 'custom.cake' },
       cakeBootstrap: 'explicit',
       scriptArguments: []
     });
@@ -184,6 +189,7 @@ describe('When running the action with skip as the Cake bootstrap input argument
 
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
+      file: { type: 'script', path: 'build.cake' },
       cakeBootstrap: 'skip',
       scriptArguments: []
     });
@@ -201,6 +207,7 @@ describe('When running the action with the target input argument', () => {
 
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
+      file: { type: 'script', path: 'build.cake' },
       scriptArguments: [new CakeArgument('target', 'Task-To-Run')]
     });
   });
@@ -218,6 +225,7 @@ describe('When running the action with the verbosity input argument', () => {
 
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
+      file: { type: 'script', path: 'build.cake' },
       scriptArguments: [new CakeArgument('verbosity', 'Verbosity-Level')]
     });
   });
@@ -235,6 +243,7 @@ describe('When running the action with custom script input arguments', () => {
 
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
+      file: { type: 'script', path: 'build.cake' },
       scriptArguments: [
         new CakeArgument('string-parameter', '\'value\''),
         new CakeArgument('numeric-parameter', '3'),
