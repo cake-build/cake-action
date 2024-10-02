@@ -1,5 +1,5 @@
 name: 'Cake Action'
-description: 'Run a Cake script as part of your build.'
+description: 'Run a Cake script or Cake Frosting project as part of your build.'
 author: 'Enrico Campidoglio'
 branding:
   icon: 'box'
@@ -9,6 +9,9 @@ inputs:
     description: 'The path of the Cake script to run.'
     required: false
     default: 'build.cake'
+  project-path:
+    description: 'The path of the Cake Frosting Project to run. Takes precedence over script-path'
+    required: false
   target:
     description: 'The name of the task to execute. Note that this argument must be supported by the script.'
     required: false

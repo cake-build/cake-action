@@ -2,9 +2,11 @@ import { exec } from '@actions/exec';
 import { which } from '@actions/io';
 import { CakeToolSettings } from './cakeToolSettings';
 import { CakeParameter } from './cakeParameter';
+import { ToolsDirectory } from './toolsDirectory';
 
 const dotnetCake = 'dotnet-cake';
 const dotnetLocalToolCake = 'dotnet tool run dotnet-cake';
+const dotnetRun = 'dotnet run';
 
 export async function runScript(
   scriptPath = 'build.cake',
@@ -17,6 +19,27 @@ export async function runScript(
 
   if (exitCode != 0) {
     throw new Error(`Failed to run the build script. Exit code: ${exitCode}`);
+  }
+}
+
+export async function runProject(
+  csprojPath: string,
+  toolsDir: ToolsDirectory,
+  ...params: CakeParameter[]
+) {
+  const cakeParams = formatParameters(params);
+  const exitCode = await exec(dotnetRun, [
+    '--project', csprojPath,
+    '--no-launch-profile',
+    '--verbosity', 'minimal',
+    '--configuration', 'Release',
+    '--',
+    `--paths_tools="${toolsDir}"`,
+    ...cakeParams
+  ]);
+
+  if (exitCode != 0) {
+    throw new Error(`Failed to run the csproj. Exit code: ${exitCode}`);
   }
 }
 
