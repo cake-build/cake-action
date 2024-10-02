@@ -14,7 +14,7 @@ steps:
     uses: cake-build/cake-action@v2
 ```
 
-The Cake action will look for a script named `build.cake` in your repository's root directory and run it for you using the [Cake Tool](https://www.nuget.org/packages/Cake.Tool/).  If you are using a [Cake Frosting](https://cakebuild.net/docs/running-builds/runners/cake-frosting) project, the `csproj-path` parameter must be specified and the `script-path` is ignored.
+The Cake action will look for a script named `build.cake` in your repository's root directory and run it for you using the [Cake Tool](https://www.nuget.org/packages/Cake.Tool/).  If you are using a [Cake Frosting](https://cakebuild.net/docs/running-builds/runners/cake-frosting) project, the `project-path` parameter must be specified and the `script-path` is ignored.
 
 All output from the Cake script or Cake Frosting project will be automatically redirected to the build log for inspection.
 
@@ -32,16 +32,16 @@ steps:
       script-path: path/to/script.cake
 ```
 
-### `csproj-path`
+### `project-path`
 
-If you are using [Cake Frosting](https://cakebuild.net/docs/running-builds/runners/cake-frosting), you can specify the path with the `csproj-path` [input parameter](https://help.github.com/en/github/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#jobsjob_idstepswith):
+If you are using [Cake Frosting](https://cakebuild.net/docs/running-builds/runners/cake-frosting), you can specify the path with the `project-path` [input parameter](https://help.github.com/en/github/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#jobsjob_idstepswith):
 
 ```yml
 steps:
   - name: Run Cake Frosting
     uses: cake-build/cake-action@v2
     with:
-      csproj-path: path/to/build.csproj
+      project-path: path/to/build.csproj
 ```
 
 ### `target`

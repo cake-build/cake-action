@@ -9,7 +9,7 @@ inputs:
     description: 'The path of the Cake script to run.'
     required: false
     default: 'build.cake'
-  csproj-path:
+  project-path:
     description: 'The path of the Cake Frosting Project to run. Takes precedence over script-path'
     required: false
   target:

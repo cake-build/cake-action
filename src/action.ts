@@ -53,7 +53,7 @@ export function getInputs(): CakeInputs & BuildInputs {
 
 function getFileInput(): BuildFile {
   const scriptPath = core.getInput('script-path');
-  const projectPath = core.getInput('csproj-path');
+  const projectPath = core.getInput('project-path');
 
   // When both script and project paths are specified,
   // the project path takes precedence.

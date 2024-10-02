@@ -3999,7 +3999,7 @@ function getInputs() {
 exports.getInputs = getInputs;
 function getFileInput() {
     const scriptPath = core.getInput('script-path');
-    const projectPath = core.getInput('csproj-path');
+    const projectPath = core.getInput('project-path');
     // When both script and project paths are specified,
     // the project path takes precedence.
     // If neither is provided, the default 'build.cake' script
