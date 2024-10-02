@@ -7,19 +7,19 @@ import { isError, isString } from './guards';
 export async function run() {
   try {
     const inputs = action.getInputs();
-    const file = inputs.file;
+    const buildFile = inputs.buildFile;
     const version = inputs.cakeVersion;
     const bootstrap = inputs.cakeBootstrap;
 
     dotnet.disableTelemetry();
     dotnet.disableWelcomeMessage();
 
-    switch (file.type) {
+    switch (buildFile.type) {
       case 'project':
-        await exec.project(file.path, ...inputs.scriptArguments);
+        await exec.project(buildFile.path, ...inputs.buildArguments);
         break;
       case 'script': {
-        await exec.script(file.path, version, bootstrap, ...inputs.scriptArguments);
+        await exec.script(buildFile.path, version, bootstrap, ...inputs.buildArguments);
         break;
       }
     }

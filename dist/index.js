@@ -3986,14 +3986,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getInputs = void 0;
 const core = __importStar(__nccwpck_require__(2186));
-const script = __importStar(__nccwpck_require__(8714));
+const build = __importStar(__nccwpck_require__(8714));
 const input = __importStar(__nccwpck_require__(6747));
 function getInputs() {
     return {
-        file: getFileInput(),
+        buildFile: getFileInput(),
         cakeVersion: getCakeVersionInput(),
         cakeBootstrap: getCakeBootstrapInput(),
-        scriptArguments: getScriptInputs()
+        buildArguments: getScriptInputs()
     };
 }
 exports.getInputs = getInputs;
@@ -4037,8 +4037,8 @@ function getCakeBootstrapInput() {
 }
 function getScriptInputs() {
     return [
-        new script.CakeArgument('target', core.getInput('target')),
-        new script.CakeArgument('verbosity', core.getInput('verbosity')),
+        new build.CakeArgument('target', core.getInput('target')),
+        new build.CakeArgument('verbosity', core.getInput('verbosity')),
         ...parseSkipBootstrapSwitch(),
         ...parseDryRunSwitch(),
         ...parseCustomArguments()
@@ -4046,19 +4046,19 @@ function getScriptInputs() {
 }
 function parseSkipBootstrapSwitch() {
     return getCakeBootstrapInput() === 'skip'
-        ? [new script.CakeSwitch('skip-bootstrap')]
+        ? [new build.CakeSwitch('skip-bootstrap')]
         : [];
 }
 function parseDryRunSwitch() {
     return input.getBooleanInput('dry-run')
-        ? [new script.CakeSwitch('dryrun')]
+        ? [new build.CakeSwitch('dryrun')]
         : [];
 }
 function parseCustomArguments() {
     return input.getMultilineInput('arguments')
         .filter(line => containsArgumentDefinition(line))
         .map(line => parseNameAndValue(line))
-        .map(([name, value]) => new script.CakeArgument(name, value));
+        .map(([name, value]) => new build.CakeArgument(name, value));
 }
 function containsArgumentDefinition(line) {
     return /.+:.+/.test(line);
@@ -4615,17 +4615,17 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const inputs = action.getInputs();
-            const file = inputs.file;
+            const buildFile = inputs.buildFile;
             const version = inputs.cakeVersion;
             const bootstrap = inputs.cakeBootstrap;
             dotnet.disableTelemetry();
             dotnet.disableWelcomeMessage();
-            switch (file.type) {
+            switch (buildFile.type) {
                 case 'project':
-                    yield exec.project(file.path, ...inputs.scriptArguments);
+                    yield exec.project(buildFile.path, ...inputs.buildArguments);
                     break;
                 case 'script': {
-                    yield exec.script(file.path, version, bootstrap, ...inputs.scriptArguments);
+                    yield exec.script(buildFile.path, version, bootstrap, ...inputs.buildArguments);
                     break;
                 }
             }

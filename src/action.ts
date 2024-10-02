@@ -1,23 +1,23 @@
 import * as core from '@actions/core';
-import * as script from './cakeParameter';
+import * as build from './cakeParameter';
 import * as input from './input';
 
 interface CakeInputs {
-  readonly file: File,
+  readonly buildFile: BuildFile,
   readonly cakeVersion?: CakeVersion,
   readonly cakeBootstrap?: CakeBootstrap;
 }
 
-interface ScriptInputs {
-  readonly scriptArguments: script.CakeParameter[];
+interface BuildInputs {
+  readonly buildArguments: build.CakeParameter[];
 }
 
-export type File = ScriptFile | ProjectFile;
-type ScriptFile = {
+export type BuildFile = Script | Project;
+type Script = {
   readonly type: 'script',
   path: string;
 };
-type ProjectFile = {
+type Project = {
   readonly type: 'project',
   path: string;
 };
@@ -42,16 +42,16 @@ export type CakeBootstrap =
   | 'explicit'
   | 'skip';
 
-export function getInputs(): CakeInputs & ScriptInputs {
+export function getInputs(): CakeInputs & BuildInputs {
   return {
-    file: getFileInput(),
+    buildFile: getFileInput(),
     cakeVersion: getCakeVersionInput(),
     cakeBootstrap: getCakeBootstrapInput(),
-    scriptArguments: getScriptInputs()
+    buildArguments: getScriptInputs()
   };
 }
 
-function getFileInput(): File {
+function getFileInput(): BuildFile {
   const scriptPath = core.getInput('script-path');
   const projectPath = core.getInput('csproj-path');
 
@@ -91,33 +91,33 @@ function getCakeBootstrapInput(): CakeBootstrap {
   }
 }
 
-function getScriptInputs(): script.CakeParameter[] {
+function getScriptInputs(): build.CakeParameter[] {
   return [
-    new script.CakeArgument('target', core.getInput('target')),
-    new script.CakeArgument('verbosity', core.getInput('verbosity')),
+    new build.CakeArgument('target', core.getInput('target')),
+    new build.CakeArgument('verbosity', core.getInput('verbosity')),
     ...parseSkipBootstrapSwitch(),
     ...parseDryRunSwitch(),
     ...parseCustomArguments()
   ];
 }
 
-function parseSkipBootstrapSwitch(): script.CakeParameter[] {
+function parseSkipBootstrapSwitch(): build.CakeParameter[] {
   return getCakeBootstrapInput() === 'skip'
-    ? [new script.CakeSwitch('skip-bootstrap')]
+    ? [new build.CakeSwitch('skip-bootstrap')]
     : [];
 }
 
-function parseDryRunSwitch(): script.CakeParameter[] {
+function parseDryRunSwitch(): build.CakeParameter[] {
   return input.getBooleanInput('dry-run')
-    ? [new script.CakeSwitch('dryrun')]
+    ? [new build.CakeSwitch('dryrun')]
     : [];
 }
 
-function parseCustomArguments(): script.CakeParameter[] {
+function parseCustomArguments(): build.CakeParameter[] {
   return input.getMultilineInput('arguments')
     .filter(line => containsArgumentDefinition(line))
     .map(line => parseNameAndValue(line))
-    .map(([name, value]) => new script.CakeArgument(name, value));
+    .map(([name, value]) => new build.CakeArgument(name, value));
 }
 
 function containsArgumentDefinition(line: string): boolean {
