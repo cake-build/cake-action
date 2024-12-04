@@ -14,15 +14,15 @@ steps:
     uses: cake-build/cake-action@v2
 ```
 
-The Cake action will look for a script named `build.cake` in your repository's root directory and run it for you using the [Cake Tool](https://www.nuget.org/packages/Cake.Tool/).  If you are using a [Cake Frosting](https://cakebuild.net/docs/running-builds/runners/cake-frosting) project, the `project-path` parameter must be specified and the `script-path` is ignored.
+The Cake action will look for a script named `build.cake` in your repository's root directory and run it for you using the [Cake Tool](https://www.nuget.org/packages/Cake.Tool/).  You can also specify the path to your Cake script using the `script-path` option. If you are using a [Cake Frosting](https://cakebuild.net/docs/running-builds/runners/cake-frosting) project instead, you must specify the path to your `.csproj` file with the `project-path` parameter.
 
-All output from the Cake script or Cake Frosting project will be automatically redirected to the build log for inspection.
+All output from the Cake script or Cake Frosting project is automatically redirected to the build log for inspection.
 
 ## Inputs
 
 ### `script-path`
 
-If your script is in another location, you can specify the path with the `script-path` [input parameter](https://help.github.com/en/github/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#jobsjob_idstepswith):
+If your Cake script is located somewhere other than the root directory of your project, you can specify its path using the `script-path` [input parameter](https://help.github.com/en/github/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#jobsjob_idstepswith):
 
 ```yml
 steps:
@@ -34,7 +34,7 @@ steps:
 
 ### `project-path`
 
-If you are using [Cake Frosting](https://cakebuild.net/docs/running-builds/runners/cake-frosting), you can specify the path with the `project-path` [input parameter](https://help.github.com/en/github/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#jobsjob_idstepswith):
+If you are using [Cake Frosting](https://cakebuild.net/docs/running-builds/runners/cake-frosting), you must specify the path to the project file with the `project-path` [input parameter](https://help.github.com/en/github/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#jobsjob_idstepswith):
 
 ```yml
 steps:
@@ -102,11 +102,9 @@ The arguments are defined in a [multi-line string literal](https://yaml.org/spec
 
 ### `cake-version`
 
-By default, the Cake action will run your script using the latest _stable_ version of the [Cake .NET Core Global tool](https://www.nuget.org/packages/Cake.Tool/).
+By default, the Cake action runs your script using the latest _stable_ version of the [Cake .NET Core Global tool](https://www.nuget.org/packages/Cake.Tool/).
 
-_Ignored_ for Cake Frosting Project.
-
-If for some reason you want to [use a specific version of Cake](https://cakebuild.net/docs/tutorials/pinning-cake-version) (for compatibility with older third-party addins, for example), you can do so by specifying the version number in the `cake-version` parameter.:
+If you need to [use a specific version of Cake](https://cakebuild.net/docs/tutorials/pinning-cake-version) (e.g. for compatibility with older addins), you can specify it with the `cake-version` parameter:
 
 ```yml
 steps:
@@ -116,7 +114,7 @@ steps:
       cake-version: 0.30.0
 ```
 
-If you're pinning your Cake version using a [tool manifest file](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools#install-a-local-tool), then you can have the action restore any local tools, including Cake, by specifying `tool-manifest` as the argument for `cake-version`:
+If you're pinning your Cake version using a [tool manifest file](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools#install-a-local-tool), you can have the action restore any local tools, including Cake, by specifying `tool-manifest` as the argument for `cake-version`:
 
 ```yml
 steps:
@@ -126,13 +124,13 @@ steps:
       cake-version: tool-manifest
 ```
 
+> :information_source: This option is ignored when [using Cake Frosting projects](#project-path).
+
 ### `cake-bootstrap`
 
 As of [Cake 1.0.0](https://github.com/cake-build/cake/releases/tag/v1.0.0), any [custom modules](https://cakebuild.net/docs/fundamentals/modules) that you reference in your script are [bootstrapped automatically](https://github.com/cake-build/cake/issues/2833) upon running it.
 
-_Ignored_ for Cake Frosting Project.
-
-If you're using an older version of Cake, however, you need to explicitly [bootstrap](https://cakebuild.net/docs/fundamentals/preprocessor-directives#module-directive) them before running the script. The Cake action can take care of this extra step for you by setting the `cake-bootstrap` parameter to `explicit`:
+For older versions of Cake, you need to explicitly [bootstrap](https://cakebuild.net/docs/fundamentals/preprocessor-directives#module-directive) any referenced modules before running the script. The Cake action can handle this extra step for you by setting the `cake-bootstrap` parameter to `explicit`:
 
 ```yml
 steps:
@@ -143,7 +141,7 @@ steps:
       cake-version: 0.38.5
 ```
 
-If you're using Cake 1.0.0 or later and wish to opt out of the automatic bootstrapping of modules, you can do so by setting the `cake-bootstrap` parameter to `skip`:
+If you're using Cake 1.0.0 or later and wish to opt out of the automatic bootstrapping of modules, you can set the `cake-bootstrap` parameter to `skip`:
 
 ```yml
 steps:
@@ -153,7 +151,9 @@ steps:
       cake-bootstrap: skip
 ```
 
-The default value is `auto`, which means that the modules will be automatically bootstrapped on Cake 1.0.0 or later.
+The default value is `auto`, which means modules will be automatically bootstrapped on Cake 1.0.0 or later.
+
+> :information_source: This option is ignored when [using Cake Frosting projects](#script-path).
 
 ## Cross-platform
 
