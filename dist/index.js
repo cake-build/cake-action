@@ -4073,19 +4073,10 @@ function parseNameAndValue(line) {
 /***/ }),
 
 /***/ 9275:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.bootstrapScript = exports.runProject = exports.runScript = void 0;
 const exec_1 = __nccwpck_require__(1514);
@@ -4093,53 +4084,45 @@ const io_1 = __nccwpck_require__(7436);
 const dotnetCake = 'dotnet-cake';
 const dotnetLocalToolCake = 'dotnet tool run dotnet-cake';
 const dotnetRun = 'dotnet run';
-function runScript(scriptPath = 'build.cake', cakeToolSettings, ...params) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const cakeToolPath = yield resolveCakeToolPath(cakeToolSettings);
-        const cakeParams = formatParameters(params);
-        const exitCode = yield (0, exec_1.exec)(cakeToolPath, [scriptPath, ...cakeParams]);
-        if (exitCode != 0) {
-            throw new Error(`Failed to run the build script. Exit code: ${exitCode}`);
-        }
-    });
+async function runScript(scriptPath = 'build.cake', cakeToolSettings, ...params) {
+    const cakeToolPath = await resolveCakeToolPath(cakeToolSettings);
+    const cakeParams = formatParameters(params);
+    const exitCode = await (0, exec_1.exec)(cakeToolPath, [scriptPath, ...cakeParams]);
+    if (exitCode != 0) {
+        throw new Error(`Failed to run the build script. Exit code: ${exitCode}`);
+    }
 }
 exports.runScript = runScript;
-function runProject(csprojPath, toolsDir, ...params) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const cakeParams = formatParameters(params);
-        const exitCode = yield (0, exec_1.exec)(dotnetRun, [
-            '--project', csprojPath,
-            '--no-launch-profile',
-            '--verbosity', 'minimal',
-            '--configuration', 'Release',
-            '--',
-            `--paths_tools="${toolsDir}"`,
-            ...cakeParams
-        ]);
-        if (exitCode != 0) {
-            throw new Error(`Failed to run the csproj. Exit code: ${exitCode}`);
-        }
-    });
+async function runProject(csprojPath, toolsDir, ...params) {
+    const cakeParams = formatParameters(params);
+    const exitCode = await (0, exec_1.exec)(dotnetRun, [
+        '--project', csprojPath,
+        '--no-launch-profile',
+        '--verbosity', 'minimal',
+        '--configuration', 'Release',
+        '--',
+        `--paths_tools="${toolsDir}"`,
+        ...cakeParams
+    ]);
+    if (exitCode != 0) {
+        throw new Error(`Failed to run the csproj. Exit code: ${exitCode}`);
+    }
 }
 exports.runProject = runProject;
-function bootstrapScript(scriptPath = 'build.cake', cakeToolSettings) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const cakeToolPath = yield resolveCakeToolPath(cakeToolSettings);
-        const exitCode = yield (0, exec_1.exec)(cakeToolPath, [scriptPath, '--bootstrap']);
-        if (exitCode != 0) {
-            throw new Error(`Failed to bootstrap the build script. Exit code: ${exitCode}`);
-        }
-    });
+async function bootstrapScript(scriptPath = 'build.cake', cakeToolSettings) {
+    const cakeToolPath = await resolveCakeToolPath(cakeToolSettings);
+    const exitCode = await (0, exec_1.exec)(cakeToolPath, [scriptPath, '--bootstrap']);
+    if (exitCode != 0) {
+        throw new Error(`Failed to bootstrap the build script. Exit code: ${exitCode}`);
+    }
 }
 exports.bootstrapScript = bootstrapScript;
-function resolveCakeToolPath(cakeToolSettings) {
-    return __awaiter(this, void 0, void 0, function* () {
-        return (cakeToolSettings === null || cakeToolSettings === void 0 ? void 0 : cakeToolSettings.useToolManifest)
-            ? dotnetLocalToolCake
-            : (cakeToolSettings === null || cakeToolSettings === void 0 ? void 0 : cakeToolSettings.workingDirectory)
-                ? cakeToolSettings.workingDirectory.append(dotnetCake)
-                : yield (0, io_1.which)(dotnetCake);
-    });
+async function resolveCakeToolPath(cakeToolSettings) {
+    return cakeToolSettings?.useToolManifest
+        ? dotnetLocalToolCake
+        : cakeToolSettings?.workingDirectory
+            ? cakeToolSettings.workingDirectory.append(dotnetCake)
+            : await (0, io_1.which)(dotnetCake);
 }
 function formatParameters(params) {
     return params
@@ -4158,6 +4141,8 @@ function formatParameters(params) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CakeSwitch = exports.CakeArgument = void 0;
 class CakeArgument {
+    _name;
+    _value;
     constructor(name, value) {
         this._name = name;
         this._value = value;
@@ -4171,6 +4156,7 @@ class CakeArgument {
 }
 exports.CakeArgument = CakeArgument;
 class CakeSwitch {
+    _name;
     constructor(name) {
         this._name = name;
     }
@@ -4214,39 +4200,25 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getLatestVersion = void 0;
 const http = __importStar(__nccwpck_require__(6255));
-function getLatestVersion() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const release = yield getLatestCakeReleaseFromGitHub();
-        return extractVersionNumber(release);
-    });
+async function getLatestVersion() {
+    const release = await getLatestCakeReleaseFromGitHub();
+    return extractVersionNumber(release);
 }
 exports.getLatestVersion = getLatestVersion;
-function getLatestCakeReleaseFromGitHub() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const client = new http.HttpClient('cake-build/cake-action');
-        const response = yield client.getJson('https://api.github.com/repos/cake-build/cake/releases/latest');
-        if (response.statusCode != 200) {
-            console.log(`Could not determine the latest version of Cake. GitHub returned status code ${response.statusCode}`);
-            return null;
-        }
-        return response.result;
-    });
+async function getLatestCakeReleaseFromGitHub() {
+    const client = new http.HttpClient('cake-build/cake-action');
+    const response = await client.getJson('https://api.github.com/repos/cake-build/cake/releases/latest');
+    if (response.statusCode != 200) {
+        console.log(`Could not determine the latest version of Cake. GitHub returned status code ${response.statusCode}`);
+        return null;
+    }
+    return response.result;
 }
 function extractVersionNumber(release) {
-    var _a;
-    return ((_a = release === null || release === void 0 ? void 0 : release.tag_name) === null || _a === void 0 ? void 0 : _a.replace(/^v/, '')) || null;
+    return release?.tag_name?.replace(/^v/, '') || null;
 }
 
 
@@ -4280,42 +4252,28 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.install = void 0;
 const dotnet = __importStar(__nccwpck_require__(9870));
 const toolsDirectory_1 = __nccwpck_require__(6745);
 const cakeRelease_1 = __nccwpck_require__(3040);
-function install(toolsDir, version) {
-    var _a;
-    return __awaiter(this, void 0, void 0, function* () {
-        switch (version === null || version === void 0 ? void 0 : version.version) {
-            case 'tool-manifest':
-                yield dotnet.restoreLocalTools();
-                break;
-            case 'latest':
-            case undefined:
-                yield installCakeLocalTool(toolsDir, (_a = yield (0, cakeRelease_1.getLatestVersion)()) !== null && _a !== void 0 ? _a : undefined);
-                break;
-            case 'specific':
-                yield installCakeLocalTool(toolsDir, version.number);
-                break;
-        }
-    });
+async function install(toolsDir, version) {
+    switch (version?.version) {
+        case 'tool-manifest':
+            await dotnet.restoreLocalTools();
+            break;
+        case 'latest':
+        case undefined:
+            await installCakeLocalTool(toolsDir, await (0, cakeRelease_1.getLatestVersion)() ?? undefined);
+            break;
+        case 'specific':
+            await installCakeLocalTool(toolsDir, version.number);
+            break;
+    }
 }
 exports.install = install;
-function installCakeLocalTool(targetDirectory = new toolsDirectory_1.ToolsDirectory(), version) {
-    return __awaiter(this, void 0, void 0, function* () {
-        return dotnet.installLocalTool('Cake.Tool', 'dotnet-cake', targetDirectory, version);
-    });
+async function installCakeLocalTool(targetDirectory = new toolsDirectory_1.ToolsDirectory(), version) {
+    return dotnet.installLocalTool('Cake.Tool', 'dotnet-cake', targetDirectory, version);
 }
 
 
@@ -4329,6 +4287,8 @@ function installCakeLocalTool(targetDirectory = new toolsDirectory_1.ToolsDirect
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CakeToolSettings = void 0;
 class CakeToolSettings {
+    workingDirectory;
+    useToolManifest;
     constructor(workingDirectory, useToolManifest = false) {
         this.workingDirectory = workingDirectory;
         this.useToolManifest = useToolManifest;
@@ -4367,15 +4327,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.restoreLocalTools = exports.uninstallLocalTool = exports.installLocalTool = exports.disableWelcomeMessage = exports.disableTelemetry = void 0;
 const core = __importStar(__nccwpck_require__(2186));
@@ -4392,44 +4343,38 @@ function disableWelcomeMessage() {
     core.exportVariable('DOTNET_NOLOGO', 'true');
 }
 exports.disableWelcomeMessage = disableWelcomeMessage;
-function installLocalTool(packageId, toolName, targetDirectory = new toolsDirectory_1.ToolsDirectory(), version) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (!version && targetDirectory.containsTool(toolName)) {
-            core.info(`The ${packageId} already exists in ${targetDirectory}, skipping installation`);
-            return;
-        }
-        if (version && targetDirectory.containsToolWithVersion(packageId, version)) {
-            core.info(`The ${packageId} version ${version} already exists in ${targetDirectory}, skipping installation`);
-            return;
-        }
-        if (version && (targetDirectory.containsTool(toolName) && !targetDirectory.containsToolWithVersion(packageId, version))) {
-            yield uninstallLocalTool(packageId, targetDirectory);
-        }
-        const versionArg = version ? ['--version', version] : [];
-        const installArgs = [...versionArg, '--tool-path', targetDirectory.path, packageId];
-        const exitCode = yield (0, exec_1.exec)(dotnetToolInstall, installArgs);
-        if (exitCode != 0) {
-            throw new Error(`Failed to install ${packageId}. Exit code: ${exitCode}`);
-        }
-    });
+async function installLocalTool(packageId, toolName, targetDirectory = new toolsDirectory_1.ToolsDirectory(), version) {
+    if (!version && targetDirectory.containsTool(toolName)) {
+        core.info(`The ${packageId} already exists in ${targetDirectory}, skipping installation`);
+        return;
+    }
+    if (version && targetDirectory.containsToolWithVersion(packageId, version)) {
+        core.info(`The ${packageId} version ${version} already exists in ${targetDirectory}, skipping installation`);
+        return;
+    }
+    if (version && (targetDirectory.containsTool(toolName) && !targetDirectory.containsToolWithVersion(packageId, version))) {
+        await uninstallLocalTool(packageId, targetDirectory);
+    }
+    const versionArg = version ? ['--version', version] : [];
+    const installArgs = [...versionArg, '--tool-path', targetDirectory.path, packageId];
+    const exitCode = await (0, exec_1.exec)(dotnetToolInstall, installArgs);
+    if (exitCode != 0) {
+        throw new Error(`Failed to install ${packageId}. Exit code: ${exitCode}`);
+    }
 }
 exports.installLocalTool = installLocalTool;
-function uninstallLocalTool(packageId, targetDirectory = new toolsDirectory_1.ToolsDirectory()) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const exitCode = yield (0, exec_1.exec)(dotnetToolUnInstall, ['--tool-path', targetDirectory.path, packageId]);
-        if (exitCode != 0) {
-            throw new Error(`Failed to uninstall ${packageId}. Exit code: ${exitCode}`);
-        }
-    });
+async function uninstallLocalTool(packageId, targetDirectory = new toolsDirectory_1.ToolsDirectory()) {
+    const exitCode = await (0, exec_1.exec)(dotnetToolUnInstall, ['--tool-path', targetDirectory.path, packageId]);
+    if (exitCode != 0) {
+        throw new Error(`Failed to uninstall ${packageId}. Exit code: ${exitCode}`);
+    }
 }
 exports.uninstallLocalTool = uninstallLocalTool;
-function restoreLocalTools() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const exitCode = yield (0, exec_1.exec)(dotnetToolRestore);
-        if (exitCode != 0) {
-            throw new Error(`Failed to restore the local tools. Exit code: ${exitCode}`);
-        }
-    });
+async function restoreLocalTools() {
+    const exitCode = await (0, exec_1.exec)(dotnetToolRestore);
+    if (exitCode != 0) {
+        throw new Error(`Failed to restore the local tools. Exit code: ${exitCode}`);
+    }
 }
 exports.restoreLocalTools = restoreLocalTools;
 
@@ -4464,40 +4409,27 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.script = exports.project = void 0;
 const cakeToolSettings_1 = __nccwpck_require__(6881);
 const toolsDirectory_1 = __nccwpck_require__(6745);
 const cake = __importStar(__nccwpck_require__(9275));
 const cakeTool = __importStar(__nccwpck_require__(4574));
-function project(path, ...params) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const toolsDir = new toolsDirectory_1.ToolsDirectory();
-        toolsDir.create();
-        yield cake.runProject(path, toolsDir, ...params);
-    });
+async function project(path, ...params) {
+    const toolsDir = new toolsDirectory_1.ToolsDirectory();
+    toolsDir.create();
+    await cake.runProject(path, toolsDir, ...params);
 }
 exports.project = project;
-function script(path, version, bootstrap, ...params) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const toolsDir = new toolsDirectory_1.ToolsDirectory();
-        toolsDir.create();
-        const cakeToolSettings = new cakeToolSettings_1.CakeToolSettings(toolsDir, (version === null || version === void 0 ? void 0 : version.version) === 'tool-manifest');
-        yield cakeTool.install(toolsDir, version);
-        if (bootstrap === 'explicit') {
-            yield cake.bootstrapScript(path, cakeToolSettings);
-        }
-        yield cake.runScript(path, cakeToolSettings, ...params);
-    });
+async function script(path, version, bootstrap, ...params) {
+    const toolsDir = new toolsDirectory_1.ToolsDirectory();
+    const cakeToolSettings = new cakeToolSettings_1.CakeToolSettings(toolsDir, version?.version === 'tool-manifest');
+    toolsDir.create();
+    await cakeTool.install(toolsDir, version);
+    if (bootstrap === 'explicit') {
+        await cake.bootstrapScript(path, cakeToolSettings);
+    }
+    await cake.runScript(path, cakeToolSettings, ...params);
 }
 exports.script = script;
 
@@ -4559,8 +4491,7 @@ function getBooleanInput(name) {
 }
 exports.getBooleanInput = getBooleanInput;
 function getMultilineInput(name) {
-    var _a;
-    return (_a = core.getMultilineInput(name)) !== null && _a !== void 0 ? _a : [];
+    return core.getMultilineInput(name) ?? [];
 }
 exports.getMultilineInput = getMultilineInput;
 
@@ -4595,15 +4526,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core = __importStar(__nccwpck_require__(2186));
@@ -4611,34 +4533,32 @@ const action = __importStar(__nccwpck_require__(7672));
 const dotnet = __importStar(__nccwpck_require__(9870));
 const exec = __importStar(__nccwpck_require__(5047));
 const guards_1 = __nccwpck_require__(3265);
-function run() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const inputs = action.getInputs();
-            const buildFile = inputs.buildFile;
-            const version = inputs.cakeVersion;
-            const bootstrap = inputs.cakeBootstrap;
-            dotnet.disableTelemetry();
-            dotnet.disableWelcomeMessage();
-            switch (buildFile.type) {
-                case 'project':
-                    yield exec.project(buildFile.path, ...inputs.buildArguments);
-                    break;
-                case 'script': {
-                    yield exec.script(buildFile.path, version, bootstrap, ...inputs.buildArguments);
-                    break;
-                }
+async function run() {
+    try {
+        const inputs = action.getInputs();
+        const buildFile = inputs.buildFile;
+        const version = inputs.cakeVersion;
+        const bootstrap = inputs.cakeBootstrap;
+        dotnet.disableTelemetry();
+        dotnet.disableWelcomeMessage();
+        switch (buildFile.type) {
+            case 'project':
+                await exec.project(buildFile.path, ...inputs.buildArguments);
+                break;
+            case 'script': {
+                await exec.script(buildFile.path, version, bootstrap, ...inputs.buildArguments);
+                break;
             }
         }
-        catch (error) {
-            if ((0, guards_1.isError)(error)) {
-                core.setFailed(error.message);
-            }
-            else if ((0, guards_1.isString)(error)) {
-                core.setFailed(error);
-            }
+    }
+    catch (error) {
+        if ((0, guards_1.isError)(error)) {
+            core.setFailed(error.message);
         }
-    });
+        else if ((0, guards_1.isString)(error)) {
+            core.setFailed(error);
+        }
+    }
 }
 exports.run = run;
 run();
@@ -4697,6 +4617,7 @@ const fs = __importStar(__nccwpck_require__(7147));
 const path = __importStar(__nccwpck_require__(1017));
 const platform_1 = __nccwpck_require__(2999);
 class ToolsDirectory {
+    _path;
     constructor(path = 'tools') {
         this._path = path;
     }
