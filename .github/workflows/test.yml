@@ -153,3 +153,58 @@ jobs:
             string-parameter: 'value'
             numeric-parameter: 3
             boolean-parameter: true
+  test-with-frosting:
+    name: Test with Cake Frosting
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    env:
+      project-directory: integrationtests/frosting
+    steps:
+      - name: Get the sources
+        uses: actions/checkout@v1
+      - name: Install Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install the .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Run a specific Cake Frosting project
+        uses: ./
+        with:
+          project-path: ${{ env.project-directory}}/Build.csproj
+      - name: Run a specific target
+        uses: ./
+        with:
+          project-path: ${{ env.project-directory}}/Build.csproj
+          target: Successful-Task
+      - name: Run with a specific verbosity level
+        uses: ./
+        env:
+          EXPECTED_VERBOSITY: Diagnostic
+        with:
+          verbosity: Diagnostic
+          project-path: ${{ env.project-directory}}/Build.csproj
+          target: Test-Verbosity
+      - name: Do a dry run
+        uses: ./
+        with:
+          dry-run: true
+          project-path: ${{ env.project-directory }}/Build.csproj
+          target: Test-Dry-Run
+      - name: Run with custom script parameters
+        uses: ./
+        env:
+          EXPECTED_STRING_ARGUMENT: '''value'''
+          EXPECTED_NUMERIC_ARGUMENT: '3'
+          EXPECTED_BOOLEAN_ARGUMENT: 'true'
+        with:
+          project-path: ${{ env.project-directory }}/Build.csproj
+          target: Test-Script-Parameters
+          arguments: |
+            string-parameter: 'value'
+            numeric-parameter: 3
+            boolean-parameter: true
