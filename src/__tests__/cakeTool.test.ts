@@ -1,13 +1,13 @@
 import * as path from 'path';
-import * as dotnet from '../src/dotnet';
-import * as cakeTool from '../src/cakeTool';
-import * as cakeRelease from '../src/cakeRelease';
-import { ToolsDirectory } from '../src/toolsDirectory';
+import * as dotnet from '../dotnet';
+import * as cakeTool from '../cakeTool';
+import * as cakeRelease from '../cakeRelease';
+import { ToolsDirectory } from '../toolsDirectory';
 
 const targetDirectory = path.join('target', 'directory');
 
-jest.mock('../src/dotnet');
-jest.mock('../src/cakeRelease');
+jest.mock('../dotnet');
+jest.mock('../cakeRelease');
 
 describe('When installing the Cake Tool based on the tool manifest', () => {
   const fakeRestoreTool = dotnet.restoreLocalTools as jest.MockedFunction<typeof dotnet.restoreLocalTools>;

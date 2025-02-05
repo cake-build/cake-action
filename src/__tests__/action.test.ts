@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 import { when } from 'jest-when';
-import * as action from '../src/action';
-import { CakeArgument, CakeSwitch } from '../src/cakeParameter';
+import * as action from '../action';
+import { CakeArgument, CakeSwitch } from '../cakeParameter';
 
 jest.mock('@actions/core');
 

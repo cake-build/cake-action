@@ -1,10 +1,10 @@
 import * as path from 'path';
 import { exec } from '@actions/exec';
 import { which } from '@actions/io';
-import * as cake from '../src/cake';
-import { ToolsDirectory } from '../src/toolsDirectory';
-import { CakeToolSettings } from '../src/cakeToolSettings';
-import { CakeArgument, CakeSwitch } from '../src/cakeParameter';
+import * as cake from '../cake';
+import { ToolsDirectory } from '../toolsDirectory';
+import { CakeToolSettings } from '../cakeToolSettings';
+import { CakeArgument, CakeSwitch } from '../cakeParameter';
 
 const pathToLocalToolsDirectory = path.join('path', 'to', 'tool');
 const pathToLocalTool = path.join(pathToLocalToolsDirectory, 'dotnet-cake');

@@ -34,7 +34,7 @@ export async function runProject(
     '--verbosity', 'minimal',
     '--configuration', 'Release',
     '--',
-    `--paths_tools="${toolsDir}"`,
+    `--paths_tools="${toolsDir.path}"`,
     ...cakeParams
   ]);
 
