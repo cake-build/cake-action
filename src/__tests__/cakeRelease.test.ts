@@ -1,17 +1,17 @@
 import * as http from '@actions/http-client';
-import * as cakeRelease from '../src/cakeRelease';
+import * as cakeRelease from '../cakeRelease';
 
 describe('When retrieving the latest Cake version', () => {
-  beforeAll(async () => {
+  beforeAll(() => {
     jest
       .spyOn(http.HttpClient.prototype, 'getJson')
-      .mockImplementation(async () => ({
+      .mockResolvedValue({
         statusCode: 200,
         result: {
           tag_name: 'v1.0.0'
         },
         headers: {}
-      }));
+      });
   });
 
   test('it should return the latest version number from GitHub', async () => {
@@ -20,16 +20,16 @@ describe('When retrieving the latest Cake version', () => {
 });
 
 describe('When retrieving the latest Cake version without the \'v\' prefix', () => {
-  beforeAll(async () => {
+  beforeAll(() => {
     jest
       .spyOn(http.HttpClient.prototype, 'getJson')
-      .mockImplementation(async () => ({
+      .mockResolvedValue({
         statusCode: 200,
         result: {
           tag_name: '1.0.0'
         },
         headers: {}
-      }));
+      });
   });
 
   test('it should return the latest version number from GitHub', async () => {
@@ -38,14 +38,14 @@ describe('When retrieving the latest Cake version without the \'v\' prefix', () 
 });
 
 describe('When failing to retrieve the latest Cake version due to a GitHub error', () => {
-  beforeAll(async () => {
+  beforeAll(() => {
     jest
       .spyOn(http.HttpClient.prototype, 'getJson')
-      .mockImplementation(async () => ({
+      .mockResolvedValue({
         statusCode: 500,
         result: {},
         headers: {}
-      }));
+      });
   });
 
   test('it should return null', async () => {
@@ -60,14 +60,14 @@ describe('When failing to retrieve the latest Cake version due to a GitHub error
 });
 
 describe('When failing to retrieve the latest Cake version due to an empty response from GitHub', () => {
-  beforeAll(async () => {
+  beforeAll(() => {
     jest
       .spyOn(http.HttpClient.prototype, 'getJson')
-      .mockImplementation(async () => ({
+      .mockResolvedValue({
         statusCode: 200,
         result: {},
         headers: {}
-      }));
+      });
   });
 
   test('it should return null', async () => {
@@ -76,16 +76,16 @@ describe('When failing to retrieve the latest Cake version due to an empty respo
 });
 
 describe('When failing to retrieve the latest Cake version due to a missing tag name in the GitHub response', () => {
-  beforeAll(async () => {
+  beforeAll(() => {
     jest
       .spyOn(http.HttpClient.prototype, 'getJson')
-      .mockImplementation(async () => ({
+      .mockResolvedValue({
         statusCode: 200,
         result: {
           tag_name: null
         },
         headers: {}
-      }));
+      });
   });
 
   test('it should return null', async () => {
@@ -94,16 +94,16 @@ describe('When failing to retrieve the latest Cake version due to a missing tag 
 });
 
 describe('When failing to retrieve the latest Cake version due to an empty tag name in the GitHub response', () => {
-  beforeAll(async () => {
+  beforeAll(() => {
     jest
       .spyOn(http.HttpClient.prototype, 'getJson')
-      .mockImplementation(async () => ({
+      .mockResolvedValue({
         statusCode: 200,
         result: {
           tag_name: ''
         },
         headers: {}
-      }));
+      });
   });
 
   test('it should return null', async () => {

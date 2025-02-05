@@ -1,8 +1,8 @@
 import * as path from 'path';
 import * as core from '@actions/core';
 import { exec } from '@actions/exec';
-import * as dotnet from '../src/dotnet';
-import { ToolsDirectory } from '../src/toolsDirectory';
+import * as dotnet from '../dotnet';
+import { ToolsDirectory } from '../toolsDirectory';
 
 const targetDirectory = path.join('target', 'directory');
 
@@ -59,8 +59,8 @@ describe('When installing a local tool in a directory where it already exists', 
     fakeExec.mockReturnValue(Promise.resolve(0));
   });
 
-  test('it should not attempt to install the specified tool in the same directory', () => {
-    dotnet.installLocalTool('The.Tool', 'dotnet-tool', directoryWithTool);
+  test('it should not attempt to install the specified tool in the same directory', async () => {
+    await dotnet.installLocalTool('The.Tool', 'dotnet-tool', directoryWithTool);
     expect(fakeExec).not.toHaveBeenCalledWith(
       'dotnet tool install',
       ['--tool-path', directoryWithTool.path, 'The.Tool']);

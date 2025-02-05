@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import del from 'del';
-import { Platform } from '../src/platform';
-import { ToolsDirectory } from '../src/toolsDirectory';
+import { Platform } from '../platform';
+import { ToolsDirectory } from '../toolsDirectory';
 
 describe('When constructing the tools directory', () => {
   test('it should set the default directory path to tools', () => {

@@ -1,18 +1,18 @@
 import * as core from '@actions/core';
-import * as action from '../src/action';
-import * as dotnet from '../src/dotnet';
-import * as cakeTool from '../src/cakeTool';
-import * as cake from '../src/cake';
-import { ToolsDirectory } from '../src/toolsDirectory';
-import { CakeArgument } from '../src/cakeParameter';
-import { run } from '../src/main';
+import * as action from '../action';
+import * as dotnet from '../dotnet';
+import * as cakeTool from '../cakeTool';
+import * as cake from '../cake';
+import { ToolsDirectory } from '../toolsDirectory';
+import { CakeArgument } from '../cakeParameter';
+import { run } from '../main';
 
 jest.mock('@actions/core');
-jest.mock('../src/action');
-jest.mock('../src/dotnet');
-jest.mock('../src/cakeTool');
-jest.mock('../src/cake');
-jest.mock('../src/toolsDirectory');
+jest.mock('../action');
+jest.mock('../dotnet');
+jest.mock('../cakeTool');
+jest.mock('../cake');
+jest.mock('../toolsDirectory');
 
 describe('When running the action without any input arguments', () => {
   const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
@@ -27,6 +27,7 @@ describe('When running the action without any input arguments', () => {
 
   test('it should create the tools directory', async () => {
     await run();
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(fakeToolsDirectory.prototype.create).toHaveBeenCalled();
   });
 
@@ -276,7 +277,7 @@ describe('When the script fails with an Error object', () => {
   const fakeRunScript = cake.runScript as jest.MockedFunction<typeof cake.runScript>;
 
   beforeAll(() => {
-    fakeRunScript.mockImplementation(async () => {
+    fakeRunScript.mockImplementation(() => {
       throw new Error('the error message');
     });
   });
@@ -292,7 +293,8 @@ describe('When the script fails with a string', () => {
   const fakeRunScript = cake.runScript as jest.MockedFunction<typeof cake.runScript>;
 
   beforeAll(() => {
-    fakeRunScript.mockImplementation(async () => {
+    fakeRunScript.mockImplementation(() => {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error
       throw 'the error message';
     });
   });

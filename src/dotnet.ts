@@ -21,12 +21,12 @@ export async function installLocalTool(
   version?: string
 ) {
   if (!version && targetDirectory.containsTool(toolName)) {
-    core.info(`The ${packageId} already exists in ${targetDirectory}, skipping installation`);
+    core.info(`The ${packageId} already exists in ${targetDirectory.path}, skipping installation`);
     return;
   }
 
   if (version && targetDirectory.containsToolWithVersion(packageId, version)) {
-    core.info(`The ${packageId} version ${version} already exists in ${targetDirectory}, skipping installation`);
+    core.info(`The ${packageId} version ${version} already exists in ${targetDirectory.path}, skipping installation`);
     return;
   }
 
