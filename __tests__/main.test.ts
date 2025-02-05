@@ -276,7 +276,7 @@ describe('When the script fails with an Error object', () => {
   const fakeRunScript = cake.runScript as jest.MockedFunction<typeof cake.runScript>;
 
   beforeAll(() => {
-    fakeRunScript.mockImplementation(async () => {
+    fakeRunScript.mockImplementation(() => {
       throw new Error('the error message');
     });
   });
@@ -292,7 +292,7 @@ describe('When the script fails with a string', () => {
   const fakeRunScript = cake.runScript as jest.MockedFunction<typeof cake.runScript>;
 
   beforeAll(() => {
-    fakeRunScript.mockImplementation(async () => {
+    fakeRunScript.mockImplementation(() => {
       throw 'the error message';
     });
   });

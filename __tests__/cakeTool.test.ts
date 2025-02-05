@@ -21,7 +21,7 @@ describe('When installing the Cake Tool based on the tool manifest', () => {
     expect(fakeRestoreTool).toHaveBeenCalled();
   });
 
-  test('it should not explicitly install any local tools', async () => {
+  test('it should not explicitly install any local tools', () => {
     expect(fakeInstallLocalTool).not.toHaveBeenCalled();
   });
 });

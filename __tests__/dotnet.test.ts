@@ -59,8 +59,8 @@ describe('When installing a local tool in a directory where it already exists', 
     fakeExec.mockReturnValue(Promise.resolve(0));
   });
 
-  test('it should not attempt to install the specified tool in the same directory', () => {
-    dotnet.installLocalTool('The.Tool', 'dotnet-tool', directoryWithTool);
+  test('it should not attempt to install the specified tool in the same directory', async () => {
+    await dotnet.installLocalTool('The.Tool', 'dotnet-tool', directoryWithTool);
     expect(fakeExec).not.toHaveBeenCalledWith(
       'dotnet tool install',
       ['--tool-path', directoryWithTool.path, 'The.Tool']);

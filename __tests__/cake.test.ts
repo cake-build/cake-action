@@ -19,7 +19,7 @@ describe('When running a script successfully using the global Cake tool', () => 
   const fakeWhich = which as jest.MockedFunction<typeof which>;
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
-  beforeAll(async () => {
+  beforeAll(() => {
     fakeWhich.mockReturnValue(Promise.resolve('/usr/bin/dotnet-cake'));
     fakeExec.mockReturnValue(Promise.resolve(0));
   });
@@ -60,7 +60,7 @@ describe('When running a script successfully using the global Cake tool', () => 
 describe('When running a script successfully using the local Cake tool', () => {
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
-  beforeAll(async () => {
+  beforeAll(() => {
     fakeExec.mockReturnValue(Promise.resolve(0));
   });
 
@@ -126,7 +126,7 @@ describe('When failing to run a script using the local Cake tool', () => {
 describe('When bootstrapping a script successfully using the local Cake tool', () => {
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
-  beforeAll(async () => {
+  beforeAll(() => {
     fakeExec.mockReturnValue(Promise.resolve(0));
   });
 
@@ -156,7 +156,7 @@ describe('When failing to bootstrap a script using the local Cake tool', () => {
 describe('When running a script successfully using the tool manifest', () => {
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
-  beforeAll(async () => {
+  beforeAll(() => {
     fakeExec.mockReturnValue(Promise.resolve(0));
   });
 
@@ -197,7 +197,7 @@ describe('When running a Cake Frosting project successfully', () => {
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
   const fakeToolsDirectory = new ToolsDirectory();
 
-  beforeAll(async () => {
+  beforeAll(() => {
     fakeExec.mockReturnValue(Promise.resolve(0));
   });
 
