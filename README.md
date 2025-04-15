@@ -1,6 +1,6 @@
 # Cake for GitHub Actions
 
-[![GitHub Marketplace](https://img.shields.io/github/v/release/cake-build/cake-action?label=Marketplace&sort=semver)](https://github.com/marketplace/actions/cake-action) [![GitHub Actions Build](https://github.com/cake-build/cake-action/workflows/Build/badge.svg)](https://github.com/cake-build/cake-action/actions?workflow=Build) [![GitHub Actions Tests](https://github.com/cake-build/cake-action/workflows/Tests/badge.svg)](https://github.com/cake-build/cake-action/actions?workflow=Tests) [![Coveralls](https://coveralls.io/repos/github/cake-build/cake-action/badge.svg?branch=master)](https://coveralls.io/github/cake-build/cake-action?branch=master)
+[![GitHub Marketplace](https://img.shields.io/github/v/release/cake-build/cake-action?label=Marketplace&sort=semver)](https://github.com/marketplace/actions/cake-action) [![GitHub Actions Build](https://github.com/cake-build/cake-action/workflows/Build/badge.svg)](https://github.com/cake-build/cake-action/actions?workflow=Build) [![GitHub Actions Tests](https://github.com/cake-build/cake-action/workflows/Test/badge.svg)](https://github.com/cake-build/cake-action/actions?workflow=Test) [![Coveralls](https://coveralls.io/repos/github/cake-build/cake-action/badge.svg?branch=master)](https://coveralls.io/github/cake-build/cake-action?branch=master)
 
 This action allows you to run a Cake script or Cake Frosting project from your GitHub Actions workflow without having to use a [bootstrapper](https://github.com/cake-build/resources).
 
