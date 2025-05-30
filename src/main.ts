@@ -18,6 +18,9 @@ export async function run() {
       case 'project':
         await exec.project(buildFile.path, ...inputs.buildArguments);
         break;
+      case 'file':
+        await exec.file(buildFile.path, ...inputs.buildArguments);
+        break;
       case 'script': {
         await exec.script(buildFile.path, version, bootstrap, ...inputs.buildArguments);
         break;

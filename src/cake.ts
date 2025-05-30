@@ -28,7 +28,7 @@ export async function runProject(
   ...params: CakeParameter[]
 ) {
   const cakeParams = formatParameters(params);
-  const exitCode = await exec(dotnetRun, [
+  const args = [
     '--project', csprojPath,
     '--no-launch-profile',
     '--verbosity', 'minimal',
@@ -36,10 +36,31 @@ export async function runProject(
     '--',
     `--paths_tools="${toolsDir.path}"`,
     ...cakeParams
-  ]);
-
+  ];
+  const exitCode = await exec(dotnetRun, args);
   if (exitCode != 0) {
     throw new Error(`Failed to run the csproj. Exit code: ${exitCode}`);
+  }
+}
+
+export async function runFile(
+  csFilePath: string,
+  toolsDir: ToolsDirectory,
+  ...params: CakeParameter[]
+) {
+  const cakeParams = formatParameters(params);
+  const args = [
+    csFilePath,
+    '--no-launch-profile',
+    '--verbosity', 'minimal',
+    '--configuration', 'Release',
+    '--',
+    `--paths_tools="${toolsDir.path}"`,
+    ...cakeParams
+  ];
+  const exitCode = await exec(dotnetRun, args);
+  if (exitCode != 0) {
+    throw new Error(`Failed to run the C# file. Exit code: ${exitCode}`);
   }
 }
 

@@ -304,3 +304,26 @@ describe('When the script fails with a string', () => {
     expect(fakeSetFailed).toHaveBeenCalledWith('the error message');
   });
 });
+
+describe('When running the action with the file path input argument', () => {
+  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeRunFile = cake.runFile as jest.MockedFunction<typeof cake.runFile>;
+
+  beforeAll(() => {
+    fakeGetInputs.mockReturnValue({
+      buildFile: { type: 'file', path: 'path/to/file.cs' },
+      buildArguments: [new CakeArgument('target', 'Task-To-Run')]
+    });
+  });
+
+  test('it should run the specified Cake file', async () => {
+    await run();
+    expect(fakeRunFile).toHaveBeenCalledWith('path/to/file.cs', expect.any(ToolsDirectory), expect.any(CakeArgument));
+  });
+
+  test('it should run script with the specified target', async () => {
+    await run();
+    expect(fakeRunFile.mock.calls[0][2]).toMatchObject(
+      new CakeArgument('target', 'Task-To-Run'));
+  });
+});

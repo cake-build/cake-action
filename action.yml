@@ -10,7 +10,10 @@ inputs:
     required: false
     default: 'build.cake'
   project-path:
-    description: 'The path of the Cake Frosting Project to run. Takes precedence over script-path'
+    description: 'The path of the Cake Frosting Project to run. Takes precedence over script-path and file-path.'
+    required: false
+  file-path:
+    description: 'The path of the C# file-based Cake app to run. Takes precedence over script-path. Requires .NET 10 or later.'
     required: false
   target:
     description: 'The name of the task to execute. Note that this argument must be supported by the script.'

@@ -12,13 +12,17 @@ interface BuildInputs {
   readonly buildArguments: build.CakeParameter[];
 }
 
-export type BuildFile = Script | Project;
+export type BuildFile = Script | Project | File;
 type Script = {
   readonly type: 'script',
   path: string;
 };
 type Project = {
   readonly type: 'project',
+  path: string;
+};
+type File = {
+  readonly type: 'file',
   path: string;
 };
 
@@ -54,13 +58,19 @@ export function getInputs(): CakeInputs & BuildInputs {
 function getFileInput(): BuildFile {
   const scriptPath = core.getInput('script-path');
   const projectPath = core.getInput('project-path');
+  const filePath = core.getInput('file-path');
 
-  // When both script and project paths are specified,
-  // the project path takes precedence.
-  // If neither is provided, the default 'build.cake' script
-  // is used, as per Cake's convention.
+  // When more than one kind of path is specified,
+  // the order of precedence is:
+  // 1. Project
+  // 2. File
+  // 3. Script
+  // If none of these paths are provided, the default
+  // 'build.cake' script is used, as per Cake's convention.
   if (projectPath) {
     return { type: 'project', path: projectPath };
+  } else if (filePath) {
+    return { type: 'file', path: filePath };
   } else if (scriptPath) {
     return { type: 'script', path: scriptPath };
   } else {
