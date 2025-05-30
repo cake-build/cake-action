@@ -28,15 +28,21 @@ export async function runProject(
   ...params: CakeParameter[]
 ) {
   const cakeParams = formatParameters(params);
-  const exitCode = await exec(dotnetRun, [
-    '--project', csprojPath,
+  const baseArgs = [
+    csprojPath,
     '--no-launch-profile',
     '--verbosity', 'minimal',
     '--configuration', 'Release',
     '--',
     `--paths_tools="${toolsDir.path}"`,
     ...cakeParams
-  ]);
+  ];
+
+  const args = csprojPath.endsWith('.cs')
+    ? baseArgs
+    : ['--project', ...baseArgs];
+
+  const exitCode = await exec(dotnetRun, args);
 
   if (exitCode != 0) {
     throw new Error(`Failed to run the csproj. Exit code: ${exitCode}`);
