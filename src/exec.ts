@@ -28,3 +28,9 @@ export async function script(
 
   await cake.runScript(path, cakeToolSettings, ...params);
 }
+
+export async function file(path: string, ...params: CakeParameter[]) {
+  const toolsDir = new ToolsDirectory();
+  toolsDir.create();
+  await cake.runFile(path, toolsDir, ...params);
+}

@@ -14,7 +14,7 @@ steps:
     uses: cake-build/cake-action@v3
 ```
 
-The Cake action will look for a script named `build.cake` in your repository's root directory and run it for you using the [Cake Tool](https://www.nuget.org/packages/Cake.Tool/).  You can also specify the path to your Cake script using the `script-path` option. If you are using a [Cake Frosting](https://cakebuild.net/docs/running-builds/runners/cake-frosting) project instead, you must specify the path to your `.csproj` file with the `project-path` parameter.
+The Cake action will look for a script named `build.cake` in your repository's root directory and run it for you using the [Cake Tool](https://www.nuget.org/packages/Cake.Tool/).  You can also specify the path to your Cake script using the `script-path` option. If you are using a [Cake Frosting](https://cakebuild.net/docs/running-builds/runners/cake-frosting) project instead, you must specify the path to your `.csproj` file with the `project-path` parameter. You can also use `file-path` to specify a C# file (`.cs`) that contains a file-based Cake app (*requires .NET 10 or later*).
 
 All output from the Cake script or Cake Frosting project is automatically redirected to the build log for inspection.
 
@@ -43,6 +43,22 @@ steps:
     with:
       project-path: path/to/build.csproj
 ```
+
+### `file-path`
+
+If you want to run a C# file-based Cake app, specify the path to your `.cs` file using the `file-path` input parameter:
+
+```yml
+steps:
+  - name: Run a Cake C# file
+    uses: cake-build/cake-action@v3
+    with:
+      file-path: path/to/Build.cs
+```
+
+> **Note:** Running C# file-based Cake apps requires .NET 10 or higher to be available in your environment.
+
+The action will automatically run the specified file as a file-based Cake app.
 
 ### `target`
 
