@@ -39,7 +39,7 @@ export async function runProject(
   ];
   const exitCode = await exec(dotnetRun, args);
   if (exitCode != 0) {
-    throw new Error(`Failed to run the csproj. Exit code: ${exitCode}`);
+    throw new Error(`Failed to run the Cake Frosting project. Exit code: ${exitCode}`);
   }
 }
 
