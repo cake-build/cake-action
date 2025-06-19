@@ -71,7 +71,7 @@ describe('When getting both the script-path and project-path input arguments fro
   });
 });
 
-describe('When getting both the script-path, file-path and project-path input arguments from the action', () => {
+describe('When getting the script-path, project-path and file-path input arguments from the action', () => {
   const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
 
   beforeAll(() => {
@@ -98,8 +98,8 @@ describe('When getting the file-path input argument from the action', () => {
 
   beforeAll(() => {
     when(fakeGetInput).calledWith('script-path').mockReturnValue('');
-    when(fakeGetInput).calledWith('file-path').mockReturnValue('path/to/build.cs');
     when(fakeGetInput).calledWith('project-path').mockReturnValue('');
+    when(fakeGetInput).calledWith('file-path').mockReturnValue('path/to/build.cs');
     when(fakeGetInput).calledWith('cake-version').mockReturnValue('');
     when(fakeGetInput).calledWith('cake-bootstrap').mockReturnValue('');
     when(fakeGetInput).calledWith('dry-run').mockReturnValue('');
@@ -120,8 +120,8 @@ describe('When getting both the script-path and file-path input arguments from t
 
   beforeAll(() => {
     when(fakeGetInput).calledWith('script-path').mockReturnValue('path/to/build.cake');
-    when(fakeGetInput).calledWith('file-path').mockReturnValue('path/to/build.cs');
     when(fakeGetInput).calledWith('project-path').mockReturnValue('');
+    when(fakeGetInput).calledWith('file-path').mockReturnValue('path/to/build.cs');
     when(fakeGetInput).calledWith('cake-version').mockReturnValue('');
     when(fakeGetInput).calledWith('cake-bootstrap').mockReturnValue('');
     when(fakeGetInput).calledWith('dry-run').mockReturnValue('');
