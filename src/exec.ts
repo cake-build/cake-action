@@ -11,6 +11,12 @@ export async function project(path: string, ...params: CakeParameter[]) {
   await cake.runProject(path, toolsDir, ...params);
 }
 
+export async function file(path: string, ...params: CakeParameter[]) {
+  const toolsDir = new ToolsDirectory();
+  toolsDir.create();
+  await cake.runFile(path, toolsDir, ...params);
+}
+
 export async function script(
   path: string,
   version?: CakeVersion,
@@ -27,10 +33,4 @@ export async function script(
   }
 
   await cake.runScript(path, cakeToolSettings, ...params);
-}
-
-export async function file(path: string, ...params: CakeParameter[]) {
-  const toolsDir = new ToolsDirectory();
-  toolsDir.create();
-  await cake.runFile(path, toolsDir, ...params);
 }

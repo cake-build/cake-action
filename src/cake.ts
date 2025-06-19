@@ -38,6 +38,7 @@ export async function runProject(
     ...cakeParams
   ];
   const exitCode = await exec(dotnetRun, args);
+
   if (exitCode != 0) {
     throw new Error(`Failed to run the Cake Frosting project. Exit code: ${exitCode}`);
   }
@@ -59,6 +60,7 @@ export async function runFile(
     ...cakeParams
   ];
   const exitCode = await exec(dotnetRun, args);
+
   if (exitCode != 0) {
     throw new Error(`Failed to run the C# file. Exit code: ${exitCode}`);
   }
