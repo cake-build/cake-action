@@ -31,7 +31,7 @@ describe('When successfully installing a local tool', () => {
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
   beforeAll(() => {
-    fakeExec.mockReturnValue(Promise.resolve(0));
+    fakeExec.mockResolvedValue(0);
   });
 
   test('it should install the specified tool in the tools directory', async () => {
@@ -56,7 +56,7 @@ describe('When installing a local tool in a directory where it already exists', 
 
   beforeAll(() => {
     directoryWithTool.containsTool = jest.fn().mockImplementation(() => true);
-    fakeExec.mockReturnValue(Promise.resolve(0));
+    fakeExec.mockResolvedValue(0);
   });
 
   test('it should not attempt to install the specified tool in the same directory', async () => {
@@ -93,7 +93,7 @@ describe('When failing to install a local tool', () => {
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
   beforeAll(() => {
-    fakeExec.mockReturnValue(Promise.resolve(-99));
+    fakeExec.mockResolvedValue(-99);
   });
 
   test('it should throw an error containing the package id', async () => {
@@ -109,7 +109,7 @@ describe('When successfully uninstalling a local tool', () => {
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
   beforeAll(() => {
-    fakeExec.mockReturnValue(Promise.resolve(0));
+    fakeExec.mockResolvedValue(0);
   });
 
   test('it should uninstall the specified tool from the tools directory', async () => {
@@ -127,7 +127,7 @@ describe('When failing to uninstall a local tool', () => {
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
   beforeAll(() => {
-    fakeExec.mockReturnValue(Promise.resolve(-99));
+    fakeExec.mockResolvedValue(-99);
   });
 
   test('it should throw an error containing the package id', async () => {
@@ -143,7 +143,7 @@ describe('When successfully restoring the local tools', () => {
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
   beforeAll(() => {
-    fakeExec.mockReturnValue(Promise.resolve(0));
+    fakeExec.mockResolvedValue(0);
   });
 
   test('it should restore all the local tools', async () => {
@@ -156,7 +156,7 @@ describe('When failing to restore the local tools', () => {
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
   beforeAll(() => {
-    fakeExec.mockReturnValue(Promise.resolve(-99));
+    fakeExec.mockResolvedValue(-99);
   });
 
   test('it should throw an error containing the exit code', async () => {

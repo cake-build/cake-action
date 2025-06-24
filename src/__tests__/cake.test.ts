@@ -21,8 +21,8 @@ describe('When running a script successfully using the global Cake tool', () => 
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
   beforeAll(() => {
-    fakeWhich.mockReturnValue(Promise.resolve('/usr/bin/dotnet-cake'));
-    fakeExec.mockReturnValue(Promise.resolve(0));
+    fakeWhich.mockResolvedValue('/usr/bin/dotnet-cake');
+    fakeExec.mockResolvedValue(0);
   });
 
   test('it should run the global dotnet-cake tool on the default script', async () => {
@@ -62,7 +62,7 @@ describe('When running a script successfully using the local Cake tool', () => {
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
   beforeAll(() => {
-    fakeExec.mockReturnValue(Promise.resolve(0));
+    fakeExec.mockResolvedValue(0);
   });
 
   test('it should run the local dotnet-cake tool on the default script', async () => {
@@ -103,8 +103,8 @@ describe('When failing to run a script using the global Cake tool', () => {
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
   beforeAll(() => {
-    fakeWhich.mockReturnValue(Promise.resolve('/usr/bin/dotnet-cake'));
-    fakeExec.mockReturnValue(Promise.resolve(-21));
+    fakeWhich.mockResolvedValue('/usr/bin/dotnet-cake');
+    fakeExec.mockResolvedValue(-21);
   });
 
   test('it should throw an error containing the exit code', async () => {
@@ -116,7 +116,7 @@ describe('When failing to run a script using the local Cake tool', () => {
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
   beforeAll(() => {
-    fakeExec.mockReturnValue(Promise.resolve(-21));
+    fakeExec.mockResolvedValue(-21);
   });
 
   test('it should throw an error containing the exit code', async () => {
@@ -128,7 +128,7 @@ describe('When bootstrapping a script successfully using the local Cake tool', (
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
   beforeAll(() => {
-    fakeExec.mockReturnValue(Promise.resolve(0));
+    fakeExec.mockResolvedValue(0);
   });
 
   test('it should run the local dotnet-cake tool on the default script', async () => {
@@ -146,7 +146,7 @@ describe('When failing to bootstrap a script using the local Cake tool', () => {
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
   beforeAll(() => {
-    fakeExec.mockReturnValue(Promise.resolve(-21));
+    fakeExec.mockResolvedValue(-21);
   });
 
   test('it should throw an error containing the exit code', async () => {
@@ -158,7 +158,7 @@ describe('When running a script successfully using the tool manifest', () => {
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
   beforeAll(() => {
-    fakeExec.mockReturnValue(Promise.resolve(0));
+    fakeExec.mockResolvedValue(0);
   });
 
   test('it should run the local dotnet-cake tool on the default script', async () => {
@@ -199,7 +199,7 @@ describe('When running a Cake Frosting project successfully', () => {
   const fakeToolsDirectory = new ToolsDirectory();
 
   beforeAll(() => {
-    fakeExec.mockReturnValue(Promise.resolve(0));
+    fakeExec.mockResolvedValue(0);
   });
 
   test('it should run with the default non-required parameters', async () => {
@@ -243,7 +243,7 @@ describe('When failing to run a Cake Frosting Project', () => {
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
   beforeAll(() => {
-    fakeExec.mockReturnValue(Promise.resolve(-21));
+    fakeExec.mockResolvedValue(-21);
   });
 
   test('it should throw an error containing the exit code', async () => {
@@ -256,7 +256,7 @@ describe('When running a Cake C# file successfully', () => {
   const fakeToolsDirectory = new ToolsDirectory();
 
   beforeAll(() => {
-    fakeExec.mockReturnValue(Promise.resolve(0));
+    fakeExec.mockResolvedValue(0);
   });
 
   test('it should run with the default non-required parameters', async () => {
@@ -300,7 +300,7 @@ describe('When failing to run a Cake C# file', () => {
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
   beforeAll(() => {
-    fakeExec.mockReturnValue(Promise.resolve(-21));
+    fakeExec.mockResolvedValue(-21);
   });
 
   test('it should throw an error containing the exit code', async () => {

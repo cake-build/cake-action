@@ -300,9 +300,7 @@ describe('When the script fails with an Error object', () => {
   const fakeRunScript = cake.runScript as jest.MockedFunction<typeof cake.runScript>;
 
   beforeAll(() => {
-    fakeRunScript.mockImplementation(() => {
-      throw new Error('the error message');
-    });
+    fakeRunScript.mockRejectedValue(new Error('the error message'));
   });
 
   test('it should mark the action as failed with the specific error message', async () => {
@@ -316,10 +314,7 @@ describe('When the script fails with a string', () => {
   const fakeRunScript = cake.runScript as jest.MockedFunction<typeof cake.runScript>;
 
   beforeAll(() => {
-    fakeRunScript.mockImplementation(() => {
-      // eslint-disable-next-line @typescript-eslint/only-throw-error
-      throw 'the error message';
-    });
+      fakeRunScript.mockRejectedValue('the error message');
   });
 
   test('it should mark the action as failed with the specific error message', async () => {
