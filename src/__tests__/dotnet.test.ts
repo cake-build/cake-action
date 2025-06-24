@@ -1,10 +1,9 @@
-import * as path from 'path';
 import * as core from '@actions/core';
 import { exec } from '@actions/exec';
 import * as dotnet from '../dotnet';
 import { ToolsDirectory } from '../toolsDirectory';
 
-const targetDirectory = path.join('target', 'directory');
+const toolsDirectory = new ToolsDirectory('path/to/tools');
 
 jest.mock('@actions/core');
 jest.mock('@actions/exec');
@@ -40,8 +39,9 @@ describe('When successfully installing a local tool', () => {
   });
 
   test('it should install the specified tool in the specified target directory', async () => {
-    await dotnet.installLocalTool('The.Tool', 'dotnet-tool', new ToolsDirectory(targetDirectory));
-    expect(fakeExec).toHaveBeenCalledWith('dotnet tool install', ['--tool-path', targetDirectory, 'The.Tool']);
+    toolsDirectory.containsTool = jest.fn().mockImplementation(() => false);
+    await dotnet.installLocalTool('The.Tool', 'dotnet-tool', toolsDirectory);
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool install', ['--tool-path', toolsDirectory.path, 'The.Tool']);
   });
 
   test('it should install the specified version of the specified tool', async () => {
@@ -51,41 +51,30 @@ describe('When successfully installing a local tool', () => {
 });
 
 describe('When installing a local tool in a directory where it already exists', () => {
-  const directoryWithTool = new ToolsDirectory(targetDirectory);
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
   beforeAll(() => {
-    directoryWithTool.containsTool = jest.fn().mockImplementation(() => true);
     fakeExec.mockResolvedValue(0);
   });
 
   test('it should not attempt to install the specified tool in the same directory', async () => {
-    await dotnet.installLocalTool('The.Tool', 'dotnet-tool', directoryWithTool);
-    expect(fakeExec).not.toHaveBeenCalledWith(
-      'dotnet tool install',
-      ['--tool-path', directoryWithTool.path, 'The.Tool']);
+    toolsDirectory.containsTool = jest.fn().mockImplementation(() => true);
+    await dotnet.installLocalTool('The.Tool', 'dotnet-tool', toolsDirectory);
+    expect(fakeExec).not.toHaveBeenCalledWith('dotnet tool install', ['--tool-path', toolsDirectory.path, 'The.Tool']);
   });
 
   test('it should uninstall and install the specified version of the tool in the specified target directory', async () => {
-    directoryWithTool.containsToolWithVersion = jest.fn().mockImplementation(() => false);
-    await dotnet.installLocalTool('The.Tool', 'dotnet-tool', directoryWithTool, 'theVersion');
-    expect(fakeExec).toHaveBeenCalledWith(
-      'dotnet tool uninstall',
-      ['--tool-path', directoryWithTool.path, 'The.Tool']);
-    expect(fakeExec).toHaveBeenCalledWith(
-      'dotnet tool install',
-      ['--version', 'theVersion', '--tool-path', directoryWithTool.path, 'The.Tool']);
+    toolsDirectory.containsToolWithVersion = jest.fn().mockImplementation(() => false);
+    await dotnet.installLocalTool('The.Tool', 'dotnet-tool', toolsDirectory, 'theVersion');
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool uninstall', ['--tool-path', toolsDirectory.path, 'The.Tool']);
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool install', ['--version', 'theVersion', '--tool-path', toolsDirectory.path, 'The.Tool']);
   });
 
   test('it should not uninstall and install the already installed specific version of the tool', async () => {
-    directoryWithTool.containsToolWithVersion = jest.fn().mockImplementation(() => true);
-    await dotnet.installLocalTool('The.Tool', 'dotnet-tool', directoryWithTool, 'theVersion');
-    expect(fakeExec).not.toHaveBeenCalledWith(
-      'dotnet tool uninstall',
-      ['--tool-path', directoryWithTool.path, 'The.Tool']);
-    expect(fakeExec).not.toHaveBeenCalledWith(
-      'dotnet tool install',
-      ['--version', 'theVersion', '--tool-path', directoryWithTool.path, 'The.Tool']);
+    toolsDirectory.containsToolWithVersion = jest.fn().mockImplementation(() => true);
+    await dotnet.installLocalTool('The.Tool', 'dotnet-tool', toolsDirectory, 'theVersion');
+    expect(fakeExec).not.toHaveBeenCalledWith('dotnet tool uninstall', ['--tool-path', toolsDirectory.path, 'The.Tool']);
+    expect(fakeExec).not.toHaveBeenCalledWith('dotnet tool install', ['--version', 'theVersion', '--tool-path', toolsDirectory.path, 'The.Tool']);
   });
 });
 
@@ -118,8 +107,8 @@ describe('When successfully uninstalling a local tool', () => {
   });
 
   test('it should uninstall the specified tool from the specified target directory', async () => {
-    await dotnet.uninstallLocalTool('The.Tool', new ToolsDirectory(targetDirectory));
-    expect(fakeExec).toHaveBeenCalledWith('dotnet tool uninstall', ['--tool-path', targetDirectory, 'The.Tool']);
+    await dotnet.uninstallLocalTool('The.Tool', toolsDirectory);
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool uninstall', ['--tool-path', toolsDirectory.path, 'The.Tool']);
   });
 });
 
@@ -135,7 +124,7 @@ describe('When failing to uninstall a local tool', () => {
   });
 
   test('it should throw an error containing the exit code', async () => {
-    await expect(dotnet.uninstallLocalTool('The.Tool', new ToolsDirectory(targetDirectory))).rejects.toThrow('-99');
+    await expect(dotnet.uninstallLocalTool('The.Tool', toolsDirectory)).rejects.toThrow('-99');
   });
 });
 
