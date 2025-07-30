@@ -212,3 +212,59 @@ jobs:
             string-parameter: 'value'
             numeric-parameter: 3
             boolean-parameter: true
+  test-with-file:
+    name: Test with Cake C# File
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    env:
+      file-directory: integrationtests/file
+    steps:
+      - name: Get the sources
+        uses: actions/checkout@v1
+      - name: Install Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install the .NET 10 SDK (Preview)
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+          dotnet-quality: 'preview'
+      - name: Run a specific Cake C# file
+        uses: ./
+        with:
+          file-path: ${{ env.file-directory }}/Build.cs
+      - name: Run a specific target
+        uses: ./
+        with:
+          file-path: ${{ env.file-directory }}/Build.cs
+          target: Successful-Task
+      - name: Run with a specific verbosity level
+        uses: ./
+        env:
+          EXPECTED_VERBOSITY: Diagnostic
+        with:
+          verbosity: Diagnostic
+          file-path: ${{ env.file-directory }}/Build.cs
+          target: Test-Verbosity
+      - name: Do a dry run
+        uses: ./
+        with:
+          dry-run: true
+          file-path: ${{ env.file-directory }}/Build.cs
+          target: Test-Dry-Run
+      - name: Run with custom script parameters
+        uses: ./
+        env:
+          EXPECTED_STRING_ARGUMENT: '''value'''
+          EXPECTED_NUMERIC_ARGUMENT: '3'
+          EXPECTED_BOOLEAN_ARGUMENT: 'true'
+        with:
+          file-path: ${{ env.file-directory }}/Build.cs
+          target: Test-Script-Parameters
+          arguments: |
+            string-parameter: 'value'
+            numeric-parameter: 3
+            boolean-parameter: true
