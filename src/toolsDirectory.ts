@@ -33,7 +33,7 @@ export class ToolsDirectory {
   }
 
   containsToolWithVersion(packageId: string, version: string): boolean {
-    return this.containsFile('project.assets.json', '.store', packageId, version);
+    return this.containsFile('project.assets.json', '.store', packageId.toLowerCase(), version);
   }
 
   toString(): string {
