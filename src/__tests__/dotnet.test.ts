@@ -53,6 +53,11 @@ describe('When successfully installing a local tool', () => {
     await dotnet.installLocalTool('The.Tool', 'dotnet-tool', undefined, 'theVersion');
     expect(fakeExec).toHaveBeenCalledWith('dotnet tool install', expect.arrayContaining(['--version', 'theVersion']));
   });
+
+  test('it should install the tool using minimal verbosity', async () => {
+    await dotnet.installLocalTool('The.Tool', 'dotnet-tool');
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool install', expect.arrayContaining(['--verbosity', 'minimal']));
+  });
 });
 
 describe('When installing a local tool in a directory where it already exists', () => {
@@ -155,7 +160,12 @@ describe('When successfully restoring the local tools', () => {
 
   test('it should restore all the local tools', async () => {
     await dotnet.restoreLocalTools();
-    expect(fakeExec).toHaveBeenCalledWith('dotnet tool restore');
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool restore', expect.anything());
+  });
+
+  test('it should restore the local tools using minimal verbosity', async () => {
+    await dotnet.restoreLocalTools();
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool restore', expect.arrayContaining(['--verbosity', 'minimal']));
   });
 });
 

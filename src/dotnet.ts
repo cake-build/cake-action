@@ -5,6 +5,7 @@ import { ToolsDirectory } from './toolsDirectory';
 const dotnetToolInstall = 'dotnet tool install';
 const dotnetToolUnInstall = 'dotnet tool uninstall';
 const dotnetToolRestore = 'dotnet tool restore';
+const verbosityArg = ['--verbosity', 'minimal'];
 
 export function disableTelemetry() {
   core.exportVariable('DOTNET_CLI_TELEMETRY_OPTOUT', 'true');
@@ -35,7 +36,7 @@ export async function installLocalTool(
   }
 
   const versionArg = version ? ['--version', version] : [];
-  const installArgs = [...versionArg, '--tool-path', targetDirectory.path, packageId];
+  const installArgs = [...verbosityArg, ...versionArg, '--tool-path', targetDirectory.path, packageId];
 
   const exitCode = await exec(dotnetToolInstall, installArgs);
 
@@ -48,7 +49,9 @@ export async function uninstallLocalTool(
   packageId: string,
   targetDirectory: ToolsDirectory = new ToolsDirectory()
 ) {
-  const exitCode = await exec(dotnetToolUnInstall, ['--tool-path', targetDirectory.path, packageId]);
+  const uninstallArgs = ['--tool-path', targetDirectory.path, packageId];
+
+  const exitCode = await exec(dotnetToolUnInstall, uninstallArgs);
 
   if (exitCode != 0) {
     throw new Error(`Failed to uninstall ${packageId}. Exit code: ${exitCode}`);
@@ -56,7 +59,9 @@ export async function uninstallLocalTool(
 }
 
 export async function restoreLocalTools() {
-  const exitCode = await exec(dotnetToolRestore);
+  const restoreArgs = [...verbosityArg];
+
+  const exitCode = await exec(dotnetToolRestore, restoreArgs);
 
   if (exitCode != 0) {
     throw new Error(`Failed to restore the local tools. Exit code: ${exitCode}`);
