@@ -146,7 +146,7 @@ describe('When checking whether the directory contains a specific version of a t
   const packageId = 'thePackage';
   const version = 'theVersion';
   const packageMetadata = 'project.assets.json';
-  const toolDirectoryPath = path.join(sut.path, '.store', packageId, version);
+  const toolDirectoryPath = path.join(sut.path, '.store', packageId.toLowerCase(), version);
 
   beforeAll(() => {
     fs.mkdirSync(toolDirectoryPath, { recursive: true });
