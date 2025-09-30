@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 import { exec } from '@actions/exec';
-import * as dotnet from '../dotnet';
-import { ToolsDirectory } from '../toolsDirectory';
+import * as dotnet from '../dotnet.js';
+import { ToolsDirectory } from '../toolsDirectory.js';
 
 const toolsDirectory = new ToolsDirectory('path/to/tools');
 

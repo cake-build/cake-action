@@ -1,8 +1,8 @@
 import { exec } from '@actions/exec';
 import { which } from '@actions/io';
-import { CakeToolSettings } from './cakeToolSettings';
-import { CakeParameter } from './cakeParameter';
-import { ToolsDirectory } from './toolsDirectory';
+import { CakeToolSettings } from './cakeToolSettings.js';
+import { CakeParameter } from './cakeParameter.js';
+import { ToolsDirectory } from './toolsDirectory.js';
 
 const dotnetCake = 'dotnet-cake';
 const dotnetLocalToolCake = 'dotnet tool run dotnet-cake';

@@ -1,4 +1,4 @@
-import { ToolsDirectory } from './toolsDirectory';
+import { ToolsDirectory } from './toolsDirectory.js';
 
 export class CakeToolSettings {
   readonly workingDirectory?: ToolsDirectory;

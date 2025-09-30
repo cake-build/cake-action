@@ -1,5 +1,5 @@
 import * as http from '@actions/http-client';
-import * as cakeRelease from '../cakeRelease';
+import * as cakeRelease from '../cakeRelease.js';
 
 describe('When retrieving the latest Cake version', () => {
   beforeAll(() => {

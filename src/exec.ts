@@ -1,9 +1,9 @@
-import { CakeBootstrap, CakeVersion } from './action';
-import { CakeParameter } from './cakeParameter';
-import { CakeToolSettings } from './cakeToolSettings';
-import { ToolsDirectory } from './toolsDirectory';
-import * as cake from './cake';
-import * as cakeTool from './cakeTool';
+import { CakeBootstrap, CakeVersion } from './action.js';
+import { CakeParameter } from './cakeParameter.js';
+import { CakeToolSettings } from './cakeToolSettings.js';
+import { ToolsDirectory } from './toolsDirectory.js';
+import * as cake from './cake.js';
+import * as cakeTool from './cakeTool.js';
 
 export async function project(path: string, ...params: CakeParameter[]) {
   const toolsDir = new ToolsDirectory();

@@ -1,6 +1,6 @@
 import * as core from '@actions/core';
-import * as build from './cakeParameter';
-import * as input from './input';
+import * as build from './cakeParameter.js';
+import * as input from './input.js';
 
 interface CakeInputs {
   readonly buildFile: BuildFile,

@@ -1,4 +1,4 @@
-import { CakeArgument, CakeSwitch } from '../cakeParameter';
+import { CakeArgument, CakeSwitch } from '../cakeParameter.js';
 
 describe('When converting Cake parameters to strings', () => {
   test('it should format an argument using the correct syntax', () => {

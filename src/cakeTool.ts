@@ -1,7 +1,7 @@
-import * as dotnet from './dotnet';
-import { ToolsDirectory } from './toolsDirectory';
-import { CakeVersion } from './action';
-import { getLatestVersion } from './cakeRelease';
+import * as dotnet from './dotnet.js';
+import { ToolsDirectory } from './toolsDirectory.js';
+import { CakeVersion } from './action.js';
+import { getLatestVersion } from './cakeRelease.js';
 
 export async function install(toolsDir?: ToolsDirectory, version?: CakeVersion) {
   switch (version?.version) {

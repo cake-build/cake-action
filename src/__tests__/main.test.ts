@@ -1,11 +1,11 @@
 import * as core from '@actions/core';
-import * as action from '../action';
-import * as dotnet from '../dotnet';
-import * as cakeTool from '../cakeTool';
-import * as cake from '../cake';
-import { ToolsDirectory } from '../toolsDirectory';
-import { CakeArgument } from '../cakeParameter';
-import { run } from '../main';
+import * as action from '../action.js';
+import * as dotnet from '../dotnet.js';
+import * as cakeTool from '../cakeTool.js';
+import * as cake from '../cake.js';
+import { ToolsDirectory } from '../toolsDirectory.js';
+import { CakeArgument } from '../cakeParameter.js';
+import { run } from '../main.js';
 
 jest.mock('@actions/core');
 jest.mock('../action');

@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Platform } from './platform';
+import { Platform } from './platform.js';
 
 export class ToolsDirectory {
   private readonly _path: string;

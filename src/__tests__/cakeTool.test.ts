@@ -1,8 +1,8 @@
 import * as path from 'path';
-import * as dotnet from '../dotnet';
-import * as cakeTool from '../cakeTool';
-import * as cakeRelease from '../cakeRelease';
-import { ToolsDirectory } from '../toolsDirectory';
+import * as dotnet from '../dotnet.js';
+import * as cakeTool from '../cakeTool.js';
+import * as cakeRelease from '../cakeRelease.js';
+import { ToolsDirectory } from '../toolsDirectory.js';
 
 const targetDirectory = path.join('target', 'directory');
 

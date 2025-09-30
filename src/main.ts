@@ -1,8 +1,8 @@
 import * as core from '@actions/core';
-import * as action from './action';
-import * as dotnet from './dotnet';
-import * as exec from './exec';
-import { isError, isString } from './guards';
+import * as action from './action.js';
+import * as dotnet from './dotnet.js';
+import * as exec from './exec.js';
+import { isError, isString } from './guards.js';
 
 export async function run() {
   try {
