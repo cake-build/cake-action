@@ -308,11 +308,13 @@ describe('When running the action with custom script input arguments', () => {
 });
 
 describe('When the script fails with an Error object', () => {
+  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
   const fakeSetFailed = core.setFailed as jest.MockedFunction<typeof core.setFailed>;
-  const fakeRunScript = cake.runScript as jest.MockedFunction<typeof cake.runScript>;
 
   beforeAll(() => {
-    fakeRunScript.mockRejectedValue(new Error('the error message'));
+    fakeGetInputs.mockImplementation(() => {
+      throw new Error('the error message');
+    });
   });
 
   test('it should mark the action as failed with the specific error message', async () => {
@@ -322,11 +324,14 @@ describe('When the script fails with an Error object', () => {
 });
 
 describe('When the script fails with a string', () => {
+  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
   const fakeSetFailed = core.setFailed as jest.MockedFunction<typeof core.setFailed>;
-  const fakeRunScript = cake.runScript as jest.MockedFunction<typeof cake.runScript>;
 
   beforeAll(() => {
-    fakeRunScript.mockRejectedValue('the error message');
+    fakeGetInputs.mockImplementation(() => {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error
+      throw 'the error message';
+    });
   });
 
   test('it should mark the action as failed with the specific error message', async () => {
