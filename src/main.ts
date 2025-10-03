@@ -1,8 +1,7 @@
-import * as core from '@actions/core';
 import * as input from './input';
 import * as dotnet from './dotnet';
 import * as exec from './exec';
-import { isError, isString } from './guards';
+import * as action from './action';
 
 export async function run() {
   try {
@@ -27,13 +26,7 @@ export async function run() {
       }
     }
   } catch (error) {
-    if (isError(error)) {
-      core.setFailed(error.message);
-    } else if (isString(error)) {
-      core.setFailed(error);
-    } else {
-      core.setFailed(String(error));
-    }
+    action.setFailed(error);
   }
 }
 
