@@ -339,3 +339,20 @@ describe('When the script fails with a string', () => {
     expect(fakeSetFailed).toHaveBeenCalledWith('the error message');
   });
 });
+
+describe('When the script fails with something other than an Error object or a string', () => {
+  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeSetFailed = core.setFailed as jest.MockedFunction<typeof core.setFailed>;
+
+  beforeAll(() => {
+    fakeGetInputs.mockImplementation(() => {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error
+      throw 42;
+    });
+  });
+
+  test('it should mark the action as failed with the error formatted as string', async () => {
+    await run();
+    expect(fakeSetFailed).toHaveBeenCalledWith('42');
+  });
+});
