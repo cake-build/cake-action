@@ -1,6 +1,6 @@
 {
   "name": "cake-action",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "private": true,
   "type": "commonjs",
   "description": "Run a Cake script from your GitHub Actions workflow.",
