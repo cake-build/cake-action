@@ -31,6 +31,8 @@ export async function run() {
       core.setFailed(error.message);
     } else if (isString(error)) {
       core.setFailed(error);
+    } else {
+      core.setFailed(String(error));
     }
   }
 }
