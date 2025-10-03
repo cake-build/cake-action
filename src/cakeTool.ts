@@ -1,6 +1,6 @@
 import * as dotnet from './dotnet';
 import { ToolsDirectory } from './toolsDirectory';
-import { CakeVersion } from './action';
+import { CakeVersion } from './input';
 import { getLatestVersion } from './cakeRelease';
 
 export async function install(toolsDir?: ToolsDirectory, version?: CakeVersion) {

@@ -1,5 +1,5 @@
 import * as core from '@actions/core';
-import * as action from '../action';
+import * as input from '../input';
 import * as dotnet from '../dotnet';
 import * as cakeTool from '../cakeTool';
 import * as cake from '../cake';
@@ -8,14 +8,14 @@ import { CakeArgument } from '../cakeParameter';
 import { run } from '../main';
 
 jest.mock('@actions/core');
-jest.mock('../action');
+jest.mock('../input');
 jest.mock('../dotnet');
 jest.mock('../cakeTool');
 jest.mock('../cake');
 jest.mock('../toolsDirectory');
 
 describe('When running the action without any input arguments', () => {
-  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeGetInputs = input.getInputs as jest.MockedFunction<typeof input.getInputs>;
   const fakeToolsDirectory = ToolsDirectory as jest.MockedClass<typeof ToolsDirectory>;
 
   beforeAll(() => {
@@ -53,7 +53,7 @@ describe('When running the action without any input arguments', () => {
 });
 
 describe('When running the action with the script path input argument', () => {
-  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeGetInputs = input.getInputs as jest.MockedFunction<typeof input.getInputs>;
   const fakeRunScript = cake.runScript as jest.MockedFunction<typeof cake.runScript>;
 
   beforeAll(() => {
@@ -70,7 +70,7 @@ describe('When running the action with the script path input argument', () => {
 });
 
 describe('When running the action with the project path input argument', () => {
-  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeGetInputs = input.getInputs as jest.MockedFunction<typeof input.getInputs>;
   const fakeRunProject = cake.runProject as jest.MockedFunction<typeof cake.runProject>;
 
   beforeAll(() => {
@@ -92,7 +92,7 @@ describe('When running the action with the project path input argument', () => {
 });
 
 describe('When running the action with the file path input argument', () => {
-  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeGetInputs = input.getInputs as jest.MockedFunction<typeof input.getInputs>;
   const fakeRunFile = cake.runFile as jest.MockedFunction<typeof cake.runFile>;
 
   beforeAll(() => {
@@ -118,7 +118,7 @@ describe('When running the action with the file path input argument', () => {
 });
 
 describe('When running the action with tool-manifest as the Cake version input argument', () => {
-  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeGetInputs = input.getInputs as jest.MockedFunction<typeof input.getInputs>;
   const fakeInstallCakeTool = cakeTool.install as jest.MockedFunction<typeof cakeTool.install>;
 
   beforeAll(() => {
@@ -136,7 +136,7 @@ describe('When running the action with tool-manifest as the Cake version input a
 });
 
 describe('When running the action with latest as the Cake version input argument', () => {
-  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeGetInputs = input.getInputs as jest.MockedFunction<typeof input.getInputs>;
   const fakeInstallCakeTool = cakeTool.install as jest.MockedFunction<typeof cakeTool.install>;
 
   beforeAll(() => {
@@ -154,7 +154,7 @@ describe('When running the action with latest as the Cake version input argument
 });
 
 describe('When running the action with a specific version as the Cake version input argument', () => {
-  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeGetInputs = input.getInputs as jest.MockedFunction<typeof input.getInputs>;
   const fakeInstallCakeTool = cakeTool.install as jest.MockedFunction<typeof cakeTool.install>;
 
   beforeAll(() => {
@@ -175,7 +175,7 @@ describe('When running the action with a specific version as the Cake version in
 });
 
 describe('When running the action with auto as the Cake bootstrap input argument', () => {
-  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeGetInputs = input.getInputs as jest.MockedFunction<typeof input.getInputs>;
   const fakeBootstrapScript = cake.bootstrapScript as jest.MockedFunction<
     typeof cake.bootstrapScript
   >;
@@ -195,7 +195,7 @@ describe('When running the action with auto as the Cake bootstrap input argument
 });
 
 describe('When running the action with explicit as the Cake bootstrap input argument', () => {
-  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeGetInputs = input.getInputs as jest.MockedFunction<typeof input.getInputs>;
   const fakeBootstrapScript = cake.bootstrapScript as jest.MockedFunction<
     typeof cake.bootstrapScript
   >;
@@ -215,7 +215,7 @@ describe('When running the action with explicit as the Cake bootstrap input argu
 });
 
 describe('When running the action with skip as the Cake bootstrap input argument', () => {
-  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeGetInputs = input.getInputs as jest.MockedFunction<typeof input.getInputs>;
   const fakeBootstrapScript = cake.bootstrapScript as jest.MockedFunction<
     typeof cake.bootstrapScript
   >;
@@ -235,7 +235,7 @@ describe('When running the action with skip as the Cake bootstrap input argument
 });
 
 describe('When running the action with the target input argument', () => {
-  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeGetInputs = input.getInputs as jest.MockedFunction<typeof input.getInputs>;
   const fakeRunScript = cake.runScript as jest.MockedFunction<typeof cake.runScript>;
 
   beforeAll(() => {
@@ -252,7 +252,7 @@ describe('When running the action with the target input argument', () => {
 });
 
 describe('When running the action with the verbosity input argument', () => {
-  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeGetInputs = input.getInputs as jest.MockedFunction<typeof input.getInputs>;
   const fakeRunScript = cake.runScript as jest.MockedFunction<typeof cake.runScript>;
 
   beforeAll(() => {
@@ -271,7 +271,7 @@ describe('When running the action with the verbosity input argument', () => {
 });
 
 describe('When running the action with custom script input arguments', () => {
-  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeGetInputs = input.getInputs as jest.MockedFunction<typeof input.getInputs>;
   const fakeRunScript = cake.runScript as jest.MockedFunction<typeof cake.runScript>;
 
   beforeAll(() => {
@@ -308,7 +308,7 @@ describe('When running the action with custom script input arguments', () => {
 });
 
 describe('When the script fails with an Error object', () => {
-  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeGetInputs = input.getInputs as jest.MockedFunction<typeof input.getInputs>;
   const fakeSetFailed = core.setFailed as jest.MockedFunction<typeof core.setFailed>;
 
   beforeAll(() => {
@@ -324,7 +324,7 @@ describe('When the script fails with an Error object', () => {
 });
 
 describe('When the script fails with a string', () => {
-  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeGetInputs = input.getInputs as jest.MockedFunction<typeof input.getInputs>;
   const fakeSetFailed = core.setFailed as jest.MockedFunction<typeof core.setFailed>;
 
   beforeAll(() => {
@@ -341,7 +341,7 @@ describe('When the script fails with a string', () => {
 });
 
 describe('When the script fails with something other than an Error object or a string', () => {
-  const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
+  const fakeGetInputs = input.getInputs as jest.MockedFunction<typeof input.getInputs>;
   const fakeSetFailed = core.setFailed as jest.MockedFunction<typeof core.setFailed>;
 
   beforeAll(() => {

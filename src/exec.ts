@@ -1,4 +1,4 @@
-import { CakeBootstrap, CakeVersion } from './action';
+import { CakeBootstrap, CakeVersion } from './input';
 import { CakeParameter } from './cakeParameter';
 import { CakeToolSettings } from './cakeToolSettings';
 import { ToolsDirectory } from './toolsDirectory';

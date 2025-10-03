@@ -1,12 +1,12 @@
 import * as core from '@actions/core';
-import * as action from './action';
+import * as input from './input';
 import * as dotnet from './dotnet';
 import * as exec from './exec';
 import { isError, isString } from './guards';
 
 export async function run() {
   try {
-    const inputs = action.getInputs();
+    const inputs = input.getInputs();
     const buildFile = inputs.buildFile;
     const version = inputs.cakeVersion;
     const bootstrap = inputs.cakeBootstrap;

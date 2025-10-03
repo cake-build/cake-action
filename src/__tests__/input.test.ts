@@ -1,6 +1,6 @@
 import * as core from '@actions/core';
 import { when } from 'jest-when';
-import * as action from '../action';
+import * as input from '../input';
 import { CakeArgument, CakeSwitch } from '../cakeParameter';
 
 jest.mock('@actions/core');
@@ -19,11 +19,11 @@ describe('When getting the script-path input argument from the action', () => {
   });
 
   test("it should return 'script' as the build file type parameter", () => {
-    expect(action.getInputs().buildFile.type).toBe('script');
+    expect(input.getInputs().buildFile.type).toBe('script');
   });
 
   test('it should return the argument for the script-path parameter as the build file path parameter', () => {
-    expect(action.getInputs().buildFile.path).toBe('path/to/script.cake');
+    expect(input.getInputs().buildFile.path).toBe('path/to/script.cake');
   });
 });
 
@@ -41,11 +41,11 @@ describe('When getting the project-path input argument from the action', () => {
   });
 
   test("it should return 'project' as the build file type parameter", () => {
-    expect(action.getInputs().buildFile.type).toBe('project');
+    expect(input.getInputs().buildFile.type).toBe('project');
   });
 
   test('it should return the argument for the project-path parameter as the build file path parameter', () => {
-    expect(action.getInputs().buildFile.path).toBe('path/to/build.csproj');
+    expect(input.getInputs().buildFile.path).toBe('path/to/build.csproj');
   });
 });
 
@@ -63,11 +63,11 @@ describe('When getting both the script-path and project-path input arguments fro
   });
 
   test("it should return 'project' as the build file type parameter", () => {
-    expect(action.getInputs().buildFile.type).toBe('project');
+    expect(input.getInputs().buildFile.type).toBe('project');
   });
 
   test('it should return the argument for the project-path parameter as the build file path parameter', () => {
-    expect(action.getInputs().buildFile.path).toBe('path/to/build.csproj');
+    expect(input.getInputs().buildFile.path).toBe('path/to/build.csproj');
   });
 });
 
@@ -85,11 +85,11 @@ describe('When getting the script-path, project-path and file-path input argumen
   });
 
   test("it should return 'project' as the build file type parameter", () => {
-    expect(action.getInputs().buildFile.type).toBe('project');
+    expect(input.getInputs().buildFile.type).toBe('project');
   });
 
   test('it should return the argument for the project-path parameter as the build file path parameter', () => {
-    expect(action.getInputs().buildFile.path).toBe('path/to/build.csproj');
+    expect(input.getInputs().buildFile.path).toBe('path/to/build.csproj');
   });
 });
 
@@ -107,11 +107,11 @@ describe('When getting both the project-path and file-path input arguments from 
   });
 
   test("it should return 'project' as the build file type parameter", () => {
-    expect(action.getInputs().buildFile.type).toBe('project');
+    expect(input.getInputs().buildFile.type).toBe('project');
   });
 
   test('it should return the argument for the project-path parameter as the build file path parameter', () => {
-    expect(action.getInputs().buildFile.path).toBe('path/to/build.csproj');
+    expect(input.getInputs().buildFile.path).toBe('path/to/build.csproj');
   });
 });
 
@@ -129,11 +129,11 @@ describe('When getting the file-path input argument from the action', () => {
   });
 
   test("it should return 'file' as the build file type parameter", () => {
-    expect(action.getInputs().buildFile.type).toBe('file');
+    expect(input.getInputs().buildFile.type).toBe('file');
   });
 
   test('it should return the argument for the file-path parameter as the build file path parameter', () => {
-    expect(action.getInputs().buildFile.path).toBe('path/to/build.cs');
+    expect(input.getInputs().buildFile.path).toBe('path/to/build.cs');
   });
 });
 
@@ -151,11 +151,11 @@ describe('When getting both the script-path and file-path input arguments from t
   });
 
   test("it should return 'file' as the build file type parameter", () => {
-    expect(action.getInputs().buildFile.type).toBe('file');
+    expect(input.getInputs().buildFile.type).toBe('file');
   });
 
   test('it should return the argument for the file-path parameter as the build file path parameter', () => {
-    expect(action.getInputs().buildFile.path).toBe('path/to/build.cs');
+    expect(input.getInputs().buildFile.path).toBe('path/to/build.cs');
   });
 });
 
@@ -170,14 +170,14 @@ describe('When getting the Cake tool input arguments from the action', () => {
   });
 
   test('it should return the argument for the cake-version parameter', () => {
-    expect(action.getInputs().cakeVersion).toMatchObject({
+    expect(input.getInputs().cakeVersion).toMatchObject({
       version: 'specific',
       number: 'the.version.number',
     });
   });
 
   test('it should return the argument for the cake-bootstrap parameter', () => {
-    expect(action.getInputs().cakeBootstrap).toBe('auto');
+    expect(input.getInputs().cakeBootstrap).toBe('auto');
   });
 });
 
@@ -192,19 +192,19 @@ describe('When getting the Cake input arguments from the action', () => {
   });
 
   test('it should return the argument for the target script parameter', () => {
-    expect(action.getInputs().buildArguments).toContainEqual(
+    expect(input.getInputs().buildArguments).toContainEqual(
       new CakeArgument('target', 'Task-To-Run')
     );
   });
 
   test('it should return the argument for the verbosity script parameter', () => {
-    expect(action.getInputs().buildArguments).toContainEqual(
+    expect(input.getInputs().buildArguments).toContainEqual(
       new CakeArgument('verbosity', 'Verbosity-Level')
     );
   });
 
   test('it should return the argument for the dry-run script parameter', () => {
-    expect(action.getInputs().buildArguments).toContainEqual(new CakeSwitch('dryrun'));
+    expect(input.getInputs().buildArguments).toContainEqual(new CakeSwitch('dryrun'));
   });
 });
 
@@ -217,7 +217,7 @@ describe('When getting the dry-run script input argument set to false from the a
   });
 
   test('it should not pass the dry run switch to the script', () => {
-    expect(action.getInputs().buildArguments).not.toContainEqual(new CakeSwitch('dryrun'));
+    expect(input.getInputs().buildArguments).not.toContainEqual(new CakeSwitch('dryrun'));
   });
 });
 
@@ -237,19 +237,19 @@ describe('When getting multiple custom script input arguments from the action', 
   });
 
   test('it should return the argument for a custom string parameter', () => {
-    expect(action.getInputs().buildArguments).toContainEqual(
+    expect(input.getInputs().buildArguments).toContainEqual(
       new CakeArgument('string-parameter', "'value'")
     );
   });
 
   test('it should return the argument for a custom numeric parameter', () => {
-    expect(action.getInputs().buildArguments).toContainEqual(
+    expect(input.getInputs().buildArguments).toContainEqual(
       new CakeArgument('numeric-parameter', '3')
     );
   });
 
   test('it should return the argument for a custom boolean parameter', () => {
-    expect(action.getInputs().buildArguments).toContainEqual(
+    expect(input.getInputs().buildArguments).toContainEqual(
       new CakeArgument('boolean-parameter', 'true')
     );
   });
@@ -263,7 +263,7 @@ describe('When getting a single custom script input argument from the action', (
   });
 
   test('it should return the argument for the custom parameter', () => {
-    expect(action.getInputs().buildArguments).toContainEqual(new CakeArgument('name', 'value'));
+    expect(input.getInputs().buildArguments).toContainEqual(new CakeArgument('name', 'value'));
   });
 });
 
@@ -275,7 +275,7 @@ describe('When getting a single custom script input argument on one line from th
   });
 
   test('it should return the argument for the custom parameter', () => {
-    expect(action.getInputs().buildArguments).toContainEqual(new CakeArgument('name', 'value'));
+    expect(input.getInputs().buildArguments).toContainEqual(new CakeArgument('name', 'value'));
   });
 });
 
@@ -287,7 +287,7 @@ describe('When getting a custom script input argument that contains colons (e.g.
   });
 
   test('it should return the argument for the custom parameter', () => {
-    expect(action.getInputs().buildArguments).toContainEqual(
+    expect(input.getInputs().buildArguments).toContainEqual(
       new CakeArgument('url', 'https://example.com')
     );
   });
@@ -315,11 +315,11 @@ describe('When getting improperly formatted custom script input arguments from t
   });
 
   test('it should not parse the invalid parameter names and values', () => {
-    expect(action.getInputs().buildArguments).not.toContainEqual(new CakeArgument('name', 'value'));
+    expect(input.getInputs().buildArguments).not.toContainEqual(new CakeArgument('name', 'value'));
   });
 
   test('it should not parse the invalid parameter names', () => {
-    expect(action.getInputs().buildArguments).not.toContainEqual(new CakeArgument('name', ''));
+    expect(input.getInputs().buildArguments).not.toContainEqual(new CakeArgument('name', ''));
   });
 });
 
@@ -339,31 +339,31 @@ describe('When getting no input arguments from the action', () => {
   });
 
   test("it should return 'script' as the build file type parameter", () => {
-    expect(action.getInputs().buildFile.type).toBe('script');
+    expect(input.getInputs().buildFile.type).toBe('script');
   });
 
   test("it should return 'build.cake' as the build file path parameter", () => {
-    expect(action.getInputs().buildFile.path).toBe('build.cake');
+    expect(input.getInputs().buildFile.path).toBe('build.cake');
   });
 
   test('it should return latest for the cake-version parameter', () => {
-    expect(action.getInputs().cakeVersion).toMatchObject({ version: 'latest' });
+    expect(input.getInputs().cakeVersion).toMatchObject({ version: 'latest' });
   });
 
   test('it should return auto for the cake-bootstrap parameter', () => {
-    expect(action.getInputs().cakeBootstrap).toBe('auto');
+    expect(input.getInputs().cakeBootstrap).toBe('auto');
   });
 
   test('it should return an empty string for the target script parameter', () => {
-    expect(action.getInputs().buildArguments).toContainEqual(new CakeArgument('target', ''));
+    expect(input.getInputs().buildArguments).toContainEqual(new CakeArgument('target', ''));
   });
 
   test('it should return an empty string for the verbosity script parameter', () => {
-    expect(action.getInputs().buildArguments).toContainEqual(new CakeArgument('verbosity', ''));
+    expect(input.getInputs().buildArguments).toContainEqual(new CakeArgument('verbosity', ''));
   });
 
   test('it should not pass the dry run switch to the script', () => {
-    expect(action.getInputs().buildArguments).not.toContainEqual(new CakeSwitch('dryrun'));
+    expect(input.getInputs().buildArguments).not.toContainEqual(new CakeSwitch('dryrun'));
   });
 });
 
@@ -375,7 +375,7 @@ describe('When getting the cake-version script input argument set to tool-manife
   });
 
   test('it should return tool-manifest the for cake-version parameter', () => {
-    expect(action.getInputs().cakeVersion).toMatchObject({ version: 'tool-manifest' });
+    expect(input.getInputs().cakeVersion).toMatchObject({ version: 'tool-manifest' });
   });
 });
 
@@ -387,7 +387,7 @@ describe('When getting the cake-version script input argument set to latest from
   });
 
   test('it should return latest for the cake-version parameter', () => {
-    expect(action.getInputs().cakeVersion).toMatchObject({ version: 'latest' });
+    expect(input.getInputs().cakeVersion).toMatchObject({ version: 'latest' });
   });
 });
 
@@ -399,11 +399,11 @@ describe('When getting the cake-bootstrap script input argument set to auto from
   });
 
   test('it should return auto for the cake-bootstrap parameter', () => {
-    expect(action.getInputs().cakeBootstrap).toBe('auto');
+    expect(input.getInputs().cakeBootstrap).toBe('auto');
   });
 
   test('it should not pass the skip-bootstrap switch to the script', () => {
-    expect(action.getInputs().buildArguments).not.toContainEqual(new CakeSwitch('skip-bootstrap'));
+    expect(input.getInputs().buildArguments).not.toContainEqual(new CakeSwitch('skip-bootstrap'));
   });
 });
 
@@ -415,11 +415,11 @@ describe('When getting the cake-bootstrap script input argument set to explicit 
   });
 
   test('it should return explicit for the cake-bootstrap parameter', () => {
-    expect(action.getInputs().cakeBootstrap).toBe('explicit');
+    expect(input.getInputs().cakeBootstrap).toBe('explicit');
   });
 
   test('it should not pass the skip-bootstrap switch to the script', () => {
-    expect(action.getInputs().buildArguments).not.toContainEqual(new CakeSwitch('skip-bootstrap'));
+    expect(input.getInputs().buildArguments).not.toContainEqual(new CakeSwitch('skip-bootstrap'));
   });
 });
 
@@ -431,10 +431,10 @@ describe('When getting the cake-bootstrap script input argument set to skip from
   });
 
   test('it should return skip for the cake-bootstrap parameter', () => {
-    expect(action.getInputs().cakeBootstrap).toBe('skip');
+    expect(input.getInputs().cakeBootstrap).toBe('skip');
   });
 
   test('it should pass the skip-bootstrap switch to the script', () => {
-    expect(action.getInputs().buildArguments).toContainEqual(new CakeSwitch('skip-bootstrap'));
+    expect(input.getInputs().buildArguments).toContainEqual(new CakeSwitch('skip-bootstrap'));
   });
 });
