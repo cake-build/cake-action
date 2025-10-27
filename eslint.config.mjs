@@ -35,7 +35,11 @@ export default [...compat.extends(
         },
         parser: tsParser,
         parserOptions: {
-            project: path.join(__dirname, 'tsconfig.json'),
+            project: [
+                './tsconfig.eslint.json',
+                './tsconfig.json',
+            ],
+            tsconfigRootDir: __dirname
         },
         ecmaVersion: 'latest',
         sourceType: 'commonjs',
