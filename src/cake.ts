@@ -29,13 +29,16 @@ export async function runProject(
 ) {
   const cakeParams = formatParameters(params);
   const args = [
-    '--project', csprojPath,
+    '--project',
+    csprojPath,
     '--no-launch-profile',
-    '--verbosity', 'minimal',
-    '--configuration', 'Release',
+    '--verbosity',
+    'minimal',
+    '--configuration',
+    'Release',
     '--',
     `--paths_tools="${toolsDir.path}"`,
-    ...cakeParams
+    ...cakeParams,
   ];
   const exitCode = await exec(dotnetRun, args);
 
@@ -53,11 +56,13 @@ export async function runFile(
   const args = [
     csFilePath,
     '--no-launch-profile',
-    '--verbosity', 'minimal',
-    '--configuration', 'Release',
+    '--verbosity',
+    'minimal',
+    '--configuration',
+    'Release',
     '--',
     `--paths_tools="${toolsDir.path}"`,
-    ...cakeParams
+    ...cakeParams,
   ];
   const exitCode = await exec(dotnetRun, args);
 
@@ -78,9 +83,7 @@ export async function bootstrapScript(
   }
 }
 
-async function resolveCakeToolPath(
-  cakeToolSettings?: CakeToolSettings
-): Promise<string> {
+async function resolveCakeToolPath(cakeToolSettings?: CakeToolSettings): Promise<string> {
   return cakeToolSettings?.useToolManifest
     ? dotnetLocalToolCake
     : cakeToolSettings?.workingDirectory
@@ -89,7 +92,5 @@ async function resolveCakeToolPath(
 }
 
 function formatParameters(params: CakeParameter[]): string[] {
-  return params
-    .filter(p => p.isValid())
-    .map(p => p.format());
+  return params.filter((p) => p.isValid()).map((p) => p.format());
 }

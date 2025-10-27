@@ -18,7 +18,7 @@ describe('When getting the script-path input argument from the action', () => {
     when(fakeGetInput).calledWith('arguments').mockReturnValue('');
   });
 
-  test('it should return \'script\' as the build file type parameter', () => {
+  test("it should return 'script' as the build file type parameter", () => {
     expect(action.getInputs().buildFile.type).toBe('script');
   });
 
@@ -40,7 +40,7 @@ describe('When getting the project-path input argument from the action', () => {
     when(fakeGetInput).calledWith('arguments').mockReturnValue('');
   });
 
-  test('it should return \'project\' as the build file type parameter', () => {
+  test("it should return 'project' as the build file type parameter", () => {
     expect(action.getInputs().buildFile.type).toBe('project');
   });
 
@@ -62,7 +62,7 @@ describe('When getting both the script-path and project-path input arguments fro
     when(fakeGetInput).calledWith('arguments').mockReturnValue('');
   });
 
-  test('it should return \'project\' as the build file type parameter', () => {
+  test("it should return 'project' as the build file type parameter", () => {
     expect(action.getInputs().buildFile.type).toBe('project');
   });
 
@@ -84,7 +84,7 @@ describe('When getting the script-path, project-path and file-path input argumen
     when(fakeGetInput).calledWith('arguments').mockReturnValue('');
   });
 
-  test('it should return \'project\' as the build file type parameter', () => {
+  test("it should return 'project' as the build file type parameter", () => {
     expect(action.getInputs().buildFile.type).toBe('project');
   });
 
@@ -106,7 +106,7 @@ describe('When getting both the project-path and file-path input arguments from 
     when(fakeGetInput).calledWith('arguments').mockReturnValue('');
   });
 
-  test('it should return \'project\' as the build file type parameter', () => {
+  test("it should return 'project' as the build file type parameter", () => {
     expect(action.getInputs().buildFile.type).toBe('project');
   });
 
@@ -128,7 +128,7 @@ describe('When getting the file-path input argument from the action', () => {
     when(fakeGetInput).calledWith('arguments').mockReturnValue('');
   });
 
-  test('it should return \'file\' as the build file type parameter', () => {
+  test("it should return 'file' as the build file type parameter", () => {
     expect(action.getInputs().buildFile.type).toBe('file');
   });
 
@@ -150,7 +150,7 @@ describe('When getting both the script-path and file-path input arguments from t
     when(fakeGetInput).calledWith('arguments').mockReturnValue('');
   });
 
-  test('it should return \'file\' as the build file type parameter', () => {
+  test("it should return 'file' as the build file type parameter", () => {
     expect(action.getInputs().buildFile.type).toBe('file');
   });
 
@@ -172,7 +172,7 @@ describe('When getting the Cake tool input arguments from the action', () => {
   test('it should return the argument for the cake-version parameter', () => {
     expect(action.getInputs().cakeVersion).toMatchObject({
       version: 'specific',
-      number: 'the.version.number'
+      number: 'the.version.number',
     });
   });
 
@@ -192,11 +192,15 @@ describe('When getting the Cake input arguments from the action', () => {
   });
 
   test('it should return the argument for the target script parameter', () => {
-    expect(action.getInputs().buildArguments).toContainEqual(new CakeArgument('target', 'Task-To-Run'));
+    expect(action.getInputs().buildArguments).toContainEqual(
+      new CakeArgument('target', 'Task-To-Run')
+    );
   });
 
   test('it should return the argument for the verbosity script parameter', () => {
-    expect(action.getInputs().buildArguments).toContainEqual(new CakeArgument('verbosity', 'Verbosity-Level'));
+    expect(action.getInputs().buildArguments).toContainEqual(
+      new CakeArgument('verbosity', 'Verbosity-Level')
+    );
   });
 
   test('it should return the argument for the dry-run script parameter', () => {
@@ -218,26 +222,36 @@ describe('When getting the dry-run script input argument set to false from the a
 });
 
 describe('When getting multiple custom script input arguments from the action', () => {
-  const fakeGetMultilineInput = core.getMultilineInput as jest.MockedFunction<typeof core.getMultilineInput>;
+  const fakeGetMultilineInput = core.getMultilineInput as jest.MockedFunction<
+    typeof core.getMultilineInput
+  >;
 
   beforeAll(() => {
-    when(fakeGetMultilineInput).calledWith('arguments').mockReturnValue([
-      'string-parameter: \'value\'',
-      'numeric-parameter: 3',
-      'boolean-parameter: true'
-    ]);
+    when(fakeGetMultilineInput)
+      .calledWith('arguments')
+      .mockReturnValue([
+        "string-parameter: 'value'",
+        'numeric-parameter: 3',
+        'boolean-parameter: true',
+      ]);
   });
 
   test('it should return the argument for a custom string parameter', () => {
-    expect(action.getInputs().buildArguments).toContainEqual(new CakeArgument('string-parameter', '\'value\''));
+    expect(action.getInputs().buildArguments).toContainEqual(
+      new CakeArgument('string-parameter', "'value'")
+    );
   });
 
   test('it should return the argument for a custom numeric parameter', () => {
-    expect(action.getInputs().buildArguments).toContainEqual(new CakeArgument('numeric-parameter', '3'));
+    expect(action.getInputs().buildArguments).toContainEqual(
+      new CakeArgument('numeric-parameter', '3')
+    );
   });
 
   test('it should return the argument for a custom boolean parameter', () => {
-    expect(action.getInputs().buildArguments).toContainEqual(new CakeArgument('boolean-parameter', 'true'));
+    expect(action.getInputs().buildArguments).toContainEqual(
+      new CakeArgument('boolean-parameter', 'true')
+    );
   });
 });
 
@@ -245,9 +259,7 @@ describe('When getting a single custom script input argument from the action', (
   const fakeGetInput = core.getMultilineInput as jest.MockedFunction<typeof core.getMultilineInput>;
 
   beforeAll(() => {
-    when(fakeGetInput).calledWith('arguments').mockReturnValue([
-      'name: value'
-    ]);
+    when(fakeGetInput).calledWith('arguments').mockReturnValue(['name: value']);
   });
 
   test('it should return the argument for the custom parameter', () => {
@@ -271,31 +283,35 @@ describe('When getting a custom script input argument that contains colons (e.g.
   const fakeGetInput = core.getMultilineInput as jest.MockedFunction<typeof core.getMultilineInput>;
 
   beforeAll(() => {
-    when(fakeGetInput).calledWith('arguments').mockReturnValue([
-      'url: https://example.com'
-    ]);
+    when(fakeGetInput).calledWith('arguments').mockReturnValue(['url: https://example.com']);
   });
 
   test('it should return the argument for the custom parameter', () => {
-    expect(action.getInputs().buildArguments).toContainEqual(new CakeArgument('url', 'https://example.com'));
+    expect(action.getInputs().buildArguments).toContainEqual(
+      new CakeArgument('url', 'https://example.com')
+    );
   });
 });
 
 describe('When getting improperly formatted custom script input arguments from the action', () => {
-  const fakeGetMultilineInput = core.getMultilineInput as jest.MockedFunction<typeof core.getMultilineInput>;
+  const fakeGetMultilineInput = core.getMultilineInput as jest.MockedFunction<
+    typeof core.getMultilineInput
+  >;
 
   beforeAll(() => {
-    when(fakeGetMultilineInput).calledWith('arguments').mockReturnValue([
-      '--name=value',
-      '-name=value',
-      'name=value',
-      '--name value',
-      '-name value',
-      'name value',
-      '--nameOnly',
-      '-nameOnly',
-      'nameOnly'
-    ]);
+    when(fakeGetMultilineInput)
+      .calledWith('arguments')
+      .mockReturnValue([
+        '--name=value',
+        '-name=value',
+        'name=value',
+        '--name value',
+        '-name value',
+        'name value',
+        '--nameOnly',
+        '-nameOnly',
+        'nameOnly',
+      ]);
   });
 
   test('it should not parse the invalid parameter names and values', () => {
@@ -322,11 +338,11 @@ describe('When getting no input arguments from the action', () => {
     when(fakeGetInput).calledWith('arguments').mockReturnValue('');
   });
 
-  test('it should return \'script\' as the build file type parameter', () => {
+  test("it should return 'script' as the build file type parameter", () => {
     expect(action.getInputs().buildFile.type).toBe('script');
   });
 
-  test('it should return \'build.cake\' as the build file path parameter', () => {
+  test("it should return 'build.cake' as the build file path parameter", () => {
     expect(action.getInputs().buildFile.path).toBe('build.cake');
   });
 

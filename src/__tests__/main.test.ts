@@ -21,7 +21,7 @@ describe('When running the action without any input arguments', () => {
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
       buildFile: { type: 'script', path: 'build.cake' },
-      buildArguments: []
+      buildArguments: [],
     });
   });
 
@@ -59,7 +59,7 @@ describe('When running the action with the script path input argument', () => {
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
       buildFile: { type: 'script', path: 'path/to/script.cake' },
-      buildArguments: []
+      buildArguments: [],
     });
   });
 
@@ -76,7 +76,7 @@ describe('When running the action with the project path input argument', () => {
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
       buildFile: { type: 'project', path: 'path/to/build.csproj' },
-      buildArguments: []
+      buildArguments: [],
     });
   });
 
@@ -98,19 +98,22 @@ describe('When running the action with the file path input argument', () => {
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
       buildFile: { type: 'file', path: 'path/to/file.cs' },
-      buildArguments: [new CakeArgument('target', 'Task-To-Run')]
+      buildArguments: [new CakeArgument('target', 'Task-To-Run')],
     });
   });
 
   test('it should run the specified Cake file', async () => {
     await run();
-    expect(fakeRunFile).toHaveBeenCalledWith('path/to/file.cs', expect.any(ToolsDirectory), expect.any(CakeArgument));
+    expect(fakeRunFile).toHaveBeenCalledWith(
+      'path/to/file.cs',
+      expect.any(ToolsDirectory),
+      expect.any(CakeArgument)
+    );
   });
 
   test('it should run script with the specified target', async () => {
     await run();
-    expect(fakeRunFile.mock.calls[0][2]).toMatchObject(
-      new CakeArgument('target', 'Task-To-Run'));
+    expect(fakeRunFile.mock.calls[0][2]).toMatchObject(new CakeArgument('target', 'Task-To-Run'));
   });
 });
 
@@ -122,7 +125,7 @@ describe('When running the action with tool-manifest as the Cake version input a
     fakeGetInputs.mockReturnValue({
       buildFile: { type: 'script', path: 'build.cake' },
       cakeVersion: { version: 'tool-manifest' },
-      buildArguments: []
+      buildArguments: [],
     });
   });
 
@@ -140,7 +143,7 @@ describe('When running the action with latest as the Cake version input argument
     fakeGetInputs.mockReturnValue({
       buildFile: { type: 'script', path: 'build.cake' },
       cakeVersion: { version: 'latest' },
-      buildArguments: []
+      buildArguments: [],
     });
   });
 
@@ -158,7 +161,7 @@ describe('When running the action with a specific version as the Cake version in
     fakeGetInputs.mockReturnValue({
       buildFile: { type: 'script', path: 'build.cake' },
       cakeVersion: { version: 'specific', number: 'the.version.number' },
-      buildArguments: []
+      buildArguments: [],
     });
   });
 
@@ -166,20 +169,22 @@ describe('When running the action with a specific version as the Cake version in
     await run();
     expect(fakeInstallCakeTool.mock.calls[0][1]).toMatchObject({
       version: 'specific',
-      number: 'the.version.number'
+      number: 'the.version.number',
     });
   });
 });
 
 describe('When running the action with auto as the Cake bootstrap input argument', () => {
   const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
-  const fakeBootstrapScript = cake.bootstrapScript as jest.MockedFunction<typeof cake.bootstrapScript>;
+  const fakeBootstrapScript = cake.bootstrapScript as jest.MockedFunction<
+    typeof cake.bootstrapScript
+  >;
 
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
       buildFile: { type: 'script', path: 'build.cake' },
       cakeBootstrap: 'auto',
-      buildArguments: []
+      buildArguments: [],
     });
   });
 
@@ -191,13 +196,15 @@ describe('When running the action with auto as the Cake bootstrap input argument
 
 describe('When running the action with explicit as the Cake bootstrap input argument', () => {
   const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
-  const fakeBootstrapScript = cake.bootstrapScript as jest.MockedFunction<typeof cake.bootstrapScript>;
+  const fakeBootstrapScript = cake.bootstrapScript as jest.MockedFunction<
+    typeof cake.bootstrapScript
+  >;
 
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
       buildFile: { type: 'script', path: 'custom.cake' },
       cakeBootstrap: 'explicit',
-      buildArguments: []
+      buildArguments: [],
     });
   });
 
@@ -209,13 +216,15 @@ describe('When running the action with explicit as the Cake bootstrap input argu
 
 describe('When running the action with skip as the Cake bootstrap input argument', () => {
   const fakeGetInputs = action.getInputs as jest.MockedFunction<typeof action.getInputs>;
-  const fakeBootstrapScript = cake.bootstrapScript as jest.MockedFunction<typeof cake.bootstrapScript>;
+  const fakeBootstrapScript = cake.bootstrapScript as jest.MockedFunction<
+    typeof cake.bootstrapScript
+  >;
 
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
       buildFile: { type: 'script', path: 'build.cake' },
       cakeBootstrap: 'skip',
-      buildArguments: []
+      buildArguments: [],
     });
   });
 
@@ -232,14 +241,13 @@ describe('When running the action with the target input argument', () => {
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
       buildFile: { type: 'script', path: 'build.cake' },
-      buildArguments: [new CakeArgument('target', 'Task-To-Run')]
+      buildArguments: [new CakeArgument('target', 'Task-To-Run')],
     });
   });
 
   test('it should run script with the specified target', async () => {
     await run();
-    expect(fakeRunScript.mock.calls[0][2]).toMatchObject(
-      new CakeArgument('target', 'Task-To-Run'));
+    expect(fakeRunScript.mock.calls[0][2]).toMatchObject(new CakeArgument('target', 'Task-To-Run'));
   });
 });
 
@@ -250,14 +258,15 @@ describe('When running the action with the verbosity input argument', () => {
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
       buildFile: { type: 'script', path: 'build.cake' },
-      buildArguments: [new CakeArgument('verbosity', 'Verbosity-Level')]
+      buildArguments: [new CakeArgument('verbosity', 'Verbosity-Level')],
     });
   });
 
   test('it should run the script with the specified verbosity level', async () => {
     await run();
     expect(fakeRunScript.mock.calls[0][2]).toMatchObject(
-      new CakeArgument('verbosity', 'Verbosity-Level'));
+      new CakeArgument('verbosity', 'Verbosity-Level')
+    );
   });
 });
 
@@ -269,29 +278,32 @@ describe('When running the action with custom script input arguments', () => {
     fakeGetInputs.mockReturnValue({
       buildFile: { type: 'script', path: 'build.cake' },
       buildArguments: [
-        new CakeArgument('string-parameter', '\'value\''),
+        new CakeArgument('string-parameter', "'value'"),
         new CakeArgument('numeric-parameter', '3'),
         new CakeArgument('boolean-parameter', 'true'),
-      ]
+      ],
     });
   });
 
   test('it should run the script with the specified custom string parameter', async () => {
     await run();
     expect(fakeRunScript.mock.calls[0][2]).toMatchObject(
-      new CakeArgument('string-parameter', '\'value\''));
+      new CakeArgument('string-parameter', "'value'")
+    );
   });
 
   test('it should run the script with the specified custom numeric parameter', async () => {
     await run();
     expect(fakeRunScript.mock.calls[0][3]).toMatchObject(
-      new CakeArgument('numeric-parameter', '3'));
+      new CakeArgument('numeric-parameter', '3')
+    );
   });
 
   test('it should run the script with the specified custom boolean parameter', async () => {
     await run();
     expect(fakeRunScript.mock.calls[0][4]).toMatchObject(
-      new CakeArgument('boolean-parameter', 'true'));
+      new CakeArgument('boolean-parameter', 'true')
+    );
   });
 });
 
@@ -314,7 +326,7 @@ describe('When the script fails with a string', () => {
   const fakeRunScript = cake.runScript as jest.MockedFunction<typeof cake.runScript>;
 
   beforeAll(() => {
-      fakeRunScript.mockRejectedValue('the error message');
+    fakeRunScript.mockRejectedValue('the error message');
   });
 
   test('it should mark the action as failed with the specific error message', async () => {

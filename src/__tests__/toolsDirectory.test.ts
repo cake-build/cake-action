@@ -173,12 +173,16 @@ describe('When checking whether the directory contains a specific version of a t
 describe('When appending a file name', () => {
   test('it should join the directory path with the specified file name', () => {
     const sut = new ToolsDirectory();
-    expect(sut.append('theFileName')).toBe(`${sut.path}${process.platform === 'win32' ? '\\' : '/'}theFileName`);
+    expect(sut.append('theFileName')).toBe(
+      `${sut.path}${process.platform === 'win32' ? '\\' : '/'}theFileName`
+    );
   });
 
   test('it should remove any extra slashes in front of the specified file name', () => {
     const sut = new ToolsDirectory();
-    expect(sut.append('/theFileName')).toBe(`${sut.path}${process.platform === 'win32' ? '\\' : '/'}theFileName`);
+    expect(sut.append('/theFileName')).toBe(
+      `${sut.path}${process.platform === 'win32' ? '\\' : '/'}theFileName`
+    );
   });
 });
 

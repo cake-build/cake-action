@@ -3,8 +3,8 @@ import * as build from './cakeParameter';
 import * as input from './input';
 
 interface CakeInputs {
-  readonly buildFile: BuildFile,
-  readonly cakeVersion?: CakeVersion,
+  readonly buildFile: BuildFile;
+  readonly cakeVersion?: CakeVersion;
   readonly cakeBootstrap?: CakeBootstrap;
 }
 
@@ -14,22 +14,19 @@ interface BuildInputs {
 
 export type BuildFile = Script | Project | File;
 type Script = {
-  readonly type: 'script',
+  readonly type: 'script';
   path: string;
 };
 type Project = {
-  readonly type: 'project',
+  readonly type: 'project';
   path: string;
 };
 type File = {
-  readonly type: 'file',
+  readonly type: 'file';
   path: string;
 };
 
-export type CakeVersion =
-  | ToolManifest
-  | Latest
-  | Specific;
+export type CakeVersion = ToolManifest | Latest | Specific;
 type ToolManifest = {
   readonly version: 'tool-manifest';
 };
@@ -37,21 +34,18 @@ type Latest = {
   readonly version: 'latest';
 };
 type Specific = {
-  readonly version: 'specific',
+  readonly version: 'specific';
   number: string;
 };
 
-export type CakeBootstrap =
-  | 'auto'
-  | 'explicit'
-  | 'skip';
+export type CakeBootstrap = 'auto' | 'explicit' | 'skip';
 
 export function getInputs(): CakeInputs & BuildInputs {
   return {
     buildFile: getFileInput(),
     cakeVersion: getCakeVersionInput(),
     cakeBootstrap: getCakeBootstrapInput(),
-    buildArguments: getScriptInputs()
+    buildArguments: getScriptInputs(),
   };
 }
 
@@ -94,10 +88,14 @@ function getCakeVersionInput(): CakeVersion {
 function getCakeBootstrapInput(): CakeBootstrap {
   const bootstrap = core.getInput('cake-bootstrap').toLowerCase();
   switch (bootstrap) {
-    case 'auto': return 'auto';
-    case 'explicit': return 'explicit';
-    case 'skip': return 'skip';
-    default: return 'auto';
+    case 'auto':
+      return 'auto';
+    case 'explicit':
+      return 'explicit';
+    case 'skip':
+      return 'skip';
+    default:
+      return 'auto';
   }
 }
 
@@ -107,26 +105,23 @@ function getScriptInputs(): build.CakeParameter[] {
     new build.CakeArgument('verbosity', core.getInput('verbosity')),
     ...parseSkipBootstrapSwitch(),
     ...parseDryRunSwitch(),
-    ...parseCustomArguments()
+    ...parseCustomArguments(),
   ];
 }
 
 function parseSkipBootstrapSwitch(): build.CakeParameter[] {
-  return getCakeBootstrapInput() === 'skip'
-    ? [new build.CakeSwitch('skip-bootstrap')]
-    : [];
+  return getCakeBootstrapInput() === 'skip' ? [new build.CakeSwitch('skip-bootstrap')] : [];
 }
 
 function parseDryRunSwitch(): build.CakeParameter[] {
-  return input.getBooleanInput('dry-run')
-    ? [new build.CakeSwitch('dryrun')]
-    : [];
+  return input.getBooleanInput('dry-run') ? [new build.CakeSwitch('dryrun')] : [];
 }
 
 function parseCustomArguments(): build.CakeParameter[] {
-  return input.getMultilineInput('arguments')
-    .filter(line => containsArgumentDefinition(line))
-    .map(line => parseNameAndValue(line))
+  return input
+    .getMultilineInput('arguments')
+    .filter((line) => containsArgumentDefinition(line))
+    .map((line) => parseNameAndValue(line))
     .map(([name, value]) => new build.CakeArgument(name, value));
 }
 

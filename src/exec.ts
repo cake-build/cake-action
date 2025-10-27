@@ -21,7 +21,8 @@ export async function script(
   path: string,
   version?: CakeVersion,
   bootstrap?: CakeBootstrap,
-  ...params: CakeParameter[]) {
+  ...params: CakeParameter[]
+) {
   const toolsDir = new ToolsDirectory();
   const cakeToolSettings = new CakeToolSettings(toolsDir, version?.version === 'tool-manifest');
 

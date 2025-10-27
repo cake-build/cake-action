@@ -27,16 +27,28 @@ export async function installLocalTool(
   }
 
   if (version && targetDirectory.containsToolWithVersion(packageId, version)) {
-    core.info(`The ${packageId} version ${version} already exists in ${targetDirectory.path}, skipping installation`);
+    core.info(
+      `The ${packageId} version ${version} already exists in ${targetDirectory.path}, skipping installation`
+    );
     return;
   }
 
-  if (version && (targetDirectory.containsTool(toolName) && !targetDirectory.containsToolWithVersion(packageId, version))) {
+  if (
+    version &&
+    targetDirectory.containsTool(toolName) &&
+    !targetDirectory.containsToolWithVersion(packageId, version)
+  ) {
     await uninstallLocalTool(packageId, targetDirectory);
   }
 
   const versionArg = version ? ['--version', version] : [];
-  const installArgs = [...verbosityArg, ...versionArg, '--tool-path', targetDirectory.path, packageId];
+  const installArgs = [
+    ...verbosityArg,
+    ...versionArg,
+    '--tool-path',
+    targetDirectory.path,
+    packageId,
+  ];
 
   const exitCode = await exec(dotnetToolInstall, installArgs);
 

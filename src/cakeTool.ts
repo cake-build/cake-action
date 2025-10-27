@@ -10,7 +10,7 @@ export async function install(toolsDir?: ToolsDirectory, version?: CakeVersion) 
       break;
     case 'latest':
     case undefined:
-      await installCakeLocalTool(toolsDir, await getLatestVersion() ?? undefined);
+      await installCakeLocalTool(toolsDir, (await getLatestVersion()) ?? undefined);
       break;
     case 'specific':
       await installCakeLocalTool(toolsDir, version.number);
@@ -22,9 +22,5 @@ async function installCakeLocalTool(
   targetDirectory: ToolsDirectory = new ToolsDirectory(),
   version?: string
 ) {
-  return dotnet.installLocalTool(
-    'Cake.Tool',
-    'dotnet-cake',
-    targetDirectory,
-    version);
+  return dotnet.installLocalTool('Cake.Tool', 'dotnet-cake', targetDirectory, version);
 }

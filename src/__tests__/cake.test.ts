@@ -40,10 +40,13 @@ describe('When running a script successfully using the global Cake tool', () => 
       'script.cake',
       undefined,
       new CakeArgument('param', 'arg'),
-      new CakeSwitch('switch'));
-    expect(fakeExec).toHaveBeenCalledWith(
-      '/usr/bin/dotnet-cake',
-      ['script.cake', '--param=arg', '--switch']);
+      new CakeSwitch('switch')
+    );
+    expect(fakeExec).toHaveBeenCalledWith('/usr/bin/dotnet-cake', [
+      'script.cake',
+      '--param=arg',
+      '--switch',
+    ]);
   });
 
   test('it should run the global dotnet-cake tool without any invalid parameters', async () => {
@@ -51,10 +54,9 @@ describe('When running a script successfully using the global Cake tool', () => 
       'script.cake',
       undefined,
       new CakeArgument('', ''),
-      new CakeSwitch('switch'));
-    expect(fakeExec).toHaveBeenCalledWith(
-      '/usr/bin/dotnet-cake',
-      ['script.cake', '--switch']);
+      new CakeSwitch('switch')
+    );
+    expect(fakeExec).toHaveBeenCalledWith('/usr/bin/dotnet-cake', ['script.cake', '--switch']);
   });
 });
 
@@ -66,12 +68,18 @@ describe('When running a script successfully using the local Cake tool', () => {
   });
 
   test('it should run the local dotnet-cake tool on the default script', async () => {
-    await cake.runScript(undefined, new CakeToolSettings(new ToolsDirectory(pathToLocalToolsDirectory)));
+    await cake.runScript(
+      undefined,
+      new CakeToolSettings(new ToolsDirectory(pathToLocalToolsDirectory))
+    );
     expect(fakeExec).toHaveBeenCalledWith(pathToLocalTool, ['build.cake']);
   });
 
   test('it should run the local dotnet-cake tool on the specified script', async () => {
-    await cake.runScript('script.cake', new CakeToolSettings(new ToolsDirectory(pathToLocalToolsDirectory)));
+    await cake.runScript(
+      'script.cake',
+      new CakeToolSettings(new ToolsDirectory(pathToLocalToolsDirectory))
+    );
     expect(fakeExec).toHaveBeenCalledWith(pathToLocalTool, ['script.cake']);
   });
 
@@ -80,10 +88,13 @@ describe('When running a script successfully using the local Cake tool', () => {
       'script.cake',
       new CakeToolSettings(new ToolsDirectory(pathToLocalToolsDirectory)),
       new CakeArgument('param', 'arg'),
-      new CakeSwitch('switch'));
-    expect(fakeExec).toHaveBeenCalledWith(
-      pathToLocalTool,
-      ['script.cake', '--param=arg', '--switch']);
+      new CakeSwitch('switch')
+    );
+    expect(fakeExec).toHaveBeenCalledWith(pathToLocalTool, [
+      'script.cake',
+      '--param=arg',
+      '--switch',
+    ]);
   });
 
   test('it should run the local dotnet-cake tool without any invalid parameters', async () => {
@@ -91,10 +102,9 @@ describe('When running a script successfully using the local Cake tool', () => {
       'script.cake',
       new CakeToolSettings(new ToolsDirectory(pathToLocalToolsDirectory)),
       new CakeArgument('', ''),
-      new CakeSwitch('switch'));
-    expect(fakeExec).toHaveBeenCalledWith(
-      pathToLocalTool,
-      ['script.cake', '--switch']);
+      new CakeSwitch('switch')
+    );
+    expect(fakeExec).toHaveBeenCalledWith(pathToLocalTool, ['script.cake', '--switch']);
   });
 });
 
@@ -120,7 +130,9 @@ describe('When failing to run a script using the local Cake tool', () => {
   });
 
   test('it should throw an error containing the exit code', async () => {
-    await expect(cake.runScript('script.cake', new CakeToolSettings(new ToolsDirectory()))).rejects.toThrow('-21');
+    await expect(
+      cake.runScript('script.cake', new CakeToolSettings(new ToolsDirectory()))
+    ).rejects.toThrow('-21');
   });
 });
 
@@ -132,12 +144,18 @@ describe('When bootstrapping a script successfully using the local Cake tool', (
   });
 
   test('it should run the local dotnet-cake tool on the default script', async () => {
-    await cake.bootstrapScript(undefined, new CakeToolSettings(new ToolsDirectory(pathToLocalToolsDirectory)));
+    await cake.bootstrapScript(
+      undefined,
+      new CakeToolSettings(new ToolsDirectory(pathToLocalToolsDirectory))
+    );
     expect(fakeExec).toHaveBeenCalledWith(pathToLocalTool, ['build.cake', '--bootstrap']);
   });
 
   test('it should run the local dotnet-cake tool on the specified script', async () => {
-    await cake.bootstrapScript('script.cake', new CakeToolSettings(new ToolsDirectory(pathToLocalToolsDirectory)));
+    await cake.bootstrapScript(
+      'script.cake',
+      new CakeToolSettings(new ToolsDirectory(pathToLocalToolsDirectory))
+    );
     expect(fakeExec).toHaveBeenCalledWith(pathToLocalTool, ['script.cake', '--bootstrap']);
   });
 });
@@ -150,7 +168,9 @@ describe('When failing to bootstrap a script using the local Cake tool', () => {
   });
 
   test('it should throw an error containing the exit code', async () => {
-    await expect(cake.bootstrapScript('script.cake', new CakeToolSettings(new ToolsDirectory()))).rejects.toThrow('-21');
+    await expect(
+      cake.bootstrapScript('script.cake', new CakeToolSettings(new ToolsDirectory()))
+    ).rejects.toThrow('-21');
   });
 });
 
@@ -176,10 +196,13 @@ describe('When running a script successfully using the tool manifest', () => {
       'script.cake',
       new CakeToolSettings(undefined, true),
       new CakeArgument('param', 'arg'),
-      new CakeSwitch('switch'));
-    expect(fakeExec).toHaveBeenCalledWith(
-      dotnetManifestCake,
-      ['script.cake', '--param=arg', '--switch']);
+      new CakeSwitch('switch')
+    );
+    expect(fakeExec).toHaveBeenCalledWith(dotnetManifestCake, [
+      'script.cake',
+      '--param=arg',
+      '--switch',
+    ]);
   });
 
   test('it should run the local dotnet-cake tool without any invalid parameters', async () => {
@@ -187,10 +210,9 @@ describe('When running a script successfully using the tool manifest', () => {
       'script.cake',
       new CakeToolSettings(undefined, true),
       new CakeArgument('', ''),
-      new CakeSwitch('switch'));
-    expect(fakeExec).toHaveBeenCalledWith(
-      dotnetManifestCake,
-      ['script.cake', '--switch']);
+      new CakeSwitch('switch')
+    );
+    expect(fakeExec).toHaveBeenCalledWith(dotnetManifestCake, ['script.cake', '--switch']);
   });
 });
 
@@ -205,16 +227,17 @@ describe('When running a Cake Frosting project successfully', () => {
   test('it should run with the default non-required parameters', async () => {
     await cake.runProject(pathToCsprojFile, fakeToolsDirectory);
 
-    expect(fakeExec).toHaveBeenCalledWith(
-      dotnetRun,
-      [
-        '--project', pathToCsprojFile,
-        '--no-launch-profile',
-        '--verbosity', 'minimal',
-        '--configuration', 'Release',
-        '--',
-        `--paths_tools="${fakeToolsDirectory.path}"`
-      ]);
+    expect(fakeExec).toHaveBeenCalledWith(dotnetRun, [
+      '--project',
+      pathToCsprojFile,
+      '--no-launch-profile',
+      '--verbosity',
+      'minimal',
+      '--configuration',
+      'Release',
+      '--',
+      `--paths_tools="${fakeToolsDirectory.path}"`,
+    ]);
   });
 
   test('it should run with the specified parameters', async () => {
@@ -222,20 +245,22 @@ describe('When running a Cake Frosting project successfully', () => {
       pathToCsprojFile,
       fakeToolsDirectory,
       new CakeArgument('param', 'arg'),
-      new CakeSwitch('switch'));
+      new CakeSwitch('switch')
+    );
 
-    expect(fakeExec).toHaveBeenCalledWith(
-      dotnetRun,
-      [
-        '--project', pathToCsprojFile,
-        '--no-launch-profile',
-        '--verbosity', 'minimal',
-        '--configuration', 'Release',
-        '--',
-        `--paths_tools="${fakeToolsDirectory.path}"`,
-        '--param=arg',
-        '--switch'
-      ]);
+    expect(fakeExec).toHaveBeenCalledWith(dotnetRun, [
+      '--project',
+      pathToCsprojFile,
+      '--no-launch-profile',
+      '--verbosity',
+      'minimal',
+      '--configuration',
+      'Release',
+      '--',
+      `--paths_tools="${fakeToolsDirectory.path}"`,
+      '--param=arg',
+      '--switch',
+    ]);
   });
 });
 
@@ -262,16 +287,16 @@ describe('When running a Cake C# file successfully', () => {
   test('it should run with the default non-required parameters', async () => {
     await cake.runFile(pathToCsFile, fakeToolsDirectory);
 
-    expect(fakeExec).toHaveBeenCalledWith(
-      dotnetRun,
-      [
-        pathToCsFile,
-        '--no-launch-profile',
-        '--verbosity', 'minimal',
-        '--configuration', 'Release',
-        '--',
-        `--paths_tools="${fakeToolsDirectory.path}"`
-      ]);
+    expect(fakeExec).toHaveBeenCalledWith(dotnetRun, [
+      pathToCsFile,
+      '--no-launch-profile',
+      '--verbosity',
+      'minimal',
+      '--configuration',
+      'Release',
+      '--',
+      `--paths_tools="${fakeToolsDirectory.path}"`,
+    ]);
   });
 
   test('it should run with the specified parameters', async () => {
@@ -279,20 +304,21 @@ describe('When running a Cake C# file successfully', () => {
       pathToCsFile,
       fakeToolsDirectory,
       new CakeArgument('param', 'arg'),
-      new CakeSwitch('switch'));
+      new CakeSwitch('switch')
+    );
 
-    expect(fakeExec).toHaveBeenCalledWith(
-      dotnetRun,
-      [
-        pathToCsFile,
-        '--no-launch-profile',
-        '--verbosity', 'minimal',
-        '--configuration', 'Release',
-        '--',
-        `--paths_tools="${fakeToolsDirectory.path}"`,
-        '--param=arg',
-        '--switch'
-      ]);
+    expect(fakeExec).toHaveBeenCalledWith(dotnetRun, [
+      pathToCsFile,
+      '--no-launch-profile',
+      '--verbosity',
+      'minimal',
+      '--configuration',
+      'Release',
+      '--',
+      `--paths_tools="${fakeToolsDirectory.path}"`,
+      '--param=arg',
+      '--switch',
+    ]);
   });
 });
 

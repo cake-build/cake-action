@@ -7,10 +7,14 @@ export async function getLatestVersion(): Promise<string | null> {
 
 async function getLatestCakeReleaseFromGitHub(): Promise<GitHubRelease | null> {
   const client = new http.HttpClient('cake-build/cake-action');
-  const response = await client.getJson<GitHubRelease>('https://api.github.com/repos/cake-build/cake/releases/latest');
+  const response = await client.getJson<GitHubRelease>(
+    'https://api.github.com/repos/cake-build/cake/releases/latest'
+  );
 
   if (response.statusCode != 200) {
-    console.log(`Could not determine the latest version of Cake. GitHub returned status code ${response.statusCode}`);
+    console.log(
+      `Could not determine the latest version of Cake. GitHub returned status code ${response.statusCode}`
+    );
     return null;
   }
 
