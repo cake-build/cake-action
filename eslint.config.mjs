@@ -3,6 +3,7 @@ import js from '@eslint/js';
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import jestPlugin from 'eslint-plugin-jest';
+import prettier from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -15,53 +16,37 @@ const compat = new FlatCompat({
     allConfig: js.configs.all
 });
 
-export default [...compat.extends(
-    'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/recommended-type-checked',
-    'plugin:jest/recommended',
-    'plugin:jest/style',
-), {
-    plugins: {
-        '@typescript-eslint': typescriptEslint,
-        'jest': jestPlugin,
-    },
-
-    languageOptions: {
-        globals: {
-            ...globals.node,
-            ...globals.jest,
-            Atomics: 'readonly',
-            SharedArrayBuffer: 'readonly',
+export default [
+    ...compat.extends(
+        'plugin:@typescript-eslint/recommended',
+        'plugin:@typescript-eslint/recommended-type-checked',
+        'plugin:jest/recommended',
+        'plugin:jest/style',
+    ),
+    {
+        plugins: {
+            '@typescript-eslint': typescriptEslint,
+            'jest': jestPlugin,
         },
-        parser: tsParser,
-        parserOptions: {
-            project: [
-                './tsconfig.eslint.json',
-                './tsconfig.json',
-            ],
-            tsconfigRootDir: __dirname
-        },
-        ecmaVersion: 'latest',
-        sourceType: 'commonjs',
-    },
 
-    rules: {
-        'brace-style': 'error',
-        'arrow-spacing': 'error',
-        'eol-last': 'error',
-        'keyword-spacing': 'error',
-        'no-mixed-spaces-and-tabs': 'error',
-        'no-multiple-empty-lines': 'error',
-        'no-trailing-spaces': 'error',
-        'space-before-blocks': 'error',
-        'space-before-function-paren': 'off',
-        'space-in-parens': 'error',
-        'space-infix-ops': 'error',
-        'space-unary-ops': 'error',
-        'spaced-comment': 'error',
-        semi: 'error',
-        quotes: [2, 'single', {
-            avoidEscape: true,
-        }],
+        languageOptions: {
+            globals: {
+                ...globals.node,
+                ...globals.jest,
+                Atomics: 'readonly',
+                SharedArrayBuffer: 'readonly',
+            },
+            parser: tsParser,
+            parserOptions: {
+                project: [
+                    './tsconfig.eslint.json',
+                    './tsconfig.json',
+                ],
+                tsconfigRootDir: __dirname
+            },
+            ecmaVersion: 'latest',
+            sourceType: 'commonjs',
+        },
     },
-}];
+    prettier
+];
