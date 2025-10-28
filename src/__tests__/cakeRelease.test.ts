@@ -49,9 +49,7 @@ describe('When failing to retrieve the latest Cake version due to a GitHub error
   test('it should log the fact that the GitHub API returned an error', async () => {
     const log = jest.spyOn(console, 'log');
     await cakeRelease.getLatestVersion();
-    expect(log).toHaveBeenCalledWith(
-      'Could not determine the latest version of Cake. GitHub returned status code 500'
-    );
+    expect(log).toHaveBeenCalledWith('Could not determine the latest version of Cake. GitHub returned status code 500');
   });
 });
 

@@ -192,15 +192,11 @@ describe('When getting the Cake input arguments from the action', () => {
   });
 
   test('it should return the argument for the target script parameter', () => {
-    expect(input.getInputs().buildArguments).toContainEqual(
-      new CakeArgument('target', 'Task-To-Run')
-    );
+    expect(input.getInputs().buildArguments).toContainEqual(new CakeArgument('target', 'Task-To-Run'));
   });
 
   test('it should return the argument for the verbosity script parameter', () => {
-    expect(input.getInputs().buildArguments).toContainEqual(
-      new CakeArgument('verbosity', 'Verbosity-Level')
-    );
+    expect(input.getInputs().buildArguments).toContainEqual(new CakeArgument('verbosity', 'Verbosity-Level'));
   });
 
   test('it should return the argument for the dry-run script parameter', () => {
@@ -222,36 +218,24 @@ describe('When getting the dry-run script input argument set to false from the a
 });
 
 describe('When getting multiple custom script input arguments from the action', () => {
-  const fakeGetMultilineInput = core.getMultilineInput as jest.MockedFunction<
-    typeof core.getMultilineInput
-  >;
+  const fakeGetMultilineInput = core.getMultilineInput as jest.MockedFunction<typeof core.getMultilineInput>;
 
   beforeAll(() => {
     when(fakeGetMultilineInput)
       .calledWith('arguments')
-      .mockReturnValue([
-        "string-parameter: 'value'",
-        'numeric-parameter: 3',
-        'boolean-parameter: true',
-      ]);
+      .mockReturnValue(["string-parameter: 'value'", 'numeric-parameter: 3', 'boolean-parameter: true']);
   });
 
   test('it should return the argument for a custom string parameter', () => {
-    expect(input.getInputs().buildArguments).toContainEqual(
-      new CakeArgument('string-parameter', "'value'")
-    );
+    expect(input.getInputs().buildArguments).toContainEqual(new CakeArgument('string-parameter', "'value'"));
   });
 
   test('it should return the argument for a custom numeric parameter', () => {
-    expect(input.getInputs().buildArguments).toContainEqual(
-      new CakeArgument('numeric-parameter', '3')
-    );
+    expect(input.getInputs().buildArguments).toContainEqual(new CakeArgument('numeric-parameter', '3'));
   });
 
   test('it should return the argument for a custom boolean parameter', () => {
-    expect(input.getInputs().buildArguments).toContainEqual(
-      new CakeArgument('boolean-parameter', 'true')
-    );
+    expect(input.getInputs().buildArguments).toContainEqual(new CakeArgument('boolean-parameter', 'true'));
   });
 });
 
@@ -287,16 +271,12 @@ describe('When getting a custom script input argument that contains colons (e.g.
   });
 
   test('it should return the argument for the custom parameter', () => {
-    expect(input.getInputs().buildArguments).toContainEqual(
-      new CakeArgument('url', 'https://example.com')
-    );
+    expect(input.getInputs().buildArguments).toContainEqual(new CakeArgument('url', 'https://example.com'));
   });
 });
 
 describe('When getting improperly formatted custom script input arguments from the action', () => {
-  const fakeGetMultilineInput = core.getMultilineInput as jest.MockedFunction<
-    typeof core.getMultilineInput
-  >;
+  const fakeGetMultilineInput = core.getMultilineInput as jest.MockedFunction<typeof core.getMultilineInput>;
 
   beforeAll(() => {
     when(fakeGetMultilineInput)

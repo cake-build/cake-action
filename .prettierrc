@@ -5,5 +5,13 @@
   "trailingComma": "es5",
   "printWidth": 100,
   "arrowParens": "always",
-  "endOfLine": "lf"
+  "endOfLine": "lf",
+  "overrides": [
+    {
+      "files": "*.test.ts",
+      "options": {
+        "printWidth": 120
+      }
+    }
+  ]
 }

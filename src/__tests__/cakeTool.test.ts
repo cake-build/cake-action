@@ -10,12 +10,8 @@ jest.mock('../dotnet');
 jest.mock('../cakeRelease');
 
 describe('When installing the Cake Tool based on the tool manifest', () => {
-  const fakeRestoreTool = dotnet.restoreLocalTools as jest.MockedFunction<
-    typeof dotnet.restoreLocalTools
-  >;
-  const fakeInstallLocalTool = dotnet.installLocalTool as jest.MockedFunction<
-    typeof dotnet.installLocalTool
-  >;
+  const fakeRestoreTool = dotnet.restoreLocalTools as jest.MockedFunction<typeof dotnet.restoreLocalTools>;
+  const fakeInstallLocalTool = dotnet.installLocalTool as jest.MockedFunction<typeof dotnet.installLocalTool>;
 
   beforeEach(async () => {
     await cakeTool.install(undefined, { version: 'tool-manifest' });
@@ -31,12 +27,8 @@ describe('When installing the Cake Tool based on the tool manifest', () => {
 });
 
 describe('When installing the Cake Tool without a version number', () => {
-  const fakeInstallLocalTool = dotnet.installLocalTool as jest.MockedFunction<
-    typeof dotnet.installLocalTool
-  >;
-  const fakeGetLatestVersion = cakeRelease.getLatestVersion as jest.MockedFunction<
-    typeof cakeRelease.getLatestVersion
-  >;
+  const fakeInstallLocalTool = dotnet.installLocalTool as jest.MockedFunction<typeof dotnet.installLocalTool>;
+  const fakeGetLatestVersion = cakeRelease.getLatestVersion as jest.MockedFunction<typeof cakeRelease.getLatestVersion>;
 
   beforeAll(() => {
     fakeGetLatestVersion.mockResolvedValue('theLatestVersion');
@@ -55,22 +47,13 @@ describe('When installing the Cake Tool without a version number', () => {
   test('it should install the latest version of the Cake.Tool in the specified target directory', async () => {
     const targetDir = new ToolsDirectory(targetDirectory);
     await cakeTool.install(targetDir);
-    expect(fakeInstallLocalTool).toHaveBeenCalledWith(
-      'Cake.Tool',
-      'dotnet-cake',
-      targetDir,
-      'theLatestVersion'
-    );
+    expect(fakeInstallLocalTool).toHaveBeenCalledWith('Cake.Tool', 'dotnet-cake', targetDir, 'theLatestVersion');
   });
 });
 
 describe('When installing the latest version of the Cake Tool', () => {
-  const fakeInstallLocalTool = dotnet.installLocalTool as jest.MockedFunction<
-    typeof dotnet.installLocalTool
-  >;
-  const fakeGetLatestVersion = cakeRelease.getLatestVersion as jest.MockedFunction<
-    typeof cakeRelease.getLatestVersion
-  >;
+  const fakeInstallLocalTool = dotnet.installLocalTool as jest.MockedFunction<typeof dotnet.installLocalTool>;
+  const fakeGetLatestVersion = cakeRelease.getLatestVersion as jest.MockedFunction<typeof cakeRelease.getLatestVersion>;
 
   beforeAll(() => {
     fakeGetLatestVersion.mockResolvedValue('theLatestVersion');
@@ -89,19 +72,12 @@ describe('When installing the latest version of the Cake Tool', () => {
   test('it should install the latest version of the Cake.Tool in the specified target directory', async () => {
     const targetDir = new ToolsDirectory(targetDirectory);
     await cakeTool.install(targetDir, { version: 'latest' });
-    expect(fakeInstallLocalTool).toHaveBeenCalledWith(
-      'Cake.Tool',
-      'dotnet-cake',
-      targetDir,
-      'theLatestVersion'
-    );
+    expect(fakeInstallLocalTool).toHaveBeenCalledWith('Cake.Tool', 'dotnet-cake', targetDir, 'theLatestVersion');
   });
 });
 
 describe('When installing a specific version of the Cake Tool', () => {
-  const fakeInstallLocalTool = dotnet.installLocalTool as jest.MockedFunction<
-    typeof dotnet.installLocalTool
-  >;
+  const fakeInstallLocalTool = dotnet.installLocalTool as jest.MockedFunction<typeof dotnet.installLocalTool>;
 
   test('it should install the specified version of the Cake.Tool in the tools directory', async () => {
     await cakeTool.install(undefined, { version: 'specific', number: 'the.version.number' });
@@ -116,19 +92,12 @@ describe('When installing a specific version of the Cake Tool', () => {
   test('it should install the specified version of the Cake.Tool in the specified target directory', async () => {
     const targetDir = new ToolsDirectory(targetDirectory);
     await cakeTool.install(targetDir, { version: 'specific', number: 'the.version.number' });
-    expect(fakeInstallLocalTool).toHaveBeenCalledWith(
-      'Cake.Tool',
-      'dotnet-cake',
-      targetDir,
-      'the.version.number'
-    );
+    expect(fakeInstallLocalTool).toHaveBeenCalledWith('Cake.Tool', 'dotnet-cake', targetDir, 'the.version.number');
   });
 });
 
 describe('When failing to install the Cake Tool based on the tool manifest', () => {
-  const fakeRestoreTool = dotnet.restoreLocalTools as jest.MockedFunction<
-    typeof dotnet.restoreLocalTools
-  >;
+  const fakeRestoreTool = dotnet.restoreLocalTools as jest.MockedFunction<typeof dotnet.restoreLocalTools>;
   const installError = new Error('Failed to install Cake.Tool');
 
   beforeAll(() => {
@@ -136,16 +105,12 @@ describe('When failing to install the Cake Tool based on the tool manifest', () 
   });
 
   test('it should throw the error returned from the restore tool function', async () => {
-    await expect(cakeTool.install(undefined, { version: 'tool-manifest' })).rejects.toThrow(
-      installError
-    );
+    await expect(cakeTool.install(undefined, { version: 'tool-manifest' })).rejects.toThrow(installError);
   });
 });
 
 describe('When failing to install the Cake Tool without a version number', () => {
-  const fakeInstallLocalTool = dotnet.installLocalTool as jest.MockedFunction<
-    typeof dotnet.installLocalTool
-  >;
+  const fakeInstallLocalTool = dotnet.installLocalTool as jest.MockedFunction<typeof dotnet.installLocalTool>;
   const installError = new Error('Failed to install Cake.Tool');
 
   beforeAll(() => {
@@ -158,9 +123,7 @@ describe('When failing to install the Cake Tool without a version number', () =>
 });
 
 describe('When failing to install the latest version of the Cake Tool', () => {
-  const fakeInstallLocalTool = dotnet.installLocalTool as jest.MockedFunction<
-    typeof dotnet.installLocalTool
-  >;
+  const fakeInstallLocalTool = dotnet.installLocalTool as jest.MockedFunction<typeof dotnet.installLocalTool>;
   const installError = new Error('Failed to install Cake.Tool');
 
   beforeAll(() => {
@@ -173,9 +136,7 @@ describe('When failing to install the latest version of the Cake Tool', () => {
 });
 
 describe('When failing to install a specific version of the Cake Tool', () => {
-  const fakeInstallLocalTool = dotnet.installLocalTool as jest.MockedFunction<
-    typeof dotnet.installLocalTool
-  >;
+  const fakeInstallLocalTool = dotnet.installLocalTool as jest.MockedFunction<typeof dotnet.installLocalTool>;
   const installError = new Error('Failed to install Cake.Tool');
 
   beforeAll(() => {
@@ -183,19 +144,15 @@ describe('When failing to install a specific version of the Cake Tool', () => {
   });
 
   test('it should throw the error returned from the install local tool function', async () => {
-    await expect(
-      cakeTool.install(undefined, { version: 'specific', number: 'the.version.number' })
-    ).rejects.toThrow(installError);
+    await expect(cakeTool.install(undefined, { version: 'specific', number: 'the.version.number' })).rejects.toThrow(
+      installError
+    );
   });
 });
 
 describe('When failing to retrieve the latest version of the Cake Tool', () => {
-  const fakeInstallLocalTool = dotnet.installLocalTool as jest.MockedFunction<
-    typeof dotnet.installLocalTool
-  >;
-  const fakeGetLatestVersion = cakeRelease.getLatestVersion as jest.MockedFunction<
-    typeof cakeRelease.getLatestVersion
-  >;
+  const fakeInstallLocalTool = dotnet.installLocalTool as jest.MockedFunction<typeof dotnet.installLocalTool>;
+  const fakeGetLatestVersion = cakeRelease.getLatestVersion as jest.MockedFunction<typeof cakeRelease.getLatestVersion>;
 
   beforeAll(() => {
     fakeInstallLocalTool.mockReset();
@@ -204,22 +161,12 @@ describe('When failing to retrieve the latest version of the Cake Tool', () => {
 
   test('it should install the Cake.Tool without a version number in the tools directory', async () => {
     await cakeTool.install();
-    expect(fakeInstallLocalTool).toHaveBeenCalledWith(
-      'Cake.Tool',
-      'dotnet-cake',
-      new ToolsDirectory(),
-      undefined
-    );
+    expect(fakeInstallLocalTool).toHaveBeenCalledWith('Cake.Tool', 'dotnet-cake', new ToolsDirectory(), undefined);
   });
 
   test('it should install the Cake.Tool without a version number in the specified target directory', async () => {
     const targetDir = new ToolsDirectory(targetDirectory);
     await cakeTool.install(targetDir);
-    expect(fakeInstallLocalTool).toHaveBeenCalledWith(
-      'Cake.Tool',
-      'dotnet-cake',
-      targetDir,
-      undefined
-    );
+    expect(fakeInstallLocalTool).toHaveBeenCalledWith('Cake.Tool', 'dotnet-cake', targetDir, undefined);
   });
 });

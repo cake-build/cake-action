@@ -35,18 +35,12 @@ describe('When successfully installing a local tool', () => {
 
   test('it should install the specified tool', async () => {
     await dotnet.installLocalTool('The.Tool', 'dotnet-tool');
-    expect(fakeExec).toHaveBeenCalledWith(
-      'dotnet tool install',
-      expect.arrayContaining(['The.Tool'])
-    );
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool install', expect.arrayContaining(['The.Tool']));
   });
 
   test('it should install the tool in the tools directory', async () => {
     await dotnet.installLocalTool('The.Tool', 'dotnet-tool');
-    expect(fakeExec).toHaveBeenCalledWith(
-      'dotnet tool install',
-      expect.arrayContaining(['--tool-path', 'tools'])
-    );
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool install', expect.arrayContaining(['--tool-path', 'tools']));
   });
 
   test('it should install the tool in the specified target directory', async () => {
@@ -60,18 +54,12 @@ describe('When successfully installing a local tool', () => {
 
   test('it should install the specified version of the tool', async () => {
     await dotnet.installLocalTool('The.Tool', 'dotnet-tool', undefined, 'theVersion');
-    expect(fakeExec).toHaveBeenCalledWith(
-      'dotnet tool install',
-      expect.arrayContaining(['--version', 'theVersion'])
-    );
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool install', expect.arrayContaining(['--version', 'theVersion']));
   });
 
   test('it should install the tool using minimal verbosity', async () => {
     await dotnet.installLocalTool('The.Tool', 'dotnet-tool');
-    expect(fakeExec).toHaveBeenCalledWith(
-      'dotnet tool install',
-      expect.arrayContaining(['--verbosity', 'minimal'])
-    );
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool install', expect.arrayContaining(['--verbosity', 'minimal']));
   });
 });
 
@@ -100,13 +88,7 @@ describe('When installing a local tool in a directory where it already exists', 
     );
     expect(fakeExec).toHaveBeenCalledWith(
       'dotnet tool install',
-      expect.arrayContaining([
-        '--version',
-        'theVersion',
-        '--tool-path',
-        toolsDirectory.path,
-        'The.Tool',
-      ])
+      expect.arrayContaining(['--version', 'theVersion', '--tool-path', toolsDirectory.path, 'The.Tool'])
     );
   });
 
@@ -119,13 +101,7 @@ describe('When installing a local tool in a directory where it already exists', 
     );
     expect(fakeExec).not.toHaveBeenCalledWith(
       'dotnet tool install',
-      expect.arrayContaining([
-        '--version',
-        'theVersion',
-        '--tool-path',
-        toolsDirectory.path,
-        'The.Tool',
-      ])
+      expect.arrayContaining(['--version', 'theVersion', '--tool-path', toolsDirectory.path, 'The.Tool'])
     );
   });
 });
@@ -155,18 +131,12 @@ describe('When successfully uninstalling a local tool', () => {
 
   test('it should uninstall the specified tool', async () => {
     await dotnet.uninstallLocalTool('The.Tool');
-    expect(fakeExec).toHaveBeenCalledWith(
-      'dotnet tool uninstall',
-      expect.arrayContaining(['The.Tool'])
-    );
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool uninstall', expect.arrayContaining(['The.Tool']));
   });
 
   test('it should uninstall the tool from the tools directory', async () => {
     await dotnet.uninstallLocalTool('The.Tool');
-    expect(fakeExec).toHaveBeenCalledWith(
-      'dotnet tool uninstall',
-      expect.arrayContaining(['--tool-path', 'tools'])
-    );
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool uninstall', expect.arrayContaining(['--tool-path', 'tools']));
   });
 
   test('it should uninstall the tool from the specified target directory', async () => {
@@ -208,10 +178,7 @@ describe('When successfully restoring the local tools', () => {
 
   test('it should restore the local tools using minimal verbosity', async () => {
     await dotnet.restoreLocalTools();
-    expect(fakeExec).toHaveBeenCalledWith(
-      'dotnet tool restore',
-      expect.arrayContaining(['--verbosity', 'minimal'])
-    );
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool restore', expect.arrayContaining(['--verbosity', 'minimal']));
   });
 });
 
