@@ -13,10 +13,10 @@ jobs:
     steps:
       - name: Get the sources
         uses: actions/checkout@v1
-      - name: Install Node 20
+      - name: Install Node 24
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
       - name: Install the .NET 6 SDK
         uses: actions/setup-dotnet@v4
         with:
@@ -168,10 +168,10 @@ jobs:
     steps:
       - name: Get the sources
         uses: actions/checkout@v1
-      - name: Install Node 20
+      - name: Install Node 24
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
       - name: Install the .NET 8 SDK
         uses: actions/setup-dotnet@v4
         with:
@@ -223,10 +223,10 @@ jobs:
     steps:
       - name: Get the sources
         uses: actions/checkout@v1
-      - name: Install Node 20
+      - name: Install Node 24
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
       - name: Install the .NET 10 SDK (Preview)
         uses: actions/setup-dotnet@v4
         with:
