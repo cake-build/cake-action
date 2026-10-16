@@ -31,6 +31,7 @@ type ToolManifest = {
 };
 type Latest = {
   readonly version: 'latest';
+  githubToken?: string;
 };
 type Specific = {
   readonly version: 'specific';
@@ -78,7 +79,7 @@ function getCakeVersionInput(): CakeVersion {
       return { version: 'tool-manifest' };
     case 'latest':
     case '':
-      return { version: 'latest' };
+      return { version: 'latest', githubToken: core.getInput('github-token') || undefined };
     default:
       return { version: 'specific', number: version };
   }

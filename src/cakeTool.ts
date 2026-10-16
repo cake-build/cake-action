@@ -10,7 +10,10 @@ export async function install(toolsDir?: ToolsDirectory, version?: CakeVersion) 
       break;
     case 'latest':
     case undefined:
-      await installCakeLocalTool(toolsDir, (await getLatestVersion()) ?? undefined);
+      await installCakeLocalTool(
+        toolsDir,
+        (await getLatestVersion(version?.githubToken)) ?? undefined
+      );
       break;
     case 'specific':
       await installCakeLocalTool(toolsDir, version.number);
