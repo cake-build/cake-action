@@ -142,6 +142,22 @@ steps:
 
 > :information_source: This option is ignored when [using Cake Frosting projects](#project-path).
 
+### `github-token`
+
+When `cake-version` is `latest`, the Cake action asks the GitHub API for the most recent Cake release. To avoid the stricter [rate limits](https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api) that apply to anonymous requests, the request is authenticated with the workflow's `GITHUB_TOKEN` by default.
+
+If you need to use a different token (for example, when running on GitHub Enterprise Server, where the workflow token isn't valid for github.com), you can specify it with the `github-token` parameter:
+
+```yml
+steps:
+  - name: Run the Cake script
+    uses: cake-build/cake-action@v3
+    with:
+      github-token: ${{ secrets.MY_GITHUB_TOKEN }}
+```
+
+If the latest release can't be determined, the action logs a warning and falls back to installing the latest version of Cake available from NuGet.
+
 ### `cake-bootstrap`
 
 As of [Cake 1.0.0](https://github.com/cake-build/cake/releases/tag/v1.0.0), any [custom modules](https://cakebuild.net/docs/fundamentals/modules) that you reference in your script are [bootstrapped automatically](https://github.com/cake-build/cake/issues/2833) upon running it.

@@ -33,6 +33,10 @@ inputs:
     description: 'The version of Cake to install. Either a specific version, "latest" (default) or "tool-manifest".'
     default: 'latest'
     required: false
+  github-token:
+    description: 'The GitHub token used to look up the latest Cake release when cake-version is "latest". Defaults to the workflow token.'
+    required: false
+    default: ${{ github.token }}
   cake-bootstrap:
     description: 'Flag for if Cake modules should be installed/bootstrapped.'
     required: false
