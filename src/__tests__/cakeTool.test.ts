@@ -150,6 +150,21 @@ describe('When failing to install a specific version of the Cake Tool', () => {
   });
 });
 
+describe('When installing the latest version of the Cake Tool with a GitHub token', () => {
+  const fakeInstallLocalTool = dotnet.installLocalTool as jest.MockedFunction<typeof dotnet.installLocalTool>;
+  const fakeGetLatestVersion = cakeRelease.getLatestVersion as jest.MockedFunction<typeof cakeRelease.getLatestVersion>;
+
+  beforeAll(() => {
+    fakeInstallLocalTool.mockReset();
+    fakeGetLatestVersion.mockResolvedValue('theLatestVersion');
+  });
+
+  test('it should use the token to retrieve the latest version', async () => {
+    await cakeTool.install(undefined, { version: 'latest', githubToken: 'theToken' });
+    expect(fakeGetLatestVersion).toHaveBeenCalledWith('theToken');
+  });
+});
+
 describe('When failing to retrieve the latest version of the Cake Tool', () => {
   const fakeInstallLocalTool = dotnet.installLocalTool as jest.MockedFunction<typeof dotnet.installLocalTool>;
   const fakeGetLatestVersion = cakeRelease.getLatestVersion as jest.MockedFunction<typeof cakeRelease.getLatestVersion>;

@@ -371,6 +371,36 @@ describe('When getting the cake-version script input argument set to latest from
   });
 });
 
+describe('When getting the github-token input argument from the action', () => {
+  const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
+
+  beforeAll(() => {
+    when(fakeGetInput).calledWith('cake-version').mockReturnValue('latest');
+    when(fakeGetInput).calledWith('github-token').mockReturnValue('theToken');
+  });
+
+  afterAll(() => {
+    when(fakeGetInput).calledWith('github-token').mockReturnValue('');
+  });
+
+  test('it should return the token along with the latest cake-version parameter', () => {
+    expect(input.getInputs().cakeVersion).toEqual({ version: 'latest', githubToken: 'theToken' });
+  });
+});
+
+describe('When getting an empty github-token input argument from the action', () => {
+  const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
+
+  beforeAll(() => {
+    when(fakeGetInput).calledWith('cake-version').mockReturnValue('latest');
+    when(fakeGetInput).calledWith('github-token').mockReturnValue('');
+  });
+
+  test('it should not return a token with the cake-version parameter', () => {
+    expect(input.getInputs().cakeVersion).toEqual({ version: 'latest', githubToken: undefined });
+  });
+});
+
 describe('When getting the cake-bootstrap script input argument set to auto from the action', () => {
   const fakeGetInput = core.getInput as jest.MockedFunction<typeof core.getInput>;
 
