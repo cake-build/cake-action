@@ -118,7 +118,7 @@ The arguments are defined in a [multi-line string literal](https://yaml.org/spec
 
 ### `cake-version`
 
-By default, the Cake action runs your script using the latest _stable_ version of the [Cake .NET Core Global tool](https://www.nuget.org/packages/Cake.Tool/).
+By default, the Cake action runs your script using the latest _stable_ version of the [Cake .NET Core Global tool](https://www.nuget.org/packages/Cake.Tool/). The latest version is resolved by `dotnet` from your configured NuGet package sources.
 
 If you need to [use a specific version of Cake](https://cakebuild.net/docs/tutorials/pinning-cake-version) (e.g. for compatibility with older addins), you can specify it with the `cake-version` parameter:
 
