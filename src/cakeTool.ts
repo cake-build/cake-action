@@ -1,7 +1,6 @@
 import * as dotnet from './dotnet';
 import { ToolsDirectory } from './toolsDirectory';
 import { CakeVersion } from './input';
-import { getLatestVersion } from './cakeRelease';
 
 export async function install(toolsDir?: ToolsDirectory, version?: CakeVersion) {
   switch (version?.version) {
@@ -10,7 +9,7 @@ export async function install(toolsDir?: ToolsDirectory, version?: CakeVersion) 
       break;
     case 'latest':
     case undefined:
-      await installCakeLocalTool(toolsDir, (await getLatestVersion()) ?? undefined);
+      await installCakeLocalTool(toolsDir);
       break;
     case 'specific':
       await installCakeLocalTool(toolsDir, version.number);
