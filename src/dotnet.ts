@@ -4,6 +4,7 @@ import { ToolsDirectory } from './toolsDirectory';
 
 const dotnetToolInstall = 'dotnet tool install';
 const dotnetToolUnInstall = 'dotnet tool uninstall';
+const dotnetToolUpdate = 'dotnet tool update';
 const dotnetToolRestore = 'dotnet tool restore';
 const verbosityArg = ['--verbosity', 'minimal'];
 
@@ -22,7 +23,7 @@ export async function installLocalTool(
   version?: string
 ) {
   if (!version && targetDirectory.containsTool(toolName)) {
-    core.info(`The ${packageId} already exists in ${targetDirectory.path}, skipping installation`);
+    await updateLocalTool(packageId, targetDirectory);
     return;
   }
 
@@ -67,6 +68,25 @@ export async function uninstallLocalTool(
 
   if (exitCode != 0) {
     throw new Error(`Failed to uninstall ${packageId}. Exit code: ${exitCode}`);
+  }
+}
+
+export async function updateLocalTool(
+  packageId: string,
+  targetDirectory: ToolsDirectory = new ToolsDirectory()
+) {
+  const updateArgs = [
+    ...verbosityArg,
+    '--allow-downgrade',
+    '--tool-path',
+    targetDirectory.path,
+    packageId,
+  ];
+
+  const exitCode = await exec(dotnetToolUpdate, updateArgs);
+
+  if (exitCode != 0) {
+    throw new Error(`Failed to update ${packageId}. Exit code: ${exitCode}`);
   }
 }
 

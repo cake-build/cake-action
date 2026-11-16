@@ -70,6 +70,15 @@ describe('When installing a local tool in a directory where it already exists', 
     fakeExec.mockResolvedValue(0);
   });
 
+  test('it should update the specified tool in the same directory', async () => {
+    toolsDirectory.containsTool = jest.fn().mockImplementation(() => true);
+    await dotnet.installLocalTool('The.Tool', 'dotnet-tool', toolsDirectory);
+    expect(fakeExec).toHaveBeenCalledWith(
+      'dotnet tool update',
+      expect.arrayContaining(['--tool-path', toolsDirectory.path, 'The.Tool'])
+    );
+  });
+
   test('it should not attempt to install the specified tool in the same directory', async () => {
     toolsDirectory.containsTool = jest.fn().mockImplementation(() => true);
     await dotnet.installLocalTool('The.Tool', 'dotnet-tool', toolsDirectory);
@@ -161,6 +170,58 @@ describe('When failing to uninstall a local tool', () => {
 
   test('it should throw an error containing the exit code', async () => {
     await expect(dotnet.uninstallLocalTool('The.Tool', toolsDirectory)).rejects.toThrow('-99');
+  });
+});
+
+describe('When successfully updating a local tool', () => {
+  const fakeExec = exec as jest.MockedFunction<typeof exec>;
+
+  beforeAll(() => {
+    fakeExec.mockResolvedValue(0);
+  });
+
+  test('it should update the specified tool', async () => {
+    await dotnet.updateLocalTool('The.Tool');
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool update', expect.arrayContaining(['The.Tool']));
+  });
+
+  test('it should update the tool in the tools directory', async () => {
+    await dotnet.updateLocalTool('The.Tool');
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool update', expect.arrayContaining(['--tool-path', 'tools']));
+  });
+
+  test('it should update the tool in the specified target directory', async () => {
+    await dotnet.updateLocalTool('The.Tool', toolsDirectory);
+    expect(fakeExec).toHaveBeenCalledWith(
+      'dotnet tool update',
+      expect.arrayContaining(['--tool-path', toolsDirectory.path])
+    );
+  });
+
+  test('it should allow the tool to be downgraded', async () => {
+    await dotnet.updateLocalTool('The.Tool');
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool update', expect.arrayContaining(['--allow-downgrade']));
+  });
+
+  test('it should update the tool using minimal verbosity', async () => {
+    await dotnet.updateLocalTool('The.Tool');
+    expect(fakeExec).toHaveBeenCalledWith('dotnet tool update', expect.arrayContaining(['--verbosity', 'minimal']));
+  });
+});
+
+describe('When failing to update a local tool', () => {
+  const fakeExec = exec as jest.MockedFunction<typeof exec>;
+
+  beforeAll(() => {
+    fakeExec.mockResolvedValue(-99);
+  });
+
+  test('it should throw an error containing the package id', async () => {
+    await expect(dotnet.updateLocalTool('The.Tool')).rejects.toThrow('The.Tool');
+  });
+
+  test('it should throw an error containing the exit code', async () => {
+    await expect(dotnet.updateLocalTool('The.Tool', toolsDirectory)).rejects.toThrow('-99');
   });
 });
 
