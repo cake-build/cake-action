@@ -7,7 +7,7 @@ export async function run() {
   try {
     const inputs = input.getInputs();
     const buildFile = inputs.buildFile;
-    const version = inputs.cakeVersion;
+    const cakeVersion = inputs.cakeVersion;
     const bootstrap = inputs.cakeBootstrap;
 
     dotnet.disableTelemetry();
@@ -21,7 +21,7 @@ export async function run() {
         await exec.file(buildFile.path, ...inputs.buildArguments);
         break;
       case 'script': {
-        await exec.script(buildFile.path, version, bootstrap, ...inputs.buildArguments);
+        await exec.script(buildFile.path, { cakeVersion, bootstrap }, ...inputs.buildArguments);
         break;
       }
     }

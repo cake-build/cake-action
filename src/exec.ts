@@ -1,9 +1,14 @@
-import { CakeBootstrap, CakeVersion } from './input';
-import { CakeParameter } from './cakeParameter';
-import { CakeToolSettings } from './cakeToolSettings';
-import { ToolsDirectory } from './toolsDirectory';
 import * as cake from './cake';
+import { CakeParameter } from './cakeParameter';
 import * as cakeTool from './cakeTool';
+import { CakeToolSettings } from './cakeToolSettings';
+import { CakeBootstrap, CakeVersion } from './input';
+import { ToolsDirectory } from './toolsDirectory';
+
+export interface ScriptOptions {
+  cakeVersion?: CakeVersion;
+  bootstrap?: CakeBootstrap;
+}
 
 export async function project(path: string, ...params: CakeParameter[]) {
   const toolsDir = new ToolsDirectory();
@@ -19,15 +24,15 @@ export async function file(path: string, ...params: CakeParameter[]) {
 
 export async function script(
   path: string,
-  version?: CakeVersion,
-  bootstrap?: CakeBootstrap,
+  options: ScriptOptions = {},
   ...params: CakeParameter[]
 ) {
+  const { cakeVersion, bootstrap } = options;
   const toolsDir = new ToolsDirectory();
-  const cakeToolSettings = new CakeToolSettings(toolsDir, version?.version === 'tool-manifest');
+  const cakeToolSettings = new CakeToolSettings(toolsDir, cakeVersion?.version === 'tool-manifest');
 
   toolsDir.create();
-  await cakeTool.install(toolsDir, version);
+  await cakeTool.install(toolsDir, cakeVersion);
 
   if (bootstrap === 'explicit') {
     await cake.bootstrapScript(path, cakeToolSettings);

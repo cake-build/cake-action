@@ -16,7 +16,7 @@ const dotnetRun = 'dotnet run';
 jest.mock('@actions/exec');
 jest.mock('@actions/io');
 
-describe('When running a script successfully using the global Cake tool', () => {
+describe('When running a Cake script successfully using the global Cake tool', () => {
   const fakeWhich = which as jest.MockedFunction<typeof which>;
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
@@ -46,7 +46,7 @@ describe('When running a script successfully using the global Cake tool', () => 
   });
 });
 
-describe('When running a script successfully using the local Cake tool', () => {
+describe('When running a Cake script successfully using the local Cake tool', () => {
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
   beforeAll(() => {
@@ -142,7 +142,7 @@ describe('When failing to bootstrap a script using the local Cake tool', () => {
   });
 });
 
-describe('When running a script successfully using the tool manifest', () => {
+describe('When running a Cake script successfully using the tool manifest', () => {
   const fakeExec = exec as jest.MockedFunction<typeof exec>;
 
   beforeAll(() => {
