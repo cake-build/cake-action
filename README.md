@@ -11,7 +11,7 @@ Using the Cake action from a GitHub Actions workflow is as simple as referencing
 ```yml
 steps:
   - name: Run the Cake script
-    uses: cake-build/cake-action@v3
+    uses: cake-build/cake-action@v4
 ```
 
 The Cake action will look for a script named `build.cake` in your repository's root directory and run it for you using the [Cake Tool](https://www.nuget.org/packages/Cake.Tool/).  You can also specify the path to your Cake script using the `script-path` option. If you are using a [Cake Frosting](https://cakebuild.net/docs/running-builds/runners/cake-frosting) project instead, you must specify the path to your `.csproj` file with the `project-path` parameter. You can also use `file-path` to specify a C# file (`.cs`) that contains a file-based Cake app (*requires .NET 10 or later*).
@@ -27,7 +27,7 @@ If your Cake script is located somewhere other than the root directory of your p
 ```yml
 steps:
   - name: Run the Cake script
-    uses: cake-build/cake-action@v3
+    uses: cake-build/cake-action@v4
     with:
       script-path: path/to/script.cake
 ```
@@ -39,7 +39,7 @@ If you are using [Cake Frosting](https://cakebuild.net/docs/running-builds/runne
 ```yml
 steps:
   - name: Run Cake Frosting
-    uses: cake-build/cake-action@v3
+    uses: cake-build/cake-action@v4
     with:
       project-path: path/to/build.csproj
 ```
@@ -51,7 +51,7 @@ If you want to run a C# file-based Cake app, specify the path to your `.cs` file
 ```yml
 steps:
   - name: Run a Cake C# file
-    uses: cake-build/cake-action@v3
+    uses: cake-build/cake-action@v4
     with:
       file-path: path/to/Build.cs
 ```
@@ -67,7 +67,7 @@ You'll likely want to specify which task to run out of the ones defined in the C
 ```yml
 steps:
   - name: Run the Cake script
-    uses: cake-build/cake-action@v3
+    uses: cake-build/cake-action@v4
     with:
       target: Task-To-Run
 ```
@@ -79,7 +79,7 @@ You can adjust the amount of information Cake sends to the build log by changing
 ```yml
 steps:
   - name: Run the Cake script
-    uses: cake-build/cake-action@v3
+    uses: cake-build/cake-action@v4
     with:
       verbosity: Diagnostic
 ```
@@ -93,7 +93,7 @@ While developing a script, you'll sometimes want to see which tasks would be tri
 ```yml
 steps:
   - name: Run the Cake script
-    uses: cake-build/cake-action@v3
+    uses: cake-build/cake-action@v4
     with:
       dry-run: true
 ```
@@ -107,7 +107,7 @@ If your script defines any custom parameters, you can specify arguments for them
 ```yml
 steps:
   - name: Run the Cake script
-    uses: cake-build/cake-action@v3
+    uses: cake-build/cake-action@v4
     with:
       arguments: |
         name: value
@@ -125,7 +125,7 @@ If you need to [use a specific version of Cake](https://cakebuild.net/docs/tutor
 ```yml
 steps:
   - name: Run the Cake script
-    uses: cake-build/cake-action@v3
+    uses: cake-build/cake-action@v4
     with:
       cake-version: 0.30.0
 ```
@@ -135,7 +135,7 @@ If you're pinning your Cake version using a [tool manifest file](https://docs.mi
 ```yml
 steps:
   - name: Run the Cake script
-    uses: cake-build/cake-action@v3
+    uses: cake-build/cake-action@v4
     with:
       cake-version: tool-manifest
 ```
@@ -151,7 +151,7 @@ For older versions of Cake, you need to explicitly [bootstrap](https://cakebuild
 ```yml
 steps:
   - name: Run the Cake script
-    uses: cake-build/cake-action@v3
+    uses: cake-build/cake-action@v4
     with:
       cake-bootstrap: explicit
       cake-version: 0.38.5
@@ -162,7 +162,7 @@ If you're using Cake 1.0.0 or later and wish to opt out of the automatic bootstr
 ```yml
 steps:
   - name: Run the Cake script
-    uses: cake-build/cake-action@v3
+    uses: cake-build/cake-action@v4
     with:
       cake-bootstrap: skip
 ```
@@ -188,7 +188,7 @@ jobs:
       - name: Get the sources
         uses: actions/checkout@v1
       - name: Run the build script
-        uses: cake-build/cake-action@v3
+        uses: cake-build/cake-action@v4
         with:
           target: Build
 ```
