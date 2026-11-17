@@ -95,6 +95,42 @@ jobs:
           cake-version: latest
           script-path: ${{ env.script-directory }}/build.cake
           target: Test-Cake-Version
+      - name: Install a newer Cake version than the package source offers
+        uses: ./
+        with:
+          cake-version: 2.1.0
+          script-path: ${{ env.script-directory }}/build.cake
+          target: Successful-Task
+      - name: Add a package source whose latest Cake version is 2.0.0
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const fs = require('fs');
+            const response = await fetch('https://api.nuget.org/v3-flatcontainer/cake.tool/2.0.0/cake.tool.2.0.0.nupkg');
+            if (!response.ok) {
+              throw new Error(`NuGet responded with ${response.status}`);
+            }
+            fs.mkdirSync('local-feed');
+            fs.writeFileSync('local-feed/cake.tool.2.0.0.nupkg', Buffer.from(await response.arrayBuffer()));
+            fs.writeFileSync('nuget.config', `<?xml version="1.0" encoding="utf-8"?>
+            <configuration>
+              <packageSources>
+                <clear />
+                <add key="local-feed" value="local-feed" />
+              </packageSources>
+            </configuration>
+            `);
+      - name: Run with the latest Cake version when a newer version is installed
+        env:
+          EXPECTED_CAKE_VERSION: 2.0.0
+        uses: ./
+        with:
+          cake-version: latest
+          script-path: ${{ env.script-directory }}/build.cake
+          target: Test-Cake-Version
+      - name: Remove the package source
+        run: rm -rf nuget.config local-feed
+        shell: bash
       - name: Run automatic bootstrapping of Cake modules (Cake >= 1.0.0)
         uses: ./
         with:
