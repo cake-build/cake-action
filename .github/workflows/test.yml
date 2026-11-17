@@ -70,7 +70,13 @@ jobs:
             }
             const { data } = await response.json();
             return data[0].version;
-      - name: Run with the latest Cake version
+      - name: Install an older Cake version
+        uses: ./
+        with:
+          cake-version: 2.0.0
+          script-path: ${{ env.script-directory }}/build.cake
+          target: Successful-Task
+      - name: Run with the latest Cake version when an older version is installed
         env:
           EXPECTED_CAKE_VERSION: ${{ steps.get-latest-cake-version.outputs.result }}
         uses: ./
