@@ -58,19 +58,21 @@ jobs:
           cake-version: tool-manifest
           script-path: ${{ env.script-directory }}/build.cake
           target: Test-Cake-Version
-      - name: Get the latest Cake release from GitHub
-        id: get-latest-cake-release
-        uses: octokit/request-action@v2.x
+      - name: Get the latest Cake version from NuGet
+        id: get-latest-cake-version
+        uses: actions/github-script@v9
         with:
-          route: GET /repos/cake-build/cake/releases/latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Set the EXPECTED_CAKE_VERSION environment variable
-        shell: bash
-        run: |
-          version=$(echo ${{ fromJson(steps.get-latest-cake-release.outputs.data).tag_name }} | sed 's/v//')
-          echo "EXPECTED_CAKE_VERSION=$version" >> $GITHUB_ENV
+          result-encoding: string
+          script: |
+            const response = await fetch('https://azuresearch-usnc.nuget.org/query?q=packageid:Cake.Tool&prerelease=false&semVerLevel=2.0.0');
+            if (!response.ok) {
+              throw new Error(`NuGet responded with ${response.status}`);
+            }
+            const { data } = await response.json();
+            return data[0].version;
       - name: Run with the latest Cake version
+        env:
+          EXPECTED_CAKE_VERSION: ${{ steps.get-latest-cake-version.outputs.result }}
         uses: ./
         with:
           cake-version: latest
