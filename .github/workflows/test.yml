@@ -34,9 +34,6 @@ jobs:
         with:
           script-path: ${{ env.script-directory }}/build.cake
           target: Successful-Task
-      - name: Remove the tools directory
-        run: rm -rf ${{ env.tools-directory }}
-        shell: bash
       - name: Run with a specific Cake version
         env:
           EXPECTED_CAKE_VERSION: 2.1.0
