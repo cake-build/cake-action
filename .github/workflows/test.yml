@@ -70,6 +70,17 @@ jobs:
             }
             const { data } = await response.json();
             return data[0].version;
+      - name: Remove the installed Cake version
+        run: rm -rf tools
+        shell: bash
+      - name: Run with the latest Cake version when no version is installed
+        env:
+          EXPECTED_CAKE_VERSION: ${{ steps.get-latest-cake-version.outputs.result }}
+        uses: ./
+        with:
+          cake-version: latest
+          script-path: ${{ env.script-directory }}/build.cake
+          target: Test-Cake-Version
       - name: Install an older Cake version
         uses: ./
         with:
