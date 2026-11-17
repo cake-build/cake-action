@@ -16,7 +16,7 @@ jest.mock('../toolsDirectory');
 
 describe('When running the action without any input arguments', () => {
   const fakeGetInputs = input.getInputs as jest.MockedFunction<typeof input.getInputs>;
-  const fakeToolsDirectory = ToolsDirectory as jest.MockedClass<typeof ToolsDirectory>;
+  const fakeCreateToolsDirectory = jest.spyOn(ToolsDirectory.prototype, 'create');
 
   beforeAll(() => {
     fakeGetInputs.mockReturnValue({
@@ -27,8 +27,7 @@ describe('When running the action without any input arguments', () => {
 
   test('it should create the tools directory', async () => {
     await run();
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    expect(fakeToolsDirectory.prototype.create).toHaveBeenCalled();
+    expect(fakeCreateToolsDirectory).toHaveBeenCalled();
   });
 
   test('it should disable the .NET Core telemetry', async () => {
